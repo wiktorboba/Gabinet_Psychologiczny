@@ -2,11 +2,17 @@ package com.example.gabinet_psychologiczny;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +29,16 @@ public class PatientFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+
+
+    Patient patient = new Patient(1, "Jan", "Kowalski", 27, "111222333");
+    Service service = new Service(1, "Terapia", 100);
+    ArrayList<Visit> visitsHistory = new ArrayList<>();
+    RecyclerView recyclerView;
+
+
+
 
     public PatientFragment() {
         // Required empty public constructor
@@ -60,5 +76,35 @@ public class PatientFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_patient, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        setUpVisitsHistory();
+        setUpRecyclerView(view);
+    }
+
+    private void setUpVisitsHistory() {
+        visitsHistory.add(new Visit(1, service, patient, "", "5/10/2023 15:30", "5/10/2023 16:00", true, true));
+        visitsHistory.add(new Visit(2, service, patient, "", "6/10/2023 13:30", "5/10/2023 14:00", true, true));
+        visitsHistory.add(new Visit(3, service, patient, "", "7/10/2023 10:00", "5/10/2023 11:00", true, true));
+        visitsHistory.add(new Visit(4, service, patient, "", "7/10/2023 10:00", "5/10/2023 11:00", true, true));
+        visitsHistory.add(new Visit(5, service, patient, "", "7/10/2023 10:00", "5/10/2023 11:00", true, true));
+        visitsHistory.add(new Visit(6, service, patient, "", "7/10/2023 10:00", "5/10/2023 11:00", true, true));
+        visitsHistory.add(new Visit(7, service, patient, "", "7/10/2023 10:00", "5/10/2023 11:00", true, true));
+        visitsHistory.add(new Visit(8, service, patient, "", "7/10/2023 10:00", "5/10/2023 11:00", true, true));
+        visitsHistory.add(new Visit(9, service, patient, "", "7/10/2023 10:00", "5/10/2023 11:00", true, true));
+        visitsHistory.add(new Visit(10, service, patient, "", "7/10/2023 10:00", "5/10/2023 11:00", true, true));
+        visitsHistory.add(new Visit(11, service, patient, "", "7/10/2023 10:00", "5/10/2023 11:00", true, true));
+        visitsHistory.add(new Visit(12, service, patient, "", "7/10/2023 10:00", "5/10/2023 11:00", true, true));
+    }
+
+    private void setUpRecyclerView(View view) {
+        recyclerView = view.findViewById(R.id.visitsHistoryRecyclerView);
+        VisitsHistoryRecyclerViewAdapter adapter = new VisitsHistoryRecyclerViewAdapter(getContext(), visitsHistory);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 }
