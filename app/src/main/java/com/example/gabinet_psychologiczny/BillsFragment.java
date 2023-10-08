@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.gabinet_psychologiczny.databinding.FragmentBillsBinding;
+import com.example.gabinet_psychologiczny.databinding.FragmentPatientSearchBinding;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link BillsFragment#newInstance} factory method to
@@ -23,6 +26,8 @@ public class BillsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private FragmentBillsBinding binding;
 
     public BillsFragment() {
         // Required empty public constructor
@@ -59,6 +64,7 @@ public class BillsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_bills, container, false);
+        binding = FragmentBillsBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 }

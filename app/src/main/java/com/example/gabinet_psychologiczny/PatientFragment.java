@@ -12,6 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.gabinet_psychologiczny.databinding.FragmentPatientBinding;
+import com.example.gabinet_psychologiczny.databinding.FragmentPatientSearchBinding;
+
 import java.util.ArrayList;
 
 /**
@@ -30,7 +33,7 @@ public class PatientFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-
+    private FragmentPatientBinding binding;
 
     Patient patient = new Patient(1, "Jan", "Kowalski", 27, "111222333");
     Service service = new Service(1, "Terapia", 100);
@@ -75,7 +78,8 @@ public class PatientFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_patient, container, false);
+        binding = FragmentPatientBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
@@ -102,7 +106,7 @@ public class PatientFragment extends Fragment {
     }
 
     private void setUpRecyclerView(View view) {
-        recyclerView = view.findViewById(R.id.visitsHistoryRecyclerView);
+        recyclerView = binding.visitsHistoryRecyclerView;
         VisitsHistoryRecyclerViewAdapter adapter = new VisitsHistoryRecyclerViewAdapter(getContext(), visitsHistory);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
