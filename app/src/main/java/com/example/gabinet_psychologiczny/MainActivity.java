@@ -10,7 +10,7 @@ import android.os.Bundle;
 import com.example.gabinet_psychologiczny.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
-    ActivityMainBinding binding;
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()){
 
                 case R.id.patients:
-                    //replaceFragment(new PatientFragment());
                     replaceFragment(new PatientSearchFragment());
                     break;
                 case R.id.calendar:

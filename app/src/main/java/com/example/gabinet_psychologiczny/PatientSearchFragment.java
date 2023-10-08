@@ -1,10 +1,13 @@
 package com.example.gabinet_psychologiczny;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,7 +25,7 @@ import java.util.ArrayList;
  * Use the {@link PatientSearchFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PatientSearchFragment extends Fragment {
+public class PatientSearchFragment extends Fragment implements RecyclerViewInterface{
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -105,8 +108,21 @@ public class PatientSearchFragment extends Fragment {
 
     private void setUpRecyclerView(View view) {
         recyclerView = binding.patientsListRecyclerView;
-        PatientsRecyclerViewAdapter adapter = new PatientsRecyclerViewAdapter(getContext(), patientsList);
+        PatientsRecyclerViewAdapter adapter = new PatientsRecyclerViewAdapter(getContext(), patientsList, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        Intent i = new Intent(getActivity(), PatientProfileActivity.class);
+        startActivity(i);
+    }
+
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_layout, fragment);
+        fragmentTransaction.commit();
     }
 }
