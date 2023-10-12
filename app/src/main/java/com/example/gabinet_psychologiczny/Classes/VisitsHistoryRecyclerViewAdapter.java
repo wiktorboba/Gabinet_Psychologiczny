@@ -1,4 +1,4 @@
-package com.example.gabinet_psychologiczny;
+package com.example.gabinet_psychologiczny.Classes;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.gabinet_psychologiczny.Models.Visit;
+import com.example.gabinet_psychologiczny.R;
 
 import java.util.ArrayList;
 

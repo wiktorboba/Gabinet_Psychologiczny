@@ -1,4 +1,4 @@
-package com.example.gabinet_psychologiczny;
+package com.example.gabinet_psychologiczny.Fragments;
 
 import android.os.Bundle;
 
@@ -8,15 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.gabinet_psychologiczny.databinding.FragmentBillsBinding;
+import com.example.gabinet_psychologiczny.databinding.FragmentCalendarBinding;
 import com.example.gabinet_psychologiczny.databinding.FragmentPatientSearchBinding;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link BillsFragment#newInstance} factory method to
+ * Use the {@link CalendarFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BillsFragment extends Fragment {
+public class CalendarFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,9 +27,9 @@ public class BillsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private FragmentBillsBinding binding;
+    private FragmentCalendarBinding binding;
 
-    public BillsFragment() {
+    public CalendarFragment() {
         // Required empty public constructor
     }
 
@@ -39,11 +39,11 @@ public class BillsFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment BillsFragment.
+     * @return A new instance of fragment CalendarFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static BillsFragment newInstance(String param1, String param2) {
-        BillsFragment fragment = new BillsFragment();
+    public static CalendarFragment newInstance(String param1, String param2) {
+        CalendarFragment fragment = new CalendarFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -64,7 +64,7 @@ public class BillsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = FragmentBillsBinding.inflate(inflater, container, false);
+        binding = FragmentCalendarBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 }

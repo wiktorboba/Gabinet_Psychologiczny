@@ -1,4 +1,4 @@
-package com.example.gabinet_psychologiczny;
+package com.example.gabinet_psychologiczny.Models;
 
 public class Visit {
     private int id;

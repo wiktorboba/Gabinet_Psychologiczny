@@ -1,16 +1,26 @@
-package com.example.gabinet_psychologiczny;
+package com.example.gabinet_psychologiczny.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+
 import android.os.Bundle;
 
+import com.example.gabinet_psychologiczny.Classes.PatientViewModel;
+import com.example.gabinet_psychologiczny.Fragments.BillsFragment;
+import com.example.gabinet_psychologiczny.Fragments.CalendarFragment;
+import com.example.gabinet_psychologiczny.Fragments.PatientSearchFragment;
+import com.example.gabinet_psychologiczny.Models.Patient;
+import com.example.gabinet_psychologiczny.R;
 import com.example.gabinet_psychologiczny.databinding.ActivityMainBinding;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class MainNavigationActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,8 +29,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         binding.bottomNavigationView.setSelectedItemId(R.id.calendar); //default fragment
-        replaceFragment(new CalendarFragment());
 
+        replaceFragment(new CalendarFragment());
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()){
 
@@ -38,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
     }
-
 
     private void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();

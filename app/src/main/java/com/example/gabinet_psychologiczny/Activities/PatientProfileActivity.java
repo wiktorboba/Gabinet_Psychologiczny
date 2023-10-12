@@ -1,13 +1,16 @@
-package com.example.gabinet_psychologiczny;
+package com.example.gabinet_psychologiczny.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 
-import com.example.gabinet_psychologiczny.databinding.ActivityMainBinding;
+import com.example.gabinet_psychologiczny.Models.Patient;
+import com.example.gabinet_psychologiczny.Models.Service;
+import com.example.gabinet_psychologiczny.Models.Visit;
+import com.example.gabinet_psychologiczny.Classes.VisitsHistoryRecyclerViewAdapter;
 import com.example.gabinet_psychologiczny.databinding.ActivityPatientProfileBinding;
 
 import java.util.ArrayList;
@@ -15,7 +18,7 @@ import java.util.ArrayList;
 public class PatientProfileActivity extends AppCompatActivity {
     private ActivityPatientProfileBinding binding;
 
-    Patient patient = new Patient(1, "Jan", "Kowalski", 27, "111222333");
+    Patient patient;
     Service service = new Service(1, "Terapia", 100);
     ArrayList<Visit> visitsHistory = new ArrayList<>();
     RecyclerView recyclerView;
@@ -26,7 +29,11 @@ public class PatientProfileActivity extends AppCompatActivity {
         binding = ActivityPatientProfileBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        Intent i = getIntent();
+        patient = i.getParcelableExtra("patient");
+
         setUpVisitsHistory();
+        setUpPersonalInformation();
         setUpRecyclerView();
     }
 
@@ -50,5 +57,13 @@ public class PatientProfileActivity extends AppCompatActivity {
         VisitsHistoryRecyclerViewAdapter adapter = new VisitsHistoryRecyclerViewAdapter(this, visitsHistory);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void setUpPersonalInformation() {
+        binding.name.setText(patient.getFirstName());
+        binding.lastName.setText(patient.getLastName());
+        binding.age.setText(Integer.toString(patient.getAge()));
+        binding.phoneNumber.setText(patient.getPhoneNumber());
+        binding.numberOfVisits.setText(Integer.toString(visitsHistory.size()));
     }
 }

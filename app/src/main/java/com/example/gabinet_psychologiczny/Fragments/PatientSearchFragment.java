@@ -1,6 +1,8 @@
-package com.example.gabinet_psychologiczny;
+package com.example.gabinet_psychologiczny.Fragments;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -8,6 +10,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,17 +19,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
+import android.widget.Toast;
 
+import com.example.gabinet_psychologiczny.Activities.PatientProfileActivity;
+import com.example.gabinet_psychologiczny.Classes.AddPatientDialog;
+import com.example.gabinet_psychologiczny.Classes.PatientViewModel;
+import com.example.gabinet_psychologiczny.Models.Patient;
+import com.example.gabinet_psychologiczny.Classes.PatientsRecyclerViewAdapter;
+import com.example.gabinet_psychologiczny.R;
+import com.example.gabinet_psychologiczny.Classes.RecyclerViewInterface;
 import com.example.gabinet_psychologiczny.databinding.FragmentPatientSearchBinding;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link PatientSearchFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PatientSearchFragment extends Fragment implements RecyclerViewInterface{
+public class PatientSearchFragment extends Fragment implements RecyclerViewInterface, AddPatientDialog.AddPatientDialogListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -38,11 +52,11 @@ public class PatientSearchFragment extends Fragment implements RecyclerViewInter
 
     private FragmentPatientSearchBinding binding;
 
+    private PatientViewModel patientViewModel;
 
-    ArrayList<Patient> patientsList = new ArrayList<>();
+    List<Patient> patientsList = new ArrayList<>();
     RecyclerView recyclerView;
     SearchView patientSearchView;
-
 
     public PatientSearchFragment() {
         // Required empty public constructor
@@ -87,36 +101,38 @@ public class PatientSearchFragment extends Fragment implements RecyclerViewInter
         super.onViewCreated(view, savedInstanceState);
 
         patientSearchView = binding.patientSearchView;
-        setUpPatientsList();
-        setUpRecyclerView(view);
-    }
 
-    private void setUpPatientsList() {
-        patientsList.add(new Patient(1, "Jan", "Kowalski", 27, "111222333"));
-        patientsList.add(new Patient(2, "Jan", "Kowalski", 27, "111222333"));
-        patientsList.add(new Patient(3, "Jan", "Kowalski", 27, "111222333"));
-        patientsList.add(new Patient(4, "Jan", "Kowalski", 27, "111222333"));
-        patientsList.add(new Patient(5, "Jan", "Kowalski", 27, "111222333"));
-        patientsList.add(new Patient(6, "Jan", "Kowalski", 27, "111222333"));
-        patientsList.add(new Patient(7, "Jan", "Kowalski", 27, "111222333"));
-        patientsList.add(new Patient(8, "Jan", "Kowalski", 27, "111222333"));
-        patientsList.add(new Patient(9, "Jan", "Kowalski", 27, "111222333"));
-        patientsList.add(new Patient(10, "Jan", "Kowalski", 27, "111222333"));
-        patientsList.add(new Patient(11, "Jan", "Kowalski", 27, "111222333"));
-        patientsList.add(new Patient(12, "Jan", "Kowalski", 27, "111222333"));
-    }
-
-    private void setUpRecyclerView(View view) {
         recyclerView = binding.patientsListRecyclerView;
-        PatientsRecyclerViewAdapter adapter = new PatientsRecyclerViewAdapter(getContext(), patientsList, this);
+        PatientsRecyclerViewAdapter adapter = new PatientsRecyclerViewAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        FloatingActionButton buttonAddPatient = binding.buttonAddPatient;
+        buttonAddPatient.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDialog();
+            }
+        });
+
+
+
+        patientViewModel = new ViewModelProvider(this).get(PatientViewModel .class);
+        patientViewModel.getAlLPatients().observe(getViewLifecycleOwner(), new Observer<List<Patient>>() {
+            @Override
+            public void onChanged(List<Patient> patients) {
+                adapter.setPatientsList(patients);
+            }
+        });
+
     }
+
 
     @Override
     public void onItemClick(int position) {
-        Intent i = new Intent(getActivity(), PatientProfileActivity.class);
-        startActivity(i);
+        //Intent i = new Intent(getActivity(), PatientProfileActivity.class);
+        //i.putExtra("patient", patientsList.get(position));
+        //startActivity(i);
     }
 
     private void replaceFragment(Fragment fragment) {
@@ -125,4 +141,19 @@ public class PatientSearchFragment extends Fragment implements RecyclerViewInter
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
     }
+
+    private void openDialog(){
+        AddPatientDialog addPatientDialog = new AddPatientDialog();
+        addPatientDialog.setTargetFragment(PatientSearchFragment.this, 1);
+        addPatientDialog.show(getFragmentManager(), "Dodaj pacjenta");
+    }
+
+    @Override
+    public void onDialogSuccess(String firstname, String lastname, String age, String phonenumber) {
+
+        Patient patient = new Patient(firstname, lastname, Integer.parseInt(age), phonenumber);
+        patientViewModel.insert(patient);
+        Toast.makeText(getActivity(), "Pacjent dodany pomyślnie!", Toast.LENGTH_SHORT).show();
+    }
+
 }

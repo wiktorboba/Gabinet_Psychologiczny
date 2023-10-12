@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    tools:context=".PatientProfileActivity">
+    tools:context=".Activities.PatientProfileActivity">
 
     <TextView
         android:layout_width="match_parent"
@@ -113,6 +113,7 @@
                                 android:textSize="14sp" />
 
                             <TextView
+                                android:id="@+id/age"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="sans-serif-medium"
@@ -136,6 +137,7 @@
                                 android:textSize="14sp" />
 
                             <TextView
+                                android:id="@+id/phoneNumber"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:fontFamily="sans-serif-medium"
@@ -159,6 +161,7 @@
                                 android:textSize="14sp" />
 
                             <TextView
+                                android:id="@+id/numberOfVisits"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="sans-serif-medium"
