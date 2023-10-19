@@ -1,6 +1,5 @@
 package com.example.gabinet_psychologiczny.Classes;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,34 +8,34 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.gabinet_psychologiczny.Models.Visit;
+import com.example.gabinet_psychologiczny.Model.Visit;
 import com.example.gabinet_psychologiczny.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class VisitsHistoryRecyclerViewAdapter extends RecyclerView.Adapter<VisitsHistoryRecyclerViewAdapter.MyViewHolder> {
 
-    Context context;
-    ArrayList<Visit> visitsList;
+    List<Visit> visitsList = new ArrayList<>();
 
-    public VisitsHistoryRecyclerViewAdapter(Context context, ArrayList<Visit> visitsList) {
-        this.context = context;
-        this.visitsList = visitsList;
-    }
+    private OnItemClickListener listener;
 
     @NonNull
     @Override
     public VisitsHistoryRecyclerViewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(context);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.visits_history_recycler_view_item, parent, false);
         return new VisitsHistoryRecyclerViewAdapter.MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull VisitsHistoryRecyclerViewAdapter.MyViewHolder holder, int position) {
-        holder.date.setText(visitsList.get(position).getStartDate());
-        holder.time.setText(visitsList.get(position).getEndDate());
-        holder.service.setText(visitsList.get(position).getService().getName());
+        Visit currentVisit = visitsList.get(position);
+
+        String startEndTime = currentVisit.getStartTime() + " - " + currentVisit.getEndTime();
+        holder.day.setText(currentVisit.getDay());
+        holder.time.setText(startEndTime);
+        holder.service.setText("terapia");
     }
 
     @Override
@@ -44,16 +43,38 @@ public class VisitsHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Visit
         return visitsList.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
+    public void setVisitsList(List<Visit> visitsList){
+        this.visitsList = visitsList;
+        notifyDataSetChanged();
+    }
 
-        TextView date, time, service;
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        TextView day, time, service;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            date = itemView.findViewById(R.id.visitDate);
+            day = itemView.findViewById(R.id.visitDay);
             time = itemView.findViewById(R.id.visitTime);
             service = itemView.findViewById(R.id.visitService);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+                    if(listener != null && position != RecyclerView.NO_POSITION) {
+                        listener.onItemClick(visitsList.get(position));
+                    }
+                }
+            });
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(Visit visit);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 }

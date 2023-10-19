@@ -1,24 +1,28 @@
-package com.example.gabinet_psychologiczny.Classes;
+package com.example.gabinet_psychologiczny.Database.Repository;
 
 import android.app.Application;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
-import com.example.gabinet_psychologiczny.Models.Patient;
+import com.example.gabinet_psychologiczny.Database.Dao.PatientDao;
+import com.example.gabinet_psychologiczny.Database.Database;
+import com.example.gabinet_psychologiczny.Database.Relations.PatientWithVisits;
+import com.example.gabinet_psychologiczny.Model.Patient;
 
-import java.nio.channels.AsynchronousChannelGroup;
-import java.util.ArrayList;
 import java.util.List;
 
 public class PatientRepository {
     private PatientDao patientDao;
     private LiveData<List<Patient>> allPatients;
 
+    private LiveData<List<PatientWithVisits>> allPatientsWithVisits;
+
     public PatientRepository(Application application) {
         Database database = Database.getInstance(application);
         patientDao = database.patientDao();
         allPatients = patientDao.getAllPatients();
+        allPatientsWithVisits = patientDao.getAllPatientsWithVisits();
     }
 
     public void insert(Patient patient) {
@@ -36,6 +40,14 @@ public class PatientRepository {
     public LiveData<List<Patient>> getAllPatients() {
         return allPatients;
     }
+
+    public LiveData<List<PatientWithVisits>> getAllPatientsWithVisits() {
+        return allPatientsWithVisits;
+    }
+
+    public LiveData<PatientWithVisits> getPatientWithVisitsById(int id) { return patientDao.getPatientWithVisitsById(id); }
+
+    public LiveData<List<Patient>> searchPatient(String searchQuery) { return patientDao.searchPatient(searchQuery);}
 
     private static class InsertPatientAsyncTask extends AsyncTask<Patient, Void, Void> {
         private PatientDao patientDao;

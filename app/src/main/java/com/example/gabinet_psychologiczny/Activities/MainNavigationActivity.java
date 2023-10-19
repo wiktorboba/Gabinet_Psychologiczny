@@ -6,17 +6,14 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.gabinet_psychologiczny.Classes.PatientViewModel;
 import com.example.gabinet_psychologiczny.Fragments.BillsFragment;
 import com.example.gabinet_psychologiczny.Fragments.CalendarFragment;
 import com.example.gabinet_psychologiczny.Fragments.PatientSearchFragment;
-import com.example.gabinet_psychologiczny.Models.Patient;
 import com.example.gabinet_psychologiczny.R;
 import com.example.gabinet_psychologiczny.databinding.ActivityMainBinding;
-
-import java.util.ArrayList;
 
 public class MainNavigationActivity extends AppCompatActivity {
     private ActivityMainBinding binding;

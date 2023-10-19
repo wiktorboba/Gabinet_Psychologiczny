@@ -1,9 +1,10 @@
-package com.example.gabinet_psychologiczny.Models;
+package com.example.gabinet_psychologiczny.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -11,9 +12,11 @@ import androidx.room.PrimaryKey;
 public class Patient {
 
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "patient_id")
     private int id;
     private String firstName;
     private String lastName;
+    @ColumnInfo(name = "patient_age")
     private int age;
     private String phoneNumber;
 

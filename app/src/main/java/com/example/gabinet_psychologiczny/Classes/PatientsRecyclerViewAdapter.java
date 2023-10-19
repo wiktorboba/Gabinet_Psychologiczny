@@ -1,6 +1,5 @@
 package com.example.gabinet_psychologiczny.Classes;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,26 +8,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.gabinet_psychologiczny.Models.Patient;
+import com.example.gabinet_psychologiczny.Model.Patient;
 import com.example.gabinet_psychologiczny.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PatientsRecyclerViewAdapter extends RecyclerView.Adapter<PatientsRecyclerViewAdapter.MyViewHolder>{
-    private final RecyclerViewInterface recyclerViewInterface;
+    private OnItemClickListener listener;
     List<Patient> patientsList = new ArrayList<>();
-
-    public PatientsRecyclerViewAdapter(RecyclerViewInterface recyclerViewInterface) {
-        this.recyclerViewInterface = recyclerViewInterface;
-    }
 
     @NonNull
     @Override
     public PatientsRecyclerViewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.patients_recycler_view_item, parent, false);
-        return new PatientsRecyclerViewAdapter.MyViewHolder(view, recyclerViewInterface);
+        return new PatientsRecyclerViewAdapter.MyViewHolder(view);
     }
 
     @Override
@@ -49,9 +44,9 @@ public class PatientsRecyclerViewAdapter extends RecyclerView.Adapter<PatientsRe
         notifyDataSetChanged();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView firstName, lastName, age;
-        public MyViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
+        public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
             firstName = itemView.findViewById(R.id.patientFirstName);
@@ -61,14 +56,20 @@ public class PatientsRecyclerViewAdapter extends RecyclerView.Adapter<PatientsRe
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(recyclerViewInterface != null){
-                        int position = getAdapterPosition();
-                        if(position != RecyclerView.NO_POSITION){
-                            recyclerViewInterface.onItemClick(position);
-                        }
+                    int position = getAdapterPosition();
+                    if(listener != null && position != RecyclerView.NO_POSITION) {
+                        listener.onItemClick(patientsList.get(position));
                     }
                 }
             });
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(Patient patient);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 }

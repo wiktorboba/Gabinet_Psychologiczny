@@ -1,4 +1,4 @@
-package com.example.gabinet_psychologiczny.Classes;
+package com.example.gabinet_psychologiczny.Database;
 
 import androidx.annotation.NonNull;
 import androidx.room.Room;
@@ -7,16 +7,20 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.provider.ContactsContract;
 
-import com.example.gabinet_psychologiczny.Models.Patient;
+import com.example.gabinet_psychologiczny.Database.Dao.PatientDao;
+import com.example.gabinet_psychologiczny.Database.Dao.VisitDao;
+import com.example.gabinet_psychologiczny.Model.Patient;
+import com.example.gabinet_psychologiczny.Model.Service;
+import com.example.gabinet_psychologiczny.Model.Visit;
 
-@androidx.room.Database(entities = {Patient.class}, version = 1)
+@androidx.room.Database(entities = {Patient.class, Visit.class}, version = 12)
 public abstract class Database extends RoomDatabase {
 
     private static Database instance;
 
     public abstract PatientDao patientDao();
+    public abstract VisitDao visitDao();
 
     public static synchronized Database getInstance(Context context) {
 
@@ -39,17 +43,20 @@ public abstract class Database extends RoomDatabase {
 
     private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
         private PatientDao patientDao;
+        private VisitDao visitDao;
 
         private PopulateDbAsyncTask(Database db) {
             patientDao = db.patientDao();
+            visitDao = db.visitDao();
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-            patientDao.insert(new Patient("Jan", "Kowalski", 27, "111222333"));
+            Patient p = new Patient("Jan", "Kowalski", 27, "111222333");
+
+            patientDao.insert(p);
             patientDao.insert(new Patient("Anna", "Nowak", 31, "444555666"));
             patientDao.insert(new Patient("Adam", "Mickiewicz", 19, "123123123"));
-
 
             return null;
         }

@@ -1,8 +1,6 @@
 package com.example.gabinet_psychologiczny.Fragments;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,11 +21,12 @@ import android.widget.Toast;
 
 import com.example.gabinet_psychologiczny.Activities.PatientProfileActivity;
 import com.example.gabinet_psychologiczny.Classes.AddPatientDialog;
-import com.example.gabinet_psychologiczny.Classes.PatientViewModel;
-import com.example.gabinet_psychologiczny.Models.Patient;
+import com.example.gabinet_psychologiczny.Database.Relations.PatientWithVisits;
+import com.example.gabinet_psychologiczny.Model.Visit;
+import com.example.gabinet_psychologiczny.ViewModel.PatientViewModel;
+import com.example.gabinet_psychologiczny.Model.Patient;
 import com.example.gabinet_psychologiczny.Classes.PatientsRecyclerViewAdapter;
 import com.example.gabinet_psychologiczny.R;
-import com.example.gabinet_psychologiczny.Classes.RecyclerViewInterface;
 import com.example.gabinet_psychologiczny.databinding.FragmentPatientSearchBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -39,7 +38,7 @@ import java.util.List;
  * Use the {@link PatientSearchFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PatientSearchFragment extends Fragment implements RecyclerViewInterface, AddPatientDialog.AddPatientDialogListener {
+public class PatientSearchFragment extends Fragment implements AddPatientDialog.AddPatientDialogListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -54,9 +53,9 @@ public class PatientSearchFragment extends Fragment implements RecyclerViewInter
 
     private PatientViewModel patientViewModel;
 
-    List<Patient> patientsList = new ArrayList<>();
     RecyclerView recyclerView;
     SearchView patientSearchView;
+
 
     public PatientSearchFragment() {
         // Required empty public constructor
@@ -103,9 +102,21 @@ public class PatientSearchFragment extends Fragment implements RecyclerViewInter
         patientSearchView = binding.patientSearchView;
 
         recyclerView = binding.patientsListRecyclerView;
-        PatientsRecyclerViewAdapter adapter = new PatientsRecyclerViewAdapter(this);
+        PatientsRecyclerViewAdapter adapter = new PatientsRecyclerViewAdapter();
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        adapter.setOnItemClickListener(new PatientsRecyclerViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Patient patient) {
+                Intent i = new Intent(getActivity(), PatientProfileActivity.class);
+                int id = patient.getId();
+                i.putExtra("id", id);
+                startActivity(i);
+            }
+        });
+
+
 
         FloatingActionButton buttonAddPatient = binding.buttonAddPatient;
         buttonAddPatient.setOnClickListener(new View.OnClickListener() {
@@ -118,21 +129,34 @@ public class PatientSearchFragment extends Fragment implements RecyclerViewInter
 
 
         patientViewModel = new ViewModelProvider(this).get(PatientViewModel .class);
-        patientViewModel.getAlLPatients().observe(getViewLifecycleOwner(), new Observer<List<Patient>>() {
+        patientViewModel.getAllPatients().observe(getViewLifecycleOwner(), new Observer<List<Patient>>() {
             @Override
-            public void onChanged(List<Patient> patients) {
+            public void onChanged(@Nullable List<Patient> patients) {
                 adapter.setPatientsList(patients);
             }
         });
 
-    }
 
+        patientSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String s) {
+                if(s != null){
+                    String searchQuery = "%"+s+"%";
+                    patientViewModel.searchPatient(searchQuery).observe(getViewLifecycleOwner(), new Observer<List<Patient>>() {
+                        @Override
+                        public void onChanged(List<Patient> patients) {
+                            adapter.setPatientsList(patients);
+                        }
+                    });
+                }
+                return true;
+            }
+        });
 
-    @Override
-    public void onItemClick(int position) {
-        //Intent i = new Intent(getActivity(), PatientProfileActivity.class);
-        //i.putExtra("patient", patientsList.get(position));
-        //startActivity(i);
     }
 
     private void replaceFragment(Fragment fragment) {
@@ -154,6 +178,11 @@ public class PatientSearchFragment extends Fragment implements RecyclerViewInter
         Patient patient = new Patient(firstname, lastname, Integer.parseInt(age), phonenumber);
         patientViewModel.insert(patient);
         Toast.makeText(getActivity(), "Pacjent dodany pomyślnie!", Toast.LENGTH_SHORT).show();
+    }
+
+
+    private void searchDatabase(String searchQuery) {
+
     }
 
 }
