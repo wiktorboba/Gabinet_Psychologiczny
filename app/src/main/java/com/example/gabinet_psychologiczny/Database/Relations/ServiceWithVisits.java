@@ -4,18 +4,17 @@ import androidx.room.Embedded;
 import androidx.room.Relation;
 
 import com.example.gabinet_psychologiczny.Model.Patient;
+import com.example.gabinet_psychologiczny.Model.Service;
 import com.example.gabinet_psychologiczny.Model.Visit;
 
 import java.util.List;
 
-public class PatientWithVisits {
+public class ServiceWithVisits {
     @Embedded
-    public Patient patient;
+    public Service service;
     @Relation(
-            entity = Visit.class,
-            parentColumn = "patient_id",
-            entityColumn = "patient_id"
+            parentColumn = "service_id",
+            entityColumn = "service_id"
     )
-    public List<VisitAndService> visitList;
-
+    public List<Visit> visitList;
 }

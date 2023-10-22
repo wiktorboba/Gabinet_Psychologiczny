@@ -13,6 +13,14 @@ import androidx.room.PrimaryKey;
                 childColumns = "patient_id",
                 onDelete = ForeignKey.CASCADE,
                 onUpdate = ForeignKey.CASCADE
+        ),
+
+        @ForeignKey(
+                entity = Service.class,
+                parentColumns = "service_id",
+                childColumns = "service_id",
+                onDelete = ForeignKey.CASCADE,
+                onUpdate = ForeignKey.CASCADE
         )
 })
 public class Visit {
@@ -21,7 +29,7 @@ public class Visit {
     @ColumnInfo(name = "visit_id")
     private int id;
 
-    @ColumnInfo(name = "service_id")
+    @ColumnInfo(name = "service_id", index = true)
     private int serviceId;
 
     @ColumnInfo(name = "patient_id", index = true)

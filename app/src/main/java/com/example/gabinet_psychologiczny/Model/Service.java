@@ -4,8 +4,11 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+@Entity(tableName = "service_table")
 public class Service {
 
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "service_id")
     private int id;
 
     private String name;

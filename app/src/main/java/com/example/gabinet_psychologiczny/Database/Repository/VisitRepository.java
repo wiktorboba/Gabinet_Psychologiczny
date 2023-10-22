@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 import com.example.gabinet_psychologiczny.Database.Dao.VisitDao;
 import com.example.gabinet_psychologiczny.Database.Database;
 import com.example.gabinet_psychologiczny.Database.Relations.PatientWithVisits;
+import com.example.gabinet_psychologiczny.Database.Relations.VisitAndService;
 import com.example.gabinet_psychologiczny.Model.Visit;
 
 import java.util.List;
@@ -17,10 +18,13 @@ public class VisitRepository {
     private VisitDao visitDao;
     private LiveData<List<Visit>> allVisits;
 
+    private LiveData<List<VisitAndService>> allVisitsAndServices;
+
     public VisitRepository(Application application) {
         Database database = Database.getInstance(application);
         visitDao = database.visitDao();
         allVisits = visitDao.getAllVisits();
+        allVisitsAndServices = visitDao.getAllVisitsAndServices();
     }
 
     public void insert(Visit visit) {
@@ -39,7 +43,11 @@ public class VisitRepository {
         return allVisits;
     }
 
+    public LiveData<List<VisitAndService>> getAllVisitsAndServices() { return allVisitsAndServices; }
+
     public LiveData<PatientWithVisits> getPatientWithVisitsById(int id) { return visitDao.getPatientWithVisitsById(id); }
+
+    public LiveData<VisitAndService> getVisitAndServiceById(int id) { return visitDao.getVisitAndServiceById(id); }
 
     private static class InsertVisitAsyncTask extends AsyncTask<Visit, Void, Void> {
         private VisitDao visitDao;

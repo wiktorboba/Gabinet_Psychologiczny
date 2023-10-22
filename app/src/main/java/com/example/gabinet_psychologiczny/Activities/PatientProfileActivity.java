@@ -12,13 +12,19 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.gabinet_psychologiczny.Classes.AddPatientDialog;
+import com.example.gabinet_psychologiczny.Classes.AddVisitDialog;
 import com.example.gabinet_psychologiczny.Database.Relations.PatientWithVisits;
+import com.example.gabinet_psychologiczny.Database.Relations.VisitAndService;
+import com.example.gabinet_psychologiczny.Fragments.PatientSearchFragment;
 import com.example.gabinet_psychologiczny.Model.Patient;
 import com.example.gabinet_psychologiczny.Model.Visit;
 import com.example.gabinet_psychologiczny.Classes.VisitsHistoryRecyclerViewAdapter;
 import com.example.gabinet_psychologiczny.ViewModel.PatientViewModel;
 import com.example.gabinet_psychologiczny.ViewModel.VisitViewModel;
 import com.example.gabinet_psychologiczny.databinding.ActivityPatientProfileBinding;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +34,7 @@ public class PatientProfileActivity extends AppCompatActivity {
     private VisitViewModel visitViewModel;
 
     Patient patient;
-    List<Visit> visitList;
+    List<VisitAndService> visitList;
 
     RecyclerView recyclerView;
 
@@ -44,9 +50,19 @@ public class PatientProfileActivity extends AppCompatActivity {
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addVisit();
+
+
             }
         });
+
+        ExtendedFloatingActionButton buttonAddPatient = binding.addVisitButton;
+        buttonAddPatient.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDialog();
+            }
+        });
+
 
         recyclerView = binding.visitsHistoryRecyclerView;
         VisitsHistoryRecyclerViewAdapter adapter = new VisitsHistoryRecyclerViewAdapter();
@@ -55,7 +71,7 @@ public class PatientProfileActivity extends AppCompatActivity {
 
         adapter.setOnItemClickListener(new VisitsHistoryRecyclerViewAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(Visit visit) {
+            public void onItemClick(VisitAndService visit) {
 
             }
         });
@@ -88,5 +104,11 @@ public class PatientProfileActivity extends AppCompatActivity {
     private void addVisit() {
         Visit visit = new Visit(1, patient.getId(), "opis", "19/10/2023", "16:00", "17:30", true, true);
         visitViewModel.insert(visit);
+    }
+
+    private void openDialog(){
+        AddVisitDialog addVisitDialog = new AddVisitDialog(patient.getId(), patient.getFirstName(), patient.getLastName());
+        //addVisitDialog.setTargetFragment(PatientSearchFragment.this, 1);
+        addVisitDialog.show(getSupportFragmentManager(), "Dodaj pacjenta");
     }
 }

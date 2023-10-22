@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="10dp"
+    android:elevation="10dp"
+    app:cardCornerRadius="10dp"
+    android:background="#FFFFFF">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageViewAddService"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/linearLayout3"
+            app:layout_constraintTop_toTopOf="@+id/linearLayout3"
+            app:srcCompat="@drawable/baseline_add"
+            app:tint="@color/teal_700"
+            android:clickable="true"
+            android:contentDescription="Adds new service"/>
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingHorizontal="32dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="16dp"
+                android:gravity="center"
+                android:hint="Pacjent">
+
+                <AutoCompleteTextView
+                    android:id="@+id/autoCompleteTextViewPatientSelection"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:inputType="none"
+                    android:text="Wybierz pacjenta"
+                    android:textAlignment="center" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="16dp"
+                android:hint="Usługa">
+
+                <AutoCompleteTextView
+                    android:id="@+id/autoCompleteTextViewServiceSelection"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="none"
+                    android:text="Wybierz usługę" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="16dp"
+                android:hint="Termin">
+
+                <AutoCompleteTextView
+                    android:id="@+id/autoCompleteTextViewDateSelection"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:inputType="none"
+                    android:text="Wybierz termin"
+                    android:textAlignment="center" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

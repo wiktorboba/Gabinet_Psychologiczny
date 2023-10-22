@@ -10,6 +10,7 @@ import androidx.room.Transaction;
 import androidx.room.Update;
 
 import com.example.gabinet_psychologiczny.Database.Relations.PatientWithVisits;
+import com.example.gabinet_psychologiczny.Database.Relations.VisitAndService;
 import com.example.gabinet_psychologiczny.Model.Visit;
 
 import java.util.List;
@@ -30,7 +31,15 @@ public interface VisitDao {
     LiveData<List<Visit>> getAllVisits();
 
     @Transaction
+    @Query("SELECT * FROM visit_table ORDER BY visit_id")
+    LiveData<List<VisitAndService>> getAllVisitsAndServices();
+
+    @Transaction
     @Query("SELECT * FROM patient_table WHERE patient_id = :id")
     LiveData<PatientWithVisits> getPatientWithVisitsById(int id);
+
+    @Transaction
+    @Query("SELECT * FROM visit_table WHERE visit_id = :id")
+    LiveData<VisitAndService> getVisitAndServiceById(int id);
 
 }

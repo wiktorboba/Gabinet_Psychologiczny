@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.gabinet_psychologiczny.Database.Relations.VisitAndService;
 import com.example.gabinet_psychologiczny.Model.Visit;
 import com.example.gabinet_psychologiczny.R;
 
@@ -16,7 +17,7 @@ import java.util.List;
 
 public class VisitsHistoryRecyclerViewAdapter extends RecyclerView.Adapter<VisitsHistoryRecyclerViewAdapter.MyViewHolder> {
 
-    List<Visit> visitsList = new ArrayList<>();
+    List<VisitAndService> visitsList = new ArrayList<>();
 
     private OnItemClickListener listener;
 
@@ -30,12 +31,12 @@ public class VisitsHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Visit
 
     @Override
     public void onBindViewHolder(@NonNull VisitsHistoryRecyclerViewAdapter.MyViewHolder holder, int position) {
-        Visit currentVisit = visitsList.get(position);
+        VisitAndService currentVisit = visitsList.get(position);
 
-        String startEndTime = currentVisit.getStartTime() + " - " + currentVisit.getEndTime();
-        holder.day.setText(currentVisit.getDay());
+        String startEndTime = currentVisit.visit.getStartTime() + " - " + currentVisit.visit.getEndTime();
+        holder.day.setText(currentVisit.visit.getDay());
         holder.time.setText(startEndTime);
-        holder.service.setText("terapia");
+        holder.service.setText(currentVisit.service.getName());
     }
 
     @Override
@@ -43,7 +44,7 @@ public class VisitsHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Visit
         return visitsList.size();
     }
 
-    public void setVisitsList(List<Visit> visitsList){
+    public void setVisitsList(List<VisitAndService> visitsList){
         this.visitsList = visitsList;
         notifyDataSetChanged();
     }
@@ -71,7 +72,7 @@ public class VisitsHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Visit
     }
 
     public interface OnItemClickListener {
-        void onItemClick(Visit visit);
+        void onItemClick(VisitAndService visit);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
