@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.gabinet_psychologiczny.Database.Relations.ServiceWithVisits;
 import com.example.gabinet_psychologiczny.Model.Service;
 import com.example.gabinet_psychologiczny.Model.Visit;
 import com.example.gabinet_psychologiczny.R;
@@ -42,6 +43,7 @@ public class AddVisitDialog extends AppCompatDialogFragment {
 
     ArrayList<String> serviceItems = new ArrayList<>();
     List<Service> serviceList = new ArrayList<>();
+
     ArrayAdapter<String> arrayAdapter;
 
 
@@ -74,7 +76,6 @@ public class AddVisitDialog extends AppCompatDialogFragment {
 
         visitViewModel = new ViewModelProvider(getActivity()).get(VisitViewModel.class);
         serviceViewModel = new ViewModelProvider(getActivity()).get(ServiceViewModel.class);
-
 
         builder.setView(view)
                 .setTitle("Dodaj wizytę")
@@ -113,6 +114,7 @@ public class AddVisitDialog extends AppCompatDialogFragment {
                 setServiceItems();
             }
         });
+
 
         addServiceImageView = view.findViewById(R.id.imageViewAddService);
         addServiceImageView.setOnClickListener(new View.OnClickListener() {
