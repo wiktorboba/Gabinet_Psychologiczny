@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -11,20 +12,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <ImageView
-            android:id="@+id/imageViewAddService"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="4dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/linearLayout3"
-            app:layout_constraintTop_toTopOf="@+id/linearLayout3"
-            app:srcCompat="@drawable/baseline_add"
-            app:tint="@color/teal_700"
-            android:clickable="true"
-            android:contentDescription="Adds new service"/>
 
         <LinearLayout
             android:id="@+id/linearLayout3"
@@ -51,21 +38,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginVertical="16dp"
-                android:hint="Usługa">
-
-                <AutoCompleteTextView
-                    android:id="@+id/autoCompleteTextViewServiceSelection"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:inputType="none"
-                    android:text="Wybierz usługę" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -79,7 +52,55 @@
                     android:inputType="none"
                     android:text="Wybierz termin"
                     android:textAlignment="center" />
+
             </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="16dp"
+                    android:hint="Usługa"
+                    android:layout_weight="4"
+                    android:layout_gravity="center">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/autoCompleteTextViewServiceSelection"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="none"
+                        android:text="Wybierz usługę" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/imageViewAddService"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="5dp"
+                    android:clickable="true"
+                    android:contentDescription="Adds new service"
+                    app:srcCompat="@drawable/baseline_add"
+                    app:tint="@color/teal_700"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/visitDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="16dp"
+                android:gravity="top"
+                android:hint="Opis wizyty..."
+                android:lines="8"
+                android:padding="10dp"
+                android:background="@color/light_gray">
+            </EditText>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 

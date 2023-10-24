@@ -29,9 +29,9 @@ public class PatientsRecyclerViewAdapter extends RecyclerView.Adapter<PatientsRe
     @Override
     public void onBindViewHolder(@NonNull PatientsRecyclerViewAdapter.MyViewHolder holder, int position) {
         Patient currentPatient = patientsList.get(position);
-        holder.firstName.setText(currentPatient.getFirstName());
-        holder.lastName.setText(currentPatient.getLastName());
-        holder.age.setText(String.valueOf(currentPatient.getAge()));
+        String name = currentPatient.getFirstName() + " " + currentPatient.getLastName();
+        holder.fullName.setText(name);
+        holder.age.setText(String.valueOf(currentPatient.getAge()) + " lat");
     }
 
     @Override
@@ -45,12 +45,11 @@ public class PatientsRecyclerViewAdapter extends RecyclerView.Adapter<PatientsRe
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView firstName, lastName, age;
+        TextView fullName, age;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            firstName = itemView.findViewById(R.id.patientFirstName);
-            lastName = itemView.findViewById(R.id.patientLastName);
+            fullName = itemView.findViewById(R.id.patientFullName);
             age = itemView.findViewById(R.id.patientAge);
 
             itemView.setOnClickListener(new View.OnClickListener() {

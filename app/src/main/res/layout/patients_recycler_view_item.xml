@@ -6,11 +6,11 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="15dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -20,35 +20,32 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="80sp"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
 
             <TextView
-                android:id="@+id/patientFirstName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Jan"
-                android:textAlignment="center"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/patientLastName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Kowalski"
-                android:textAlignment="center"
-                android:textSize="20sp" />
+                android:id="@+id/patientFullName"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="10dp"
+                android:lines="1"
+                android:text="Jan Kowalski"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="25sp"
+                android:autoSizeMaxTextSize="35sp"/>
 
             <TextView
                 android:id="@+id/patientAge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:gravity="center"
+                android:paddingHorizontal="10dp"
                 android:text="31 lat"
-                android:textAlignment="center"
-                android:textSize="20sp" />
+                android:textSize="30sp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

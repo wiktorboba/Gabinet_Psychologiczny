@@ -34,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        app:cardCornerRadius="15dp"
+        app:cardCornerRadius="10dp"
         app:cardElevation="10dp"
         app:cardUseCompatPadding="true"
         app:layout_constraintTop_toTopOf="parent">
@@ -42,26 +42,30 @@
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="150dp"
             android:orientation="vertical"
             android:padding="8dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    android:gravity="center"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentBottom="true"
                     android:orientation="horizontal"
                     android:padding="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:gravity="center">
 
                         <TextView
                             android:id="@+id/name"
@@ -71,7 +75,7 @@
                             android:text="Jan"
                             android:textAlignment="viewStart"
                             android:textColor="#474747"
-                            android:textSize="30sp"
+                            android:textSize="35sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -82,7 +86,7 @@
                             android:text="Kowalski"
                             android:textAlignment="viewStart"
                             android:textColor="#474747"
-                            android:textSize="30sp"
+                            android:textSize="35sp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -91,7 +95,10 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginTop="0dp"
                     android:gravity="center"
                     android:orientation="horizontal"
                     android:padding="1dp">
@@ -100,18 +107,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
-                        android:paddingVertical="10dp">
+                        android:paddingVertical="10dp"
+                        android:gravity="center">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
                             android:orientation="horizontal">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Wiek: "
-                                android:textSize="14sp" />
+                                android:textSize="16sp" />
 
                             <TextView
                                 android:id="@+id/age"
@@ -122,20 +131,21 @@
                                 android:text="24 lata"
                                 android:textAlignment="viewStart"
                                 android:textColor="#474747"
-                                android:textSize="14sp" />
+                                android:textSize="16sp" />
 
                         </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
                             android:orientation="horizontal">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Nr. telefonu: "
-                                android:textSize="14sp" />
+                                android:textSize="16sp" />
 
                             <TextView
                                 android:id="@+id/phoneNumber"
@@ -146,7 +156,7 @@
                                 android:text="222333444"
                                 android:textAlignment="center"
                                 android:textColor="#474747"
-                                android:textSize="14sp" />
+                                android:textSize="16sp" />
 
                         </LinearLayout>
 
@@ -159,7 +169,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Liczba wizyt: "
-                                android:textSize="14sp" />
+                                android:textSize="16sp" />
 
                             <TextView
                                 android:id="@+id/numberOfVisits"
@@ -170,7 +180,7 @@
                                 android:text="6"
                                 android:textAlignment="viewStart"
                                 android:textColor="#474747"
-                                android:textSize="14sp" />
+                                android:textSize="16sp" />
 
                         </LinearLayout>
 
@@ -188,7 +198,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        app:cardCornerRadius="15dp"
+        app:cardCornerRadius="10dp"
         app:cardElevation="10dp"
         app:cardUseCompatPadding="true"
         app:layout_constraintTop_toBottomOf="@+id/personalData">
@@ -197,8 +207,8 @@
             android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp">
+            android:layout_marginTop="8dp"
+            android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -207,7 +217,8 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/visitsHistoryRecyclerView"
                     android:layout_width="match_parent"
-                    android:layout_height="400dp" />
+                    android:layout_height="400dp"
+                    tools:listitem="@layout/visits_history_recycler_view_item"/>
             </RelativeLayout>
         </LinearLayout>
 

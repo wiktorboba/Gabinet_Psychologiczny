@@ -144,7 +144,7 @@ public class PatientSearchFragment extends Fragment implements AddPatientDialog.
             }
             @Override
             public boolean onQueryTextChange(String s) {
-                if(s != null){
+                if(s != null && !s.isEmpty()){
                     String searchQuery = "%"+s+"%";
                     patientViewModel.searchPatient(searchQuery).observe(getViewLifecycleOwner(), new Observer<List<Patient>>() {
                         @Override
