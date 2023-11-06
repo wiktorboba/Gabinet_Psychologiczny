@@ -77,17 +77,17 @@
                         android:text="Wybierz usługę" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <ImageView
-                    android:id="@+id/imageViewAddService"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:layout_marginLeft="5dp"
-                    android:clickable="true"
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/button_add_service"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:fabCustomSize="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginHorizontal="5dp"
+                    android:src="@drawable/baseline_add"
                     android:contentDescription="Adds new service"
-                    app:srcCompat="@drawable/baseline_add"
-                    app:tint="@color/teal_700"
-                    android:layout_weight="1"
-                    android:layout_gravity="center"/>
+
+                    />
             </LinearLayout>
 
             <EditText

@@ -25,18 +25,22 @@ public class VisitsHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Visit
     @Override
     public VisitsHistoryRecyclerViewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.visits_history_recycler_view_item, parent, false);
+        View view = inflater.inflate(R.layout.visits_history_recycler_view_item_v2, parent, false);
         return new VisitsHistoryRecyclerViewAdapter.MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull VisitsHistoryRecyclerViewAdapter.MyViewHolder holder, int position) {
         VisitAndService currentVisit = visitsList.get(position);
+        String date = currentVisit.visit.getDay();
+        String dayMonth = date.substring(0, date.length()-1-4);
+        String year = date.substring(date.length()-4, date.length());
 
         String startEndTime = currentVisit.visit.getStartTime() + " - " + currentVisit.visit.getEndTime();
-        holder.day.setText(currentVisit.visit.getDay());
-        holder.time.setText(startEndTime);
-        holder.service.setText(currentVisit.service.getName());
+        holder.dayAndMonth.setText(dayMonth);
+        holder.year.setText(year);
+        holder.visitTime.setText(startEndTime);
+        holder.serviceName.setText(currentVisit.service.getName());
     }
 
     @Override
@@ -50,14 +54,15 @@ public class VisitsHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Visit
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView day, time, service;
+        TextView dayAndMonth, year, serviceName, visitTime;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            day = itemView.findViewById(R.id.visitDay);
-            time = itemView.findViewById(R.id.visitTime);
-            service = itemView.findViewById(R.id.visitService);
+            dayAndMonth = itemView.findViewById(R.id.dayAndMonth);
+            year = itemView.findViewById(R.id.year);
+            serviceName = itemView.findViewById(R.id.serviceName);
+            visitTime = itemView.findViewById(R.id.visitTime);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

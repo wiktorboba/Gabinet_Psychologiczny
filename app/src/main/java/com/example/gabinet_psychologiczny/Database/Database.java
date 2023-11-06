@@ -15,7 +15,7 @@ import com.example.gabinet_psychologiczny.Model.Patient;
 import com.example.gabinet_psychologiczny.Model.Service;
 import com.example.gabinet_psychologiczny.Model.Visit;
 
-@androidx.room.Database(entities = {Patient.class, Visit.class, Service.class}, version = 14)
+@androidx.room.Database(entities = {Patient.class, Visit.class, Service.class}, version = 4)
 public abstract class Database extends RoomDatabase {
 
     private static Database instance;
@@ -56,6 +56,7 @@ public abstract class Database extends RoomDatabase {
 
         @Override
         protected Void doInBackground(Void... voids) {
+
             Patient p = new Patient("Jan", "Kowalski", 27, "111222333");
 
             patientDao.insert(p);
@@ -64,6 +65,7 @@ public abstract class Database extends RoomDatabase {
 
             Service service = new Service("Terapia", 50);
             serviceDao.insert(service);
+
 
             return null;
         }

@@ -1,16 +1,690 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#009688"
+    android:paddingTop="5dp"
+    android:paddingRight="5dp"
     tools:context=".Fragments.CalendarFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Calendar"
-        android:textSize="26dp" />
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="100dp"
+        android:elevation="10dp"
+        app:cardCornerRadius="10dp">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/selectedWeek"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="tydzień"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/nextWeekButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/baseline_arrow_forward_ios_24"
+                app:layout_constraintBottom_toBottomOf="@+id/selectedWeek"
+                app:layout_constraintStart_toEndOf="@+id/selectedWeek"
+                app:layout_constraintTop_toTopOf="@+id/selectedWeek"
+                app:tint="#009688" />
+
+            <ImageView
+                android:id="@+id/previousWeekButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:scaleX="-1"
+                android:src="@drawable/baseline_arrow_forward_ios_24"
+                app:layout_constraintBottom_toBottomOf="@+id/selectedWeek"
+                app:layout_constraintEnd_toStartOf="@+id/selectedWeek"
+                app:layout_constraintTop_toTopOf="@+id/selectedWeek"
+                app:tint="#009688" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/selectedWeek">
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clipChildren="false"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:id="@+id/hours_layout"
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:background="#FFFFFF"
+                            android:backgroundTint="#FFFFFF"
+                            android:clipChildren="false"
+                            android:orientation="vertical">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="16dp">
+
+                                <TextView
+                                    android:id="@+id/textViewHour6"
+                                    android:layout_width="36dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="6:00"
+                                    android:textAlignment="textEnd"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <View
+                                    android:id="@+id/hour_6"
+                                    android:layout_width="400dp"
+                                    android:layout_height="2dp"
+                                    android:layout_gravity="center"
+                                    android:background="@color/gray"
+                                    app:layout_constraintBottom_toBottomOf="@id/textViewHour6"
+                                    app:layout_constraintLeft_toRightOf="@id/textViewHour6"
+                                    app:layout_constraintTop_toTopOf="@id/textViewHour6" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/hours_spacing">
+
+                                <TextView
+                                    android:id="@+id/textViewHour7"
+                                    android:layout_width="36dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="7:00"
+                                    android:textAlignment="textEnd"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <View
+                                    android:id="@+id/hour_7"
+                                    android:layout_width="400dp"
+                                    android:layout_height="2dp"
+                                    android:layout_gravity="center"
+                                    android:background="@color/light_gray"
+                                    app:layout_constraintBottom_toBottomOf="@id/textViewHour7"
+                                    app:layout_constraintLeft_toRightOf="@id/textViewHour7"
+                                    app:layout_constraintTop_toTopOf="@id/textViewHour7" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/hours_spacing">
+
+                                <TextView
+                                    android:id="@+id/textViewHour8"
+                                    android:layout_width="36dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="8:00"
+                                    android:textAlignment="textEnd"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <View
+                                    android:id="@+id/hour_8"
+                                    android:layout_width="400dp"
+                                    android:layout_height="2dp"
+                                    android:layout_gravity="center"
+                                    android:background="@color/light_gray"
+                                    app:layout_constraintBottom_toBottomOf="@id/textViewHour8"
+                                    app:layout_constraintLeft_toRightOf="@id/textViewHour8"
+                                    app:layout_constraintTop_toTopOf="@id/textViewHour8" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/hours_spacing">
+
+                                <TextView
+                                    android:id="@+id/textViewHour9"
+                                    android:layout_width="36dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="9:00"
+                                    android:textAlignment="textEnd"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <View
+                                    android:id="@+id/hour_9"
+                                    android:layout_width="400dp"
+                                    android:layout_height="2dp"
+                                    android:layout_gravity="center"
+                                    android:background="@color/light_gray"
+                                    app:layout_constraintBottom_toBottomOf="@id/textViewHour9"
+                                    app:layout_constraintLeft_toRightOf="@id/textViewHour9"
+                                    app:layout_constraintTop_toTopOf="@id/textViewHour9" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/hours_spacing">
+
+                                <TextView
+                                    android:id="@+id/textViewHour10"
+                                    android:layout_width="36dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="10:00"
+                                    android:textAlignment="textEnd"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <View
+                                    android:id="@+id/hour_10"
+                                    android:layout_width="400dp"
+                                    android:layout_height="2dp"
+                                    android:layout_gravity="center"
+                                    android:background="@color/light_gray"
+                                    app:layout_constraintBottom_toBottomOf="@id/textViewHour10"
+                                    app:layout_constraintLeft_toRightOf="@id/textViewHour10"
+                                    app:layout_constraintTop_toTopOf="@id/textViewHour10" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/hours_spacing">
+
+                                <TextView
+                                    android:id="@+id/textViewHour11"
+                                    android:layout_width="36dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="11:00"
+                                    android:textAlignment="textEnd"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <View
+                                    android:id="@+id/hour_11"
+                                    android:layout_width="400dp"
+                                    android:layout_height="2dp"
+                                    android:layout_gravity="center"
+                                    android:background="@color/light_gray"
+                                    app:layout_constraintBottom_toBottomOf="@id/textViewHour11"
+                                    app:layout_constraintLeft_toRightOf="@id/textViewHour11"
+                                    app:layout_constraintTop_toTopOf="@id/textViewHour11" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/hours_spacing">
+
+                                <TextView
+                                    android:id="@+id/textViewHour12"
+                                    android:layout_width="36dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="12:00"
+                                    android:textAlignment="textEnd"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <View
+                                    android:id="@+id/hour_12"
+                                    android:layout_width="400dp"
+                                    android:layout_height="2dp"
+                                    android:layout_gravity="center"
+                                    android:background="@color/light_gray"
+                                    app:layout_constraintBottom_toBottomOf="@id/textViewHour12"
+                                    app:layout_constraintLeft_toRightOf="@id/textViewHour12"
+                                    app:layout_constraintTop_toTopOf="@id/textViewHour12" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/hours_spacing">
+
+                                <TextView
+                                    android:id="@+id/textViewHour13"
+                                    android:layout_width="36dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="13:00"
+                                    android:textAlignment="textEnd"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <View
+                                    android:id="@+id/hour_13"
+                                    android:layout_width="400dp"
+                                    android:layout_height="2dp"
+                                    android:layout_gravity="center"
+                                    android:background="@color/light_gray"
+                                    app:layout_constraintBottom_toBottomOf="@id/textViewHour13"
+                                    app:layout_constraintLeft_toRightOf="@id/textViewHour13"
+                                    app:layout_constraintTop_toTopOf="@id/textViewHour13" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/hours_spacing">
+
+                                <TextView
+                                    android:id="@+id/textViewHour14"
+                                    android:layout_width="36dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="14:00"
+                                    android:textAlignment="textEnd"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <View
+                                    android:id="@+id/hour_14"
+                                    android:layout_width="400dp"
+                                    android:layout_height="2dp"
+                                    android:layout_gravity="center"
+                                    android:background="@color/light_gray"
+                                    app:layout_constraintBottom_toBottomOf="@id/textViewHour14"
+                                    app:layout_constraintLeft_toRightOf="@id/textViewHour14"
+                                    app:layout_constraintTop_toTopOf="@id/textViewHour14" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/hours_spacing">
+
+                                <TextView
+                                    android:id="@+id/textViewHour15"
+                                    android:layout_width="36dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="15:00"
+                                    android:textAlignment="textEnd"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <View
+                                    android:id="@+id/hour_15"
+                                    android:layout_width="400dp"
+                                    android:layout_height="2dp"
+                                    android:layout_gravity="center"
+                                    android:background="@color/light_gray"
+                                    app:layout_constraintBottom_toBottomOf="@id/textViewHour15"
+                                    app:layout_constraintLeft_toRightOf="@id/textViewHour15"
+                                    app:layout_constraintTop_toTopOf="@id/textViewHour15" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/hours_spacing">
+
+                                <TextView
+                                    android:id="@+id/textViewHour16"
+                                    android:layout_width="36dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="16:00"
+                                    android:textAlignment="textEnd"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <View
+                                    android:id="@+id/hour_16"
+                                    android:layout_width="400dp"
+                                    android:layout_height="2dp"
+                                    android:layout_gravity="center"
+                                    android:background="@color/light_gray"
+                                    app:layout_constraintBottom_toBottomOf="@id/textViewHour16"
+                                    app:layout_constraintLeft_toRightOf="@id/textViewHour16"
+                                    app:layout_constraintTop_toTopOf="@id/textViewHour16" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/hours_spacing">
+
+                                <TextView
+                                    android:id="@+id/textViewHour17"
+                                    android:layout_width="36dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="17:00"
+                                    android:textAlignment="textEnd"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <View
+                                    android:id="@+id/hour_17"
+                                    android:layout_width="400dp"
+                                    android:layout_height="2dp"
+                                    android:layout_gravity="center"
+                                    android:background="@color/light_gray"
+                                    app:layout_constraintBottom_toBottomOf="@id/textViewHour17"
+                                    app:layout_constraintLeft_toRightOf="@id/textViewHour17"
+                                    app:layout_constraintTop_toTopOf="@id/textViewHour17" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/hours_spacing">
+
+                                <TextView
+                                    android:id="@+id/textViewHour18"
+                                    android:layout_width="36dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="18:00"
+                                    android:textAlignment="textEnd"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <View
+                                    android:id="@+id/hour_18"
+                                    android:layout_width="400dp"
+                                    android:layout_height="2dp"
+                                    android:layout_gravity="center"
+                                    android:background="@color/light_gray"
+                                    app:layout_constraintBottom_toBottomOf="@id/textViewHour18"
+                                    app:layout_constraintLeft_toRightOf="@id/textViewHour18"
+                                    app:layout_constraintTop_toTopOf="@id/textViewHour18" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/hours_spacing">
+
+                                <TextView
+                                    android:id="@+id/textViewHour19"
+                                    android:layout_width="36dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="19:00"
+                                    android:textAlignment="textEnd"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <View
+                                    android:id="@+id/hour_19"
+                                    android:layout_width="400dp"
+                                    android:layout_height="2dp"
+                                    android:layout_gravity="center"
+                                    android:background="@color/light_gray"
+                                    app:layout_constraintBottom_toBottomOf="@id/textViewHour19"
+                                    app:layout_constraintLeft_toRightOf="@id/textViewHour19"
+                                    app:layout_constraintTop_toTopOf="@id/textViewHour19" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/hours_spacing">
+
+                                <TextView
+                                    android:id="@+id/textViewHour20"
+                                    android:layout_width="36dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="20:00"
+                                    android:textAlignment="textEnd"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <View
+                                    android:id="@+id/hour_20"
+                                    android:layout_width="400dp"
+                                    android:layout_height="2dp"
+                                    android:layout_gravity="center"
+                                    android:background="@color/light_gray"
+                                    app:layout_constraintBottom_toBottomOf="@id/textViewHour20"
+                                    app:layout_constraintLeft_toRightOf="@id/textViewHour20"
+                                    app:layout_constraintTop_toTopOf="@id/textViewHour20" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/hours_spacing">
+
+                                <TextView
+                                    android:id="@+id/textViewHour21"
+                                    android:layout_width="36dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="21:00"
+                                    android:textAlignment="textEnd"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <View
+                                    android:id="@+id/hour_21"
+                                    android:layout_width="400dp"
+                                    android:layout_height="2dp"
+                                    android:layout_gravity="center"
+                                    android:background="@color/light_gray"
+                                    app:layout_constraintBottom_toBottomOf="@id/textViewHour21"
+                                    app:layout_constraintLeft_toRightOf="@id/textViewHour21"
+                                    app:layout_constraintTop_toTopOf="@id/textViewHour21" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/hours_spacing">
+
+                                <TextView
+                                    android:id="@+id/textViewHour22"
+                                    android:layout_width="36dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="22:00"
+                                    android:textAlignment="textEnd"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <View
+                                    android:id="@+id/hour_22"
+                                    android:layout_width="400dp"
+                                    android:layout_height="2dp"
+                                    android:layout_gravity="center"
+                                    android:background="@color/gray"
+                                    app:layout_constraintBottom_toBottomOf="@id/textViewHour22"
+                                    app:layout_constraintLeft_toRightOf="@id/textViewHour22"
+                                    app:layout_constraintTop_toTopOf="@id/textViewHour22" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        </LinearLayout>
+
+                        <HorizontalScrollView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:paddingLeft="20dp">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal"
+                                android:paddingBottom="10dp">
+
+                                <View
+                                    android:id="@+id/divider16"
+                                    android:layout_width="2dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:background="@color/gray" />
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/mondayLayout"
+                                    android:layout_width="@dimen/days_spacing"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1">
+
+                                    <TextView
+                                        android:id="@+id/mondayTextView"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="27dp"
+                                        android:text="poniedziałek"
+                                        android:textAlignment="center"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <include
+                                        android:id="@+id/visit1"
+                                        layout="@layout/calendar_visit_item"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@id/mondayTextView" />
+
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                                <View
+                                    android:id="@+id/divider17"
+                                    android:layout_width="2dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:background="@color/gray" />
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/tuesdayLayout"
+                                    android:layout_width="@dimen/days_spacing"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1">
+
+                                    <TextView
+                                        android:id="@+id/tuesdayTextView"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="27dp"
+                                        android:text="wtorek"
+                                        android:textAlignment="center"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                                <View
+                                    android:id="@+id/divider18"
+                                    android:layout_width="2dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:background="@color/gray" />
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/wednesdayLayout"
+                                    android:layout_width="@dimen/days_spacing"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1">
+
+                                    <TextView
+                                        android:id="@+id/wednesdayTextView"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="27dp"
+                                        android:text="środa"
+                                        android:textAlignment="center"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                                <View
+                                    android:id="@+id/divider19"
+                                    android:layout_width="2dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:background="@color/gray" />
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/thursdayLayout"
+                                    android:layout_width="@dimen/days_spacing"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1">
+
+                                    <TextView
+                                        android:id="@+id/thursdayTextView"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="27dp"
+                                        android:text="czwartek"
+                                        android:textAlignment="center"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                                <View
+                                    android:id="@+id/divider20"
+                                    android:layout_width="2dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:background="@color/gray" />
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/fridayLayout"
+                                    android:layout_width="@dimen/days_spacing"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1">
+
+                                    <TextView
+                                        android:id="@+id/fridayTextView"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="27dp"
+                                        android:text="piątek"
+                                        android:textAlignment="center"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                                <View
+                                    android:id="@+id/divider21"
+                                    android:layout_width="2dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:background="@color/gray" />
+
+                            </LinearLayout>
+                        </HorizontalScrollView>
+                    </LinearLayout>
+                </ScrollView>
+
+            </FrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 </FrameLayout>

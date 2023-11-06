@@ -3,6 +3,7 @@ package com.example.gabinet_psychologiczny.Classes;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -14,6 +15,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,18 +31,22 @@ import com.example.gabinet_psychologiczny.Model.Visit;
 import com.example.gabinet_psychologiczny.R;
 import com.example.gabinet_psychologiczny.ViewModel.ServiceViewModel;
 import com.example.gabinet_psychologiczny.ViewModel.VisitViewModel;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class AddVisitDialog extends AppCompatDialogFragment {
 
     AutoCompleteTextView serviceTextView;
     AutoCompleteTextView patientTextView;
     AutoCompleteTextView dateTextView;
-    ImageView addServiceImageView;
+    TextView descriptionTextView;
 
     ArrayList<String> serviceItems = new ArrayList<>();
     List<Service> serviceList = new ArrayList<>();
@@ -52,9 +59,9 @@ public class AddVisitDialog extends AppCompatDialogFragment {
     String patientLastName;
 
     int selectedServiceInArrayAdapter;
-    String visitDay = "19/10/2023";
-    String visitStartTime = "15:00";
-    String visitEndTime = "16:30";
+    String visitDay = "";
+    String visitStartTime = "";
+    String visitEndTime = "";
 
 
     private VisitViewModel visitViewModel;
@@ -93,7 +100,7 @@ public class AddVisitDialog extends AppCompatDialogFragment {
                             Toast.makeText(getActivity(), "Podano niepoprawne dane", Toast.LENGTH_SHORT).show();
                         }
                         else {
-                            Visit visit = new Visit(serviceList.get(selectedServiceInArrayAdapter).getId(), patientId, "opis wizyty",
+                            Visit visit = new Visit(serviceList.get(selectedServiceInArrayAdapter).getId(), patientId, descriptionTextView.getText().toString(),
                                     visitDay, visitStartTime, visitEndTime, false, false);
 
                             visitViewModel.insert(visit);
@@ -106,6 +113,15 @@ public class AddVisitDialog extends AppCompatDialogFragment {
         serviceTextView = view.findViewById(R.id.autoCompleteTextViewServiceSelection);
         patientTextView = view.findViewById(R.id.autoCompleteTextViewPatientSelection);
         dateTextView = view.findViewById(R.id.autoCompleteTextViewDateSelection);
+        descriptionTextView = view.findViewById(R.id.visitDescription);
+
+        FloatingActionButton buttonAddService = view.findViewById(R.id.button_add_service);
+        buttonAddService.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openAddServiceDialog();
+            }
+        });
 
         serviceViewModel.getAllServices().observe(getActivity(), new Observer<List<Service>>() {
             @Override
@@ -115,14 +131,6 @@ public class AddVisitDialog extends AppCompatDialogFragment {
             }
         });
 
-
-        addServiceImageView = view.findViewById(R.id.imageViewAddService);
-        addServiceImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openAddServiceDialog();
-            }
-        });
 
 
         serviceTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -134,9 +142,63 @@ public class AddVisitDialog extends AppCompatDialogFragment {
 
 
         dateTextView.setOnClickListener(new View.OnClickListener() {
+
+            Calendar c = Calendar.getInstance();
+
             @Override
             public void onClick(View view) {
-                dateTextView.setText(visitDay + " " + visitStartTime + "-" + visitEndTime);
+                DatePickerDialog dayDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+
+                        c.set(year, month, day);
+                        visitDay = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(c.getTime());
+
+                        TimePickerDialog startTimeDialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker timePicker, int hours, int minutes) {
+                                String selectedHour = Integer.toString(hours);
+                                String selectedMinute = Integer.toString(minutes);
+
+                                if(selectedHour.equals("0"))
+                                    selectedHour = "00";
+                                if(selectedMinute.equals("0"))
+                                    selectedMinute = "00";
+
+                                visitStartTime = selectedHour + ":" + selectedMinute;
+
+                                TimePickerDialog endTimeDialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
+                                    @Override
+                                    public void onTimeSet(TimePicker timePicker, int hours, int minutes) {
+
+                                        String selectedHour = Integer.toString(hours);
+                                        String selectedMinute = Integer.toString(minutes);
+
+                                        if(selectedHour.equals("0"))
+                                            selectedHour = "00";
+                                        if(selectedMinute.equals("0"))
+                                            selectedMinute = "00";
+
+                                        visitEndTime = selectedHour + ":" + selectedMinute;
+                                        dateTextView.setText(visitDay + " " + visitStartTime + "-" + visitEndTime);
+                                    }
+                                }, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
+
+                                endTimeDialog.setTitle("Godzina zakończenia wizyty");
+                                endTimeDialog.show();
+                            }
+                        }, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
+
+                        startTimeDialog.setTitle("Godzina rozpoczęcia wizyty");
+                        startTimeDialog.show();
+                    }
+                }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+
+                dayDialog.setTitle("Dzień wizyty");
+                dayDialog.show();
+
+
             }
         });
 

@@ -72,6 +72,10 @@ public class Visit {
         this.patientId = id;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
 
     // Getters
     public int getId() {
