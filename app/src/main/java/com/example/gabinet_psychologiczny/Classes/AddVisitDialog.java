@@ -35,6 +35,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -59,9 +62,9 @@ public class AddVisitDialog extends AppCompatDialogFragment {
     String patientLastName;
 
     int selectedServiceInArrayAdapter;
-    String visitDay = "";
-    String visitStartTime = "";
-    String visitEndTime = "";
+    LocalDate visitDay = null;
+    LocalTime visitStartTime = null;
+    LocalTime visitEndTime = null;
 
 
     private VisitViewModel visitViewModel;
@@ -96,7 +99,7 @@ public class AddVisitDialog extends AppCompatDialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
-                        if(patientId == null || visitDay.isEmpty() || visitStartTime.isEmpty() || visitEndTime.isEmpty()) {
+                        if(patientId == null || visitDay == null || visitStartTime == null || visitEndTime == null) {
                             Toast.makeText(getActivity(), "Podano niepoprawne dane", Toast.LENGTH_SHORT).show();
                         }
                         else {
@@ -153,35 +156,21 @@ public class AddVisitDialog extends AppCompatDialogFragment {
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
 
                         c.set(year, month, day);
-                        visitDay = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(c.getTime());
+                        visitDay = c.getTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
                         TimePickerDialog startTimeDialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker timePicker, int hours, int minutes) {
-                                String selectedHour = Integer.toString(hours);
-                                String selectedMinute = Integer.toString(minutes);
 
-                                if(selectedHour.equals("0"))
-                                    selectedHour = "00";
-                                if(selectedMinute.equals("0"))
-                                    selectedMinute = "00";
-
-                                visitStartTime = selectedHour + ":" + selectedMinute;
+                                visitStartTime = LocalTime.of(hours, minutes);
 
                                 TimePickerDialog endTimeDialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
                                     @Override
                                     public void onTimeSet(TimePicker timePicker, int hours, int minutes) {
 
-                                        String selectedHour = Integer.toString(hours);
-                                        String selectedMinute = Integer.toString(minutes);
-
-                                        if(selectedHour.equals("0"))
-                                            selectedHour = "00";
-                                        if(selectedMinute.equals("0"))
-                                            selectedMinute = "00";
-
-                                        visitEndTime = selectedHour + ":" + selectedMinute;
-                                        dateTextView.setText(visitDay + " " + visitStartTime + "-" + visitEndTime);
+                                        visitEndTime = LocalTime.of(hours, minutes);
+                                        dateTextView.setText(CalendarUtils.formattedDate(visitDay) + " " +
+                                                CalendarUtils.formattedTime(visitStartTime) + "-" + CalendarUtils.formattedTime(visitEndTime));
                                     }
                                 }, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
 

@@ -5,6 +5,9 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 @Entity(tableName = "visit_table", foreignKeys = {
 
         @ForeignKey(
@@ -38,16 +41,16 @@ public class Visit {
 
 
     //TODO change to Date or LocalDate
-    private String day;
-    private String startTime;
-    private String endTime;
+    private LocalDate day;
+    private LocalTime startTime;
+    private LocalTime endTime;
 
 
     //TODO change to enum
     private boolean paymentStatus;
     private boolean tookPlaceStatus;
 
-    public Visit(int serviceId, int patientId, String description, String day , String startTime, String endTime, boolean paymentStatus, boolean tookPlaceStatus) {
+    public Visit(int serviceId, int patientId, String description, LocalDate day , LocalTime startTime, LocalTime endTime, boolean paymentStatus, boolean tookPlaceStatus) {
         this.serviceId = serviceId;
         this.patientId = patientId;
         this.description = description;
@@ -94,11 +97,11 @@ public class Visit {
         return description;
     }
 
-    public String getDay() { return day; }
+    public LocalDate getDay() { return day; }
 
-    public String getStartTime() { return startTime; }
+    public LocalTime getStartTime() { return startTime; }
 
-    public String getEndTime() {
+    public LocalTime getEndTime() {
         return endTime;
     }
 

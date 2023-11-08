@@ -7,10 +7,12 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.example.gabinet_psychologiczny.Database.Relations.PatientWithVisits;
+import com.example.gabinet_psychologiczny.Database.Relations.VisitAndPatient;
 import com.example.gabinet_psychologiczny.Database.Relations.VisitAndService;
 import com.example.gabinet_psychologiczny.Database.Repository.VisitRepository;
 import com.example.gabinet_psychologiczny.Model.Visit;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class VisitViewModel extends AndroidViewModel {
@@ -48,5 +50,7 @@ public class VisitViewModel extends AndroidViewModel {
     public LiveData<PatientWithVisits> getPatientWithVisitsById(int id) { return repository.getPatientWithVisitsById(id); }
 
     public LiveData<VisitAndService> getVisitAndServiceById(int id) { return repository.getVisitAndServiceById(id); }
+    public LiveData<VisitAndPatient> getVisitAndPatientById(int id) { return repository.getVisitAndPatientById(id); }
+    public LiveData<List<VisitAndService>> getVisitAndServiceFromDayToDay(LocalDate fromDay, LocalDate toDay) { return repository.getVisitAndServiceFromDayToDay(fromDay, toDay); }
 
 }

@@ -3,4 +3,6 @@
     <dimen name="hours_spacing">43dp</dimen>
     <dimen name="visit_hour_height">60dp</dimen>
     <dimen name="days_spacing">150dp</dimen>
+    <dimen name="top_offset">27.5dp</dimen>
+    <dimen name="dividers_size">2dp</dimen>
 </resources>

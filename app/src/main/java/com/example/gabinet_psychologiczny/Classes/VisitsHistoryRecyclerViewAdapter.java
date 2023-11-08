@@ -32,12 +32,12 @@ public class VisitsHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Visit
     @Override
     public void onBindViewHolder(@NonNull VisitsHistoryRecyclerViewAdapter.MyViewHolder holder, int position) {
         VisitAndService currentVisit = visitsList.get(position);
-        String date = currentVisit.visit.getDay();
-        String dayMonth = date.substring(0, date.length()-1-4);
-        String year = date.substring(date.length()-4, date.length());
+        String day = Integer.toString(currentVisit.visit.getDay().getDayOfMonth());
+        String month = Integer.toString(currentVisit.visit.getDay().getMonthValue());
+        String year = Integer.toString(currentVisit.visit.getDay().getYear());
+        String startEndTime = CalendarUtils.formattedTime(currentVisit.visit.getStartTime()) + " - " + CalendarUtils.formattedTime(currentVisit.visit.getEndTime());
 
-        String startEndTime = currentVisit.visit.getStartTime() + " - " + currentVisit.visit.getEndTime();
-        holder.dayAndMonth.setText(dayMonth);
+        holder.dayAndMonth.setText(day + "." + month);
         holder.year.setText(year);
         holder.visitTime.setText(startEndTime);
         holder.serviceName.setText(currentVisit.service.getName());

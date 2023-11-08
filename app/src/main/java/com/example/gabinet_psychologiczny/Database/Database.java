@@ -8,6 +8,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.example.gabinet_psychologiczny.Database.Converters.DateConverter;
+import com.example.gabinet_psychologiczny.Database.Converters.TimeConverter;
 import com.example.gabinet_psychologiczny.Database.Dao.PatientDao;
 import com.example.gabinet_psychologiczny.Database.Dao.ServiceDao;
 import com.example.gabinet_psychologiczny.Database.Dao.VisitDao;
@@ -16,6 +18,7 @@ import com.example.gabinet_psychologiczny.Model.Service;
 import com.example.gabinet_psychologiczny.Model.Visit;
 
 @androidx.room.Database(entities = {Patient.class, Visit.class, Service.class}, version = 4)
+@androidx.room.TypeConverters({DateConverter.class, TimeConverter.class})
 public abstract class Database extends RoomDatabase {
 
     private static Database instance;

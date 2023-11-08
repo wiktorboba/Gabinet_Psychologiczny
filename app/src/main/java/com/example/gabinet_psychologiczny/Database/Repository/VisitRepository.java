@@ -8,9 +8,11 @@ import androidx.lifecycle.LiveData;
 import com.example.gabinet_psychologiczny.Database.Dao.VisitDao;
 import com.example.gabinet_psychologiczny.Database.Database;
 import com.example.gabinet_psychologiczny.Database.Relations.PatientWithVisits;
+import com.example.gabinet_psychologiczny.Database.Relations.VisitAndPatient;
 import com.example.gabinet_psychologiczny.Database.Relations.VisitAndService;
 import com.example.gabinet_psychologiczny.Model.Visit;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class VisitRepository {
@@ -48,6 +50,9 @@ public class VisitRepository {
     public LiveData<PatientWithVisits> getPatientWithVisitsById(int id) { return visitDao.getPatientWithVisitsById(id); }
 
     public LiveData<VisitAndService> getVisitAndServiceById(int id) { return visitDao.getVisitAndServiceById(id); }
+    public LiveData<VisitAndPatient> getVisitAndPatientById(int id) { return visitDao.getVisitAndPatientById(id); }
+
+    public LiveData<List<VisitAndService>>getVisitAndServiceFromDayToDay(LocalDate fromDay, LocalDate toDay) { return visitDao.getVisitAndServiceFromDayToDay(fromDay, toDay); }
 
     private static class InsertVisitAsyncTask extends AsyncTask<Visit, Void, Void> {
         private VisitDao visitDao;

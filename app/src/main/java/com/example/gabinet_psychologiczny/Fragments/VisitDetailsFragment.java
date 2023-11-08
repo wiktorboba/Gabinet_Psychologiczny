@@ -20,6 +20,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.gabinet_psychologiczny.Classes.CalendarUtils;
 import com.example.gabinet_psychologiczny.Classes.VisitsHistoryRecyclerViewAdapter;
 import com.example.gabinet_psychologiczny.Database.Relations.PatientWithVisits;
 import com.example.gabinet_psychologiczny.Database.Relations.VisitAndService;
@@ -155,7 +156,7 @@ public class VisitDetailsFragment extends Fragment {
     private void setUpVisitInformation() {
         binding.service.setText(service.getName());
         binding.patientName.setText(firstName + " " + lastName);
-        binding.visitDate.setText(visit.getDay());
+        binding.visitDate.setText(CalendarUtils.formattedDate(visit.getDay()));
         binding.visitStartEndTime.setText(visit.getStartTime() + " - " + visit.getEndTime());
         binding.description.setText(visit.getDescription());
 

@@ -105,7 +105,7 @@
                                 <View
                                     android:id="@+id/hour_6"
                                     android:layout_width="400dp"
-                                    android:layout_height="2dp"
+                                    android:layout_height="@dimen/dividers_size"
                                     android:layout_gravity="center"
                                     android:background="@color/gray"
                                     app:layout_constraintBottom_toBottomOf="@id/textViewHour6"
@@ -130,7 +130,7 @@
                                 <View
                                     android:id="@+id/hour_7"
                                     android:layout_width="400dp"
-                                    android:layout_height="2dp"
+                                    android:layout_height="@dimen/dividers_size"
                                     android:layout_gravity="center"
                                     android:background="@color/light_gray"
                                     app:layout_constraintBottom_toBottomOf="@id/textViewHour7"
@@ -156,7 +156,7 @@
                                 <View
                                     android:id="@+id/hour_8"
                                     android:layout_width="400dp"
-                                    android:layout_height="2dp"
+                                    android:layout_height="@dimen/dividers_size"
                                     android:layout_gravity="center"
                                     android:background="@color/light_gray"
                                     app:layout_constraintBottom_toBottomOf="@id/textViewHour8"
@@ -182,7 +182,7 @@
                                 <View
                                     android:id="@+id/hour_9"
                                     android:layout_width="400dp"
-                                    android:layout_height="2dp"
+                                    android:layout_height="@dimen/dividers_size"
                                     android:layout_gravity="center"
                                     android:background="@color/light_gray"
                                     app:layout_constraintBottom_toBottomOf="@id/textViewHour9"
@@ -208,7 +208,7 @@
                                 <View
                                     android:id="@+id/hour_10"
                                     android:layout_width="400dp"
-                                    android:layout_height="2dp"
+                                    android:layout_height="@dimen/dividers_size"
                                     android:layout_gravity="center"
                                     android:background="@color/light_gray"
                                     app:layout_constraintBottom_toBottomOf="@id/textViewHour10"
@@ -234,7 +234,7 @@
                                 <View
                                     android:id="@+id/hour_11"
                                     android:layout_width="400dp"
-                                    android:layout_height="2dp"
+                                    android:layout_height="@dimen/dividers_size"
                                     android:layout_gravity="center"
                                     android:background="@color/light_gray"
                                     app:layout_constraintBottom_toBottomOf="@id/textViewHour11"
@@ -260,7 +260,7 @@
                                 <View
                                     android:id="@+id/hour_12"
                                     android:layout_width="400dp"
-                                    android:layout_height="2dp"
+                                    android:layout_height="@dimen/dividers_size"
                                     android:layout_gravity="center"
                                     android:background="@color/light_gray"
                                     app:layout_constraintBottom_toBottomOf="@id/textViewHour12"
@@ -286,7 +286,7 @@
                                 <View
                                     android:id="@+id/hour_13"
                                     android:layout_width="400dp"
-                                    android:layout_height="2dp"
+                                    android:layout_height="@dimen/dividers_size"
                                     android:layout_gravity="center"
                                     android:background="@color/light_gray"
                                     app:layout_constraintBottom_toBottomOf="@id/textViewHour13"
@@ -312,7 +312,7 @@
                                 <View
                                     android:id="@+id/hour_14"
                                     android:layout_width="400dp"
-                                    android:layout_height="2dp"
+                                    android:layout_height="@dimen/dividers_size"
                                     android:layout_gravity="center"
                                     android:background="@color/light_gray"
                                     app:layout_constraintBottom_toBottomOf="@id/textViewHour14"
@@ -338,7 +338,7 @@
                                 <View
                                     android:id="@+id/hour_15"
                                     android:layout_width="400dp"
-                                    android:layout_height="2dp"
+                                    android:layout_height="@dimen/dividers_size"
                                     android:layout_gravity="center"
                                     android:background="@color/light_gray"
                                     app:layout_constraintBottom_toBottomOf="@id/textViewHour15"
@@ -364,7 +364,7 @@
                                 <View
                                     android:id="@+id/hour_16"
                                     android:layout_width="400dp"
-                                    android:layout_height="2dp"
+                                    android:layout_height="@dimen/dividers_size"
                                     android:layout_gravity="center"
                                     android:background="@color/light_gray"
                                     app:layout_constraintBottom_toBottomOf="@id/textViewHour16"
@@ -390,7 +390,7 @@
                                 <View
                                     android:id="@+id/hour_17"
                                     android:layout_width="400dp"
-                                    android:layout_height="2dp"
+                                    android:layout_height="@dimen/dividers_size"
                                     android:layout_gravity="center"
                                     android:background="@color/light_gray"
                                     app:layout_constraintBottom_toBottomOf="@id/textViewHour17"
@@ -416,7 +416,7 @@
                                 <View
                                     android:id="@+id/hour_18"
                                     android:layout_width="400dp"
-                                    android:layout_height="2dp"
+                                    android:layout_height="@dimen/dividers_size"
                                     android:layout_gravity="center"
                                     android:background="@color/light_gray"
                                     app:layout_constraintBottom_toBottomOf="@id/textViewHour18"
@@ -442,7 +442,7 @@
                                 <View
                                     android:id="@+id/hour_19"
                                     android:layout_width="400dp"
-                                    android:layout_height="2dp"
+                                    android:layout_height="@dimen/dividers_size"
                                     android:layout_gravity="center"
                                     android:background="@color/light_gray"
                                     app:layout_constraintBottom_toBottomOf="@id/textViewHour19"
@@ -468,7 +468,7 @@
                                 <View
                                     android:id="@+id/hour_20"
                                     android:layout_width="400dp"
-                                    android:layout_height="2dp"
+                                    android:layout_height="@dimen/dividers_size"
                                     android:layout_gravity="center"
                                     android:background="@color/light_gray"
                                     app:layout_constraintBottom_toBottomOf="@id/textViewHour20"
@@ -494,7 +494,7 @@
                                 <View
                                     android:id="@+id/hour_21"
                                     android:layout_width="400dp"
-                                    android:layout_height="2dp"
+                                    android:layout_height="@dimen/dividers_size"
                                     android:layout_gravity="center"
                                     android:background="@color/light_gray"
                                     app:layout_constraintBottom_toBottomOf="@id/textViewHour21"
@@ -520,7 +520,7 @@
                                 <View
                                     android:id="@+id/hour_22"
                                     android:layout_width="400dp"
-                                    android:layout_height="2dp"
+                                    android:layout_height="@dimen/dividers_size"
                                     android:layout_gravity="center"
                                     android:background="@color/gray"
                                     app:layout_constraintBottom_toBottomOf="@id/textViewHour22"
@@ -544,7 +544,7 @@
 
                                 <View
                                     android:id="@+id/divider16"
-                                    android:layout_width="2dp"
+                                    android:layout_width="@dimen/dividers_size"
                                     android:layout_height="match_parent"
                                     android:layout_weight="1"
                                     android:background="@color/gray" />
@@ -565,20 +565,11 @@
                                         app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintTop_toTopOf="parent" />
 
-                                    <include
-                                        android:id="@+id/visit1"
-                                        layout="@layout/calendar_visit_item"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        app:layout_constraintEnd_toEndOf="parent"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toBottomOf="@id/mondayTextView" />
-
                                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                                 <View
                                     android:id="@+id/divider17"
-                                    android:layout_width="2dp"
+                                    android:layout_width="@dimen/dividers_size"
                                     android:layout_height="match_parent"
                                     android:layout_weight="1"
                                     android:background="@color/gray" />
@@ -598,11 +589,12 @@
                                         app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintTop_toTopOf="parent" />
+
                                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                                 <View
                                     android:id="@+id/divider18"
-                                    android:layout_width="2dp"
+                                    android:layout_width="@dimen/dividers_size"
                                     android:layout_height="match_parent"
                                     android:layout_weight="1"
                                     android:background="@color/gray" />
@@ -626,7 +618,7 @@
 
                                 <View
                                     android:id="@+id/divider19"
-                                    android:layout_width="2dp"
+                                    android:layout_width="@dimen/dividers_size"
                                     android:layout_height="match_parent"
                                     android:layout_weight="1"
                                     android:background="@color/gray" />
@@ -650,7 +642,7 @@
 
                                 <View
                                     android:id="@+id/divider20"
-                                    android:layout_width="2dp"
+                                    android:layout_width="@dimen/dividers_size"
                                     android:layout_height="match_parent"
                                     android:layout_weight="1"
                                     android:background="@color/gray" />
@@ -674,7 +666,7 @@
 
                                 <View
                                     android:id="@+id/divider21"
-                                    android:layout_width="2dp"
+                                    android:layout_width="@dimen/dividers_size"
                                     android:layout_height="match_parent"
                                     android:layout_weight="1"
                                     android:background="@color/gray" />
