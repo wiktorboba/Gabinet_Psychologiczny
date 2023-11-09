@@ -7,9 +7,7 @@ import com.example.gabinet_psychologiczny.Model.Patient;
 import com.example.gabinet_psychologiczny.Model.Service;
 import com.example.gabinet_psychologiczny.Model.Visit;
 
-import java.util.List;
-
-public class VisitAndService {
+public class VisitWithPatientAndService {
 
     @Embedded
     public Visit visit;

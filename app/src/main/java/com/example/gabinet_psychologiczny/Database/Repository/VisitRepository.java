@@ -9,7 +9,7 @@ import com.example.gabinet_psychologiczny.Database.Dao.VisitDao;
 import com.example.gabinet_psychologiczny.Database.Database;
 import com.example.gabinet_psychologiczny.Database.Relations.PatientWithVisits;
 import com.example.gabinet_psychologiczny.Database.Relations.VisitAndPatient;
-import com.example.gabinet_psychologiczny.Database.Relations.VisitAndService;
+import com.example.gabinet_psychologiczny.Database.Relations.VisitWithPatientAndService;
 import com.example.gabinet_psychologiczny.Model.Visit;
 
 import java.time.LocalDate;
@@ -20,7 +20,7 @@ public class VisitRepository {
     private VisitDao visitDao;
     private LiveData<List<Visit>> allVisits;
 
-    private LiveData<List<VisitAndService>> allVisitsAndServices;
+    private LiveData<List<VisitWithPatientAndService>> allVisitsAndServices;
 
     public VisitRepository(Application application) {
         Database database = Database.getInstance(application);
@@ -45,14 +45,14 @@ public class VisitRepository {
         return allVisits;
     }
 
-    public LiveData<List<VisitAndService>> getAllVisitsAndServices() { return allVisitsAndServices; }
+    public LiveData<List<VisitWithPatientAndService>> getAllVisitsAndServices() { return allVisitsAndServices; }
 
     public LiveData<PatientWithVisits> getPatientWithVisitsById(int id) { return visitDao.getPatientWithVisitsById(id); }
 
-    public LiveData<VisitAndService> getVisitAndServiceById(int id) { return visitDao.getVisitAndServiceById(id); }
+    public LiveData<VisitWithPatientAndService> getVisitAndServiceById(int id) { return visitDao.getVisitAndServiceById(id); }
     public LiveData<VisitAndPatient> getVisitAndPatientById(int id) { return visitDao.getVisitAndPatientById(id); }
 
-    public LiveData<List<VisitAndService>>getVisitAndServiceFromDayToDay(LocalDate fromDay, LocalDate toDay) { return visitDao.getVisitAndServiceFromDayToDay(fromDay, toDay); }
+    public LiveData<List<VisitWithPatientAndService>>getVisitAndServiceFromDayToDay(LocalDate fromDay, LocalDate toDay) { return visitDao.getVisitAndServiceFromDayToDay(fromDay, toDay); }
 
     private static class InsertVisitAsyncTask extends AsyncTask<Visit, Void, Void> {
         private VisitDao visitDao;

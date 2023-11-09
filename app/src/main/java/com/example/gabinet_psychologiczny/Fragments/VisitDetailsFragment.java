@@ -7,11 +7,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,17 +18,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gabinet_psychologiczny.Classes.CalendarUtils;
-import com.example.gabinet_psychologiczny.Classes.VisitsHistoryRecyclerViewAdapter;
-import com.example.gabinet_psychologiczny.Database.Relations.PatientWithVisits;
-import com.example.gabinet_psychologiczny.Database.Relations.VisitAndService;
+import com.example.gabinet_psychologiczny.Database.Relations.VisitWithPatientAndService;
+import com.example.gabinet_psychologiczny.Model.Patient;
 import com.example.gabinet_psychologiczny.Model.Service;
 import com.example.gabinet_psychologiczny.Model.Visit;
-import com.example.gabinet_psychologiczny.R;
-import com.example.gabinet_psychologiczny.ViewModel.PatientViewModel;
 import com.example.gabinet_psychologiczny.ViewModel.VisitViewModel;
-import com.example.gabinet_psychologiczny.databinding.FragmentCalendarBinding;
 import com.example.gabinet_psychologiczny.databinding.FragmentVisitDetailsBinding;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 /**
@@ -49,13 +41,13 @@ public class VisitDetailsFragment extends Fragment {
 
     // TODO: Rename and change types of parameters
     private int id;
-    private String firstName;
-    private String lastName;
     private FragmentVisitDetailsBinding binding;
     private VisitViewModel visitViewModel;
     RecyclerView recyclerView;
     Visit visit;
     Service service;
+    Patient patient;
+
 
     public VisitDetailsFragment() {
         // Required empty public constructor
@@ -66,17 +58,13 @@ public class VisitDetailsFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @param param3 Parameter 3.
      * @return A new instance of fragment VisitDetailsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static VisitDetailsFragment newInstance(int param1, String param2, String param3) {
+    public static VisitDetailsFragment newInstance(int param1) {
         VisitDetailsFragment fragment = new VisitDetailsFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        args.putString(ARG_PARAM3, param3);
         fragment.setArguments(args);
         return fragment;
     }
@@ -86,8 +74,6 @@ public class VisitDetailsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             id = getArguments().getInt(ARG_PARAM1);
-            firstName = getArguments().getString(ARG_PARAM2);
-            lastName = getArguments().getString(ARG_PARAM3);
         }
     }
 
@@ -142,11 +128,12 @@ public class VisitDetailsFragment extends Fragment {
 
 
         visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
-        visitViewModel.getVisitAndServiceById(id).observe(getViewLifecycleOwner(), new Observer<VisitAndService>() {
+        visitViewModel.getVisitAndServiceById(id).observe(getViewLifecycleOwner(), new Observer<VisitWithPatientAndService>() {
             @Override
-            public void onChanged(@Nullable VisitAndService v) {
+            public void onChanged(@Nullable VisitWithPatientAndService v) {
                 visit = v.visit;
                 service = v.service;
+                patient = v.patient;
                 setUpVisitInformation();
             }
         });
@@ -155,7 +142,7 @@ public class VisitDetailsFragment extends Fragment {
 
     private void setUpVisitInformation() {
         binding.service.setText(service.getName());
-        binding.patientName.setText(firstName + " " + lastName);
+        binding.patientName.setText(patient.getFirstName() + " " + patient.getLastName());
         binding.visitDate.setText(CalendarUtils.formattedDate(visit.getDay()));
         binding.visitStartEndTime.setText(visit.getStartTime() + " - " + visit.getEndTime());
         binding.description.setText(visit.getDescription());

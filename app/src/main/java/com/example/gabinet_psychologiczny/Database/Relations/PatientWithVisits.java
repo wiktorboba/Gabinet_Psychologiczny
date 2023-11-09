@@ -16,6 +16,6 @@ public class PatientWithVisits {
             parentColumn = "patient_id",
             entityColumn = "patient_id"
     )
-    public List<VisitAndService> visitList;
+    public List<VisitWithPatientAndService> visitList;
 
 }

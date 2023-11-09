@@ -8,6 +8,8 @@ import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -15,22 +17,20 @@ import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.gabinet_psychologiczny.Classes.CalendarUtils;
-import com.example.gabinet_psychologiczny.Database.Relations.VisitAndService;
+import com.example.gabinet_psychologiczny.Database.Relations.VisitWithPatientAndService;
 import com.example.gabinet_psychologiczny.R;
 import com.example.gabinet_psychologiczny.ViewModel.VisitViewModel;
 import com.example.gabinet_psychologiczny.databinding.FragmentCalendarBinding;
 
-import java.sql.Array;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -68,8 +68,9 @@ public class CalendarFragment extends Fragment {
 
     private ArrayList<TextView> dayNamesList;
 
+    private ArrayList<CardView> displayedVisits = new ArrayList<>();
 
-    private LiveData<List<VisitAndService>> observedWeek;
+    private LiveData<List<VisitWithPatientAndService>> observedWeek;
 
 
     public CalendarFragment() {
@@ -139,7 +140,6 @@ public class CalendarFragment extends Fragment {
         });
 
         currentDate = LocalDate.now();
-        setWeekView();
     }
 
     private void setUpWidgets(){
@@ -180,10 +180,10 @@ public class CalendarFragment extends Fragment {
         setDayNames(days);
 
         observedWeek = visitViewModel.getVisitAndServiceFromDayToDay(days.get(0), days.get(days.size()-1));
-        observedWeek.observe(getViewLifecycleOwner(), new Observer<List<VisitAndService>>() {
+        observedWeek.observe(getViewLifecycleOwner(), new Observer<List<VisitWithPatientAndService>>() {
             @Override
-            public void onChanged(@Nullable List<VisitAndService> visitAndServices) {
-                ArrayList<ArrayList<VisitAndService>> visitsPerDay = getVisitsPerDay(days, visitAndServices);
+            public void onChanged(@Nullable List<VisitWithPatientAndService> visitWithPatientAndServices) {
+                ArrayList<ArrayList<VisitWithPatientAndService>> visitsPerDay = getVisitsPerDay(days, visitWithPatientAndServices);
                 setUpVisitsInCalendar(visitsPerDay);
                 observedWeek.removeObserver(this);
             }
@@ -191,16 +191,36 @@ public class CalendarFragment extends Fragment {
 
     }
 
-    private void setUpVisitsInCalendar(ArrayList<ArrayList<VisitAndService>> visitsPerDay) {
+    private void setUpVisitsInCalendar(ArrayList<ArrayList<VisitWithPatientAndService>> visitsPerDay) {
         int i=0;
+        if(!displayedVisits.isEmpty())
+            removeVisitsFromView();
+
         for(ConstraintLayout dayLayout: daysLayouts){
-            ArrayList<VisitAndService> visits = visitsPerDay.get(i);
-            for(VisitAndService visit: visits){
+            ArrayList<VisitWithPatientAndService> visits = visitsPerDay.get(i);
+
+            if(Duration.between(LocalTime.of(6, 0), visits.get(0).visit.getStartTime()).toMinutes() > 30){
+                CardView freetimeCardView = createCardViewForFreeTime(dayLayout, LocalTime.of(6, 0), visits.get(0).visit.getStartTime());
+                displayedVisits.add(freetimeCardView);
+            }
+
+
+
+            for(VisitWithPatientAndService visit: visits){
                 CardView visitCardView = createCardViewForVisit(dayLayout, visit);
+                displayedVisits.add(visitCardView);
+
+
                 visitCardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("visit_id", visit.visit.getId());
+                        Fragment fragment = new VisitDetailsFragment();
+                        fragment.setArguments(bundle);
+                        getActivity().findViewById(R.id.bottomNavigationView).setVisibility(View.GONE);
+                        replaceFragment(fragment);
+                        //addFragmentFromBottom(fragment);
                     }
                 });
             }
@@ -208,7 +228,7 @@ public class CalendarFragment extends Fragment {
         }
     }
 
-    private CardView createCardViewForVisit(ConstraintLayout parentLayout, VisitAndService visit){
+    private CardView createCardViewForVisit(ConstraintLayout parentLayout, VisitWithPatientAndService visit){
         //calculate cardview height and offset
         double visitDuration = Duration.between(visit.visit.getStartTime(), visit.visit.getEndTime()).toMinutes() / 60f;
         double verticalOffset = Duration.between(LocalTime.of(6, 0), visit.visit.getStartTime()).toMinutes() / 60f;
@@ -232,10 +252,43 @@ public class CalendarFragment extends Fragment {
         //set up information inside cardview
         TextView time = visitCardView.findViewById(R.id.visitStartEndTime);
         TextView patientName = visitCardView.findViewById(R.id.patientName);
-        time.setText(CalendarUtils.formattedTime(visit.visit.getStartTime()) + "-" + CalendarUtils.formattedTime(visit.visit.getEndTime()));
-        //patientName.setText(visit.visit.get);
+        time.setText(CalendarUtils.formattedTime(visit.visit.getStartTime()) + " - " + CalendarUtils.formattedTime(visit.visit.getEndTime()));
+        patientName.setText(visit.patient.getFirstName() + " " + visit.patient.getLastName());
 
         return visitCardView;
+    }
+
+    private CardView createCardViewForFreeTime(ConstraintLayout parentLayout, LocalTime startTime, LocalTime endTime){
+        //calculate cardview height and offset
+        double visitDuration = Duration.between(startTime, endTime).toMinutes() / 60f;
+        double verticalOffset = Duration.between(LocalTime.of(6, 0), startTime).toMinutes() / 60f;
+
+        //inflate cardview with layout from xml
+        CardView freetimeCardView = (CardView)getLayoutInflater().inflate(R.layout.calendar_freetime_item, parentLayout, false);
+        freetimeCardView.setId(View.generateViewId());
+
+        //set up cardview height
+        ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams)freetimeCardView.getLayoutParams();
+        layoutParams.height = (int)(visitDuration*(one_hour_height + dividers_size));
+        freetimeCardView.setLayoutParams(layoutParams);
+        parentLayout.addView(freetimeCardView);
+
+        //set up cardview offset (horizontal placement)
+        ConstraintSet constraintSet = new ConstraintSet();
+        constraintSet.clone(parentLayout);
+        constraintSet.connect(freetimeCardView.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, (int)(verticalOffset*(one_hour_height + dividers_size) + dividers_size + top_offset));
+        constraintSet.applyTo(parentLayout);
+
+
+        return freetimeCardView;
+    }
+
+    private void removeVisitsFromView(){
+        for(CardView visitCardView: displayedVisits){
+            ConstraintLayout parent = (ConstraintLayout)visitCardView.getParent();
+            parent.removeView(visitCardView);
+        }
+        displayedVisits = new ArrayList<>();
     }
 
     private void previousWeek(){
@@ -256,18 +309,54 @@ public class CalendarFragment extends Fragment {
         }
     }
 
-    private ArrayList<ArrayList<VisitAndService>> getVisitsPerDay(ArrayList<LocalDate> days, List<VisitAndService> allVisitsInWeek){
-        ArrayList<ArrayList<VisitAndService>> visitsPerDay = new ArrayList<>();
+    private ArrayList<ArrayList<VisitWithPatientAndService>> getVisitsPerDay(ArrayList<LocalDate> days, List<VisitWithPatientAndService> allVisitsInWeek){
+        ArrayList<ArrayList<VisitWithPatientAndService>> visitsPerDay = new ArrayList<>();
         for(LocalDate day: days){
-            ArrayList<VisitAndService> visitsThisDay = new ArrayList<>();
-            for(VisitAndService visit: allVisitsInWeek){
+            ArrayList<VisitWithPatientAndService> visitsThisDay = new ArrayList<>();
+            for(VisitWithPatientAndService visit: allVisitsInWeek){
                 if(visit.visit.getDay().equals(day)){
                     visitsThisDay.add(visit);
-                    //allVisitsInWeek.remove(visit);
+                    //allVisitsInWeek.remove(visit); //TODO
                 }
             }
+            visitsThisDay.sort(new Comparator<VisitWithPatientAndService>() {
+                @Override
+                public int compare(VisitWithPatientAndService v1, VisitWithPatientAndService v2) {
+                    return v1.visit.getStartTime().compareTo(v2.visit.getStartTime());
+                }
+            });
             visitsPerDay.add(visitsThisDay);
         }
         return visitsPerDay;
+    }
+
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_layout, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    private void addFragmentFromBottom(Fragment fragment) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_top);
+        fragmentTransaction.replace(R.id.bottom_container, fragment);
+        //fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().findViewById(R.id.bottomNavigationView).setVisibility(View.VISIBLE);
+        setWeekView();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        removeVisitsFromView();
     }
 }

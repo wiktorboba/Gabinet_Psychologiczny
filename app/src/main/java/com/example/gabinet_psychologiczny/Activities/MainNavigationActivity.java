@@ -25,9 +25,10 @@ public class MainNavigationActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.bottomNavigationView.setSelectedItemId(R.id.calendar); //default fragment
+        binding.bottomNavigationView.setSelectedItemId(R.id.patients); //default fragment
 
-        replaceFragment(new CalendarFragment());
+
+        replaceFragment(new PatientSearchFragment());
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()){
 
@@ -51,6 +52,16 @@ public class MainNavigationActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onBackPressed(){
+        FragmentManager fm = getSupportFragmentManager();
+        if (fm.getBackStackEntryCount() > 0) {
+            fm.popBackStack();
+        } else {
+            super.onBackPressed();
+        }
     }
 
 }

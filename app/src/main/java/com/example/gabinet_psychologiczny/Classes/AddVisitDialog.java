@@ -6,6 +6,8 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -158,13 +160,13 @@ public class AddVisitDialog extends AppCompatDialogFragment {
                         c.set(year, month, day);
                         visitDay = c.getTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
-                        TimePickerDialog startTimeDialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
+                        TimePickerDialog startTimeDialog = new TimePickerDialog(getContext(), android.R.style.Theme_Holo_Light_Dialog_NoActionBar, new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker timePicker, int hours, int minutes) {
 
                                 visitStartTime = LocalTime.of(hours, minutes);
 
-                                TimePickerDialog endTimeDialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
+                                TimePickerDialog endTimeDialog = new TimePickerDialog(getContext(), android.R.style.Theme_Holo_Light_Dialog_NoActionBar, new TimePickerDialog.OnTimeSetListener() {
                                     @Override
                                     public void onTimeSet(TimePicker timePicker, int hours, int minutes) {
 
@@ -175,11 +177,13 @@ public class AddVisitDialog extends AppCompatDialogFragment {
                                 }, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
 
                                 endTimeDialog.setTitle("Godzina zakończenia wizyty");
+                                endTimeDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                                 endTimeDialog.show();
                             }
                         }, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
 
                         startTimeDialog.setTitle("Godzina rozpoczęcia wizyty");
+                        startTimeDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                         startTimeDialog.show();
                     }
                 }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
@@ -203,7 +207,9 @@ public class AddVisitDialog extends AppCompatDialogFragment {
             });
         }
 
-        return builder.create();
+        Dialog dialog = builder.create();
+        //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        return dialog;
     }
 
     @Override

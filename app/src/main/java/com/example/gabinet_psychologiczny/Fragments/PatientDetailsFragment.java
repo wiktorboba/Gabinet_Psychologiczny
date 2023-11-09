@@ -1,6 +1,7 @@
 package com.example.gabinet_psychologiczny.Fragments;
 
-import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,13 +22,11 @@ import android.widget.TextView;
 import com.example.gabinet_psychologiczny.Classes.AddVisitDialog;
 import com.example.gabinet_psychologiczny.Classes.VisitsHistoryRecyclerViewAdapter;
 import com.example.gabinet_psychologiczny.Database.Relations.PatientWithVisits;
-import com.example.gabinet_psychologiczny.Database.Relations.VisitAndService;
+import com.example.gabinet_psychologiczny.Database.Relations.VisitWithPatientAndService;
 import com.example.gabinet_psychologiczny.Model.Patient;
-import com.example.gabinet_psychologiczny.Model.Visit;
 import com.example.gabinet_psychologiczny.R;
 import com.example.gabinet_psychologiczny.ViewModel.VisitViewModel;
 import com.example.gabinet_psychologiczny.databinding.FragmentPatientDetailsBinding;
-import com.example.gabinet_psychologiczny.databinding.FragmentVisitDetailsBinding;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.List;
@@ -50,7 +49,7 @@ public class PatientDetailsFragment extends Fragment {
     private VisitViewModel visitViewModel;
 
     Patient patient;
-    List<VisitAndService> visitList;
+    List<VisitWithPatientAndService> visitList;
 
     RecyclerView recyclerView;
 
@@ -120,11 +119,9 @@ public class PatientDetailsFragment extends Fragment {
 
         adapter.setOnItemClickListener(new VisitsHistoryRecyclerViewAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(VisitAndService visit) {
+            public void onItemClick(VisitWithPatientAndService visit) {
                 Bundle bundle = new Bundle();
                 bundle.putInt("visit_id", visit.visit.getId());
-                bundle.putString("patient_first_name", patient.getFirstName());
-                bundle.putString("patient_last_name", patient.getLastName());
                 Fragment fragment = new VisitDetailsFragment();
                 fragment.setArguments(bundle);
 
