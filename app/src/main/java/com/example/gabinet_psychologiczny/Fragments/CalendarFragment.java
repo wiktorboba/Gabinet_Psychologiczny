@@ -69,8 +69,11 @@ public class CalendarFragment extends Fragment {
     private ArrayList<TextView> dayNamesList;
 
     private ArrayList<CardView> displayedVisits = new ArrayList<>();
+    private ArrayList<CardView> displayedFreeTimes = new ArrayList<>();
 
     private LiveData<List<VisitWithPatientAndService>> observedWeek;
+    private final int breakTime = 5;
+    private final int minFreeTime = 30;
 
 
     public CalendarFragment() {
@@ -121,7 +124,7 @@ public class CalendarFragment extends Fragment {
         visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
 
         one_hour_height = getResources().getDimensionPixelSize(R.dimen.visit_hour_height);
-        top_offset = getResources().getDimensionPixelSize(R.dimen.top_offset);
+        top_offset = getResources().getDimensionPixelSize(R.dimen.new_top_offset);
         dividers_size = getResources().getDimensionPixelSize(R.dimen.dividers_size);
 
 
@@ -139,7 +142,8 @@ public class CalendarFragment extends Fragment {
             }
         });
 
-        currentDate = LocalDate.now();
+        if(currentDate == null)
+            currentDate = LocalDate.now();
     }
 
     private void setUpWidgets(){
@@ -193,24 +197,25 @@ public class CalendarFragment extends Fragment {
 
     private void setUpVisitsInCalendar(ArrayList<ArrayList<VisitWithPatientAndService>> visitsPerDay) {
         int i=0;
-        if(!displayedVisits.isEmpty())
-            removeVisitsFromView();
+        if(!displayedVisits.isEmpty() || !displayedFreeTimes.isEmpty()){
+            removeFromView(displayedVisits);
+            displayedVisits = new ArrayList<>();
+
+            removeFromView(displayedFreeTimes);
+            displayedFreeTimes = new ArrayList<>();
+        }
+
 
         for(ConstraintLayout dayLayout: daysLayouts){
             ArrayList<VisitWithPatientAndService> visits = visitsPerDay.get(i);
 
-            if(Duration.between(LocalTime.of(6, 0), visits.get(0).visit.getStartTime()).toMinutes() > 30){
-                CardView freetimeCardView = createCardViewForFreeTime(dayLayout, LocalTime.of(6, 0), visits.get(0).visit.getStartTime());
-                displayedVisits.add(freetimeCardView);
-            }
-
-
-
+            LocalTime previousVisitEndTime = LocalTime.of(6, 0).minusMinutes(5);
+            LocalTime freeTimeStart;
+            LocalTime freeTimeEnd;
+            int freeTimeDuration = 0;
             for(VisitWithPatientAndService visit: visits){
                 CardView visitCardView = createCardViewForVisit(dayLayout, visit);
                 displayedVisits.add(visitCardView);
-
-
                 visitCardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -220,10 +225,43 @@ public class CalendarFragment extends Fragment {
                         fragment.setArguments(bundle);
                         getActivity().findViewById(R.id.bottomNavigationView).setVisibility(View.GONE);
                         replaceFragment(fragment);
-                        //addFragmentFromBottom(fragment);
+                    }
+                });
+
+                freeTimeStart = previousVisitEndTime.plusMinutes(breakTime);
+                freeTimeEnd = visit.visit.getStartTime().minusMinutes(breakTime);
+
+                freeTimeDuration = (int)Duration.between(freeTimeStart, freeTimeEnd).toMinutes();
+
+                if(freeTimeDuration >= minFreeTime){
+                    CardView freeTimeCardView = createCardViewForFreeTime(dayLayout, freeTimeStart, freeTimeEnd);
+                    displayedFreeTimes.add(freeTimeCardView);
+                    freeTimeCardView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            // open addVisitDialog with selected date
+                            // let user choose patient, time(TimesPickerDialog) and service
+                        }
+                    });
+                }
+                previousVisitEndTime = visit.visit.getEndTime();
+            }
+
+            // last freetime in a day
+            freeTimeStart = previousVisitEndTime.plusMinutes(5);
+            freeTimeEnd = LocalTime.of(22, 0);
+            freeTimeDuration = (int)Duration.between(freeTimeStart, freeTimeEnd).toMinutes();
+            if(freeTimeDuration >= minFreeTime){
+                CardView freeTimeCardView = createCardViewForFreeTime(dayLayout, freeTimeStart, freeTimeEnd);
+                displayedFreeTimes.add(freeTimeCardView);
+                freeTimeCardView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // TODO
                     }
                 });
             }
+
             i++;
         }
     }
@@ -239,14 +277,14 @@ public class CalendarFragment extends Fragment {
 
         //set up cardview height
         ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams)visitCardView.getLayoutParams();
-        layoutParams.height = (int)(visitDuration*(one_hour_height + dividers_size));
+        layoutParams.height = (int)(visitDuration*one_hour_height) + ((int)Math.ceil(visitDuration)-1)*dividers_size;
         visitCardView.setLayoutParams(layoutParams);
         parentLayout.addView(visitCardView);
 
         //set up cardview offset (horizontal placement)
         ConstraintSet constraintSet = new ConstraintSet();
         constraintSet.clone(parentLayout);
-        constraintSet.connect(visitCardView.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, (int)(verticalOffset*(one_hour_height + dividers_size) + dividers_size + top_offset));
+        constraintSet.connect(visitCardView.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, top_offset + (int)(verticalOffset*one_hour_height) + ((int)Math.floor(verticalOffset))*dividers_size);
         constraintSet.applyTo(parentLayout);
 
         //set up information inside cardview
@@ -269,26 +307,24 @@ public class CalendarFragment extends Fragment {
 
         //set up cardview height
         ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams)freetimeCardView.getLayoutParams();
-        layoutParams.height = (int)(visitDuration*(one_hour_height + dividers_size));
+        layoutParams.height = (int)(visitDuration*one_hour_height) + ((int)Math.ceil(visitDuration)-1)*dividers_size;
         freetimeCardView.setLayoutParams(layoutParams);
         parentLayout.addView(freetimeCardView);
 
         //set up cardview offset (horizontal placement)
         ConstraintSet constraintSet = new ConstraintSet();
         constraintSet.clone(parentLayout);
-        constraintSet.connect(freetimeCardView.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, (int)(verticalOffset*(one_hour_height + dividers_size) + dividers_size + top_offset));
+        constraintSet.connect(freetimeCardView.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, top_offset + (int)(verticalOffset*one_hour_height) + ((int)Math.floor(verticalOffset))*dividers_size);
         constraintSet.applyTo(parentLayout);
-
 
         return freetimeCardView;
     }
 
-    private void removeVisitsFromView(){
-        for(CardView visitCardView: displayedVisits){
-            ConstraintLayout parent = (ConstraintLayout)visitCardView.getParent();
-            parent.removeView(visitCardView);
+    private void removeFromView(ArrayList<CardView> cardViews){
+        for(CardView cardView: cardViews){
+            ConstraintLayout parent = (ConstraintLayout)cardView.getParent();
+            parent.removeView(cardView);
         }
-        displayedVisits = new ArrayList<>();
     }
 
     private void previousWeek(){
@@ -357,6 +393,10 @@ public class CalendarFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        removeVisitsFromView();
+        removeFromView(displayedVisits);
+        displayedVisits = new ArrayList<>();
+
+        removeFromView(displayedFreeTimes);
+        displayedFreeTimes = new ArrayList<>();
     }
 }

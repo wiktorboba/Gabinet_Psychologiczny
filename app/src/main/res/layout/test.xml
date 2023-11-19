@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/hour_6"
+        android:layout_width="400dp"
+        android:layout_height="@dimen/dividers_size"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:background="@color/gray"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/hour_7"
+        android:layout_width="400dp"
+        android:layout_height="@dimen/dividers_size"
+        android:layout_gravity="center"
+        android:layout_marginTop="60dp"
+        android:background="@color/light_gray"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hour_6" />
+
+    <View
+        android:id="@+id/hour_8"
+        android:layout_width="400dp"
+        android:layout_height="@dimen/dividers_size"
+        android:layout_gravity="center"
+        android:layout_marginTop="60dp"
+        android:background="@color/light_gray"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hour_7" />
+
+    <View
+        android:id="@+id/hour_9"
+        android:layout_width="400dp"
+        android:layout_height="@dimen/dividers_size"
+        android:layout_gravity="center"
+        android:layout_marginTop="60dp"
+        android:background="@color/light_gray"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hour_8" />
+
+    <View
+        android:id="@+id/hour_10"
+        android:layout_width="400dp"
+        android:layout_height="@dimen/dividers_size"
+        android:layout_gravity="center"
+        android:layout_marginTop="60dp"
+        android:background="@color/light_gray"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hour_9" />
+
+    <View
+        android:id="@+id/hour_11"
+        android:layout_width="400dp"
+        android:layout_height="@dimen/dividers_size"
+        android:layout_gravity="center"
+        android:layout_marginTop="60dp"
+        android:background="@color/light_gray"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hour_10" />
+
+    <View
+        android:id="@+id/hour_12"
+        android:layout_width="400dp"
+        android:layout_height="@dimen/dividers_size"
+        android:layout_gravity="center"
+        android:layout_marginTop="60dp"
+        android:background="@color/light_gray"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hour_11" />
+
+    <View
+        android:id="@+id/hour_13"
+        android:layout_width="400dp"
+        android:layout_height="@dimen/dividers_size"
+        android:layout_gravity="center"
+        android:layout_marginTop="60dp"
+        android:background="@color/light_gray"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hour_12" />
+
+    <View
+        android:id="@+id/hour_14"
+        android:layout_width="400dp"
+        android:layout_height="@dimen/dividers_size"
+        android:layout_gravity="center"
+        android:layout_marginTop="60dp"
+        android:background="@color/light_gray"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hour_13" />
+
+    <View
+        android:id="@+id/hour_15"
+        android:layout_width="400dp"
+        android:layout_height="@dimen/dividers_size"
+        android:layout_gravity="center"
+        android:layout_marginTop="60dp"
+        android:background="@color/light_gray"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hour_14" />
+
+    <View
+        android:id="@+id/hour_16"
+        android:layout_width="400dp"
+        android:layout_height="@dimen/dividers_size"
+        android:layout_gravity="center"
+        android:layout_marginTop="60dp"
+        android:background="@color/light_gray"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hour_15" />
+
+    <View
+        android:id="@+id/hour_17"
+        android:layout_width="400dp"
+        android:layout_height="@dimen/dividers_size"
+        android:layout_gravity="center"
+        android:layout_marginTop="60dp"
+        android:background="@color/light_gray"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hour_16" />
+
+    <View
+        android:id="@+id/hour_18"
+        android:layout_width="400dp"
+        android:layout_height="@dimen/dividers_size"
+        android:layout_gravity="center"
+        android:layout_marginTop="60dp"
+        android:background="@color/light_gray"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hour_17" />
+
+    <View
+        android:id="@+id/hour_19"
+        android:layout_width="400dp"
+        android:layout_height="@dimen/dividers_size"
+        android:layout_gravity="center"
+        android:layout_marginTop="60dp"
+        android:background="@color/light_gray"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hour_18" />
+
+    <View
+        android:id="@+id/hour_20"
+        android:layout_width="400dp"
+        android:layout_height="@dimen/dividers_size"
+        android:layout_gravity="center"
+        android:layout_marginTop="60dp"
+        android:background="@color/light_gray"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hour_19" />
+
+    <View
+        android:id="@+id/hour_21"
+        android:layout_width="400dp"
+        android:layout_height="@dimen/dividers_size"
+        android:layout_gravity="center"
+        android:layout_marginTop="60dp"
+        android:background="@color/light_gray"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hour_20" />
+
+    <View
+        android:id="@+id/hour_22"
+        android:layout_width="400dp"
+        android:layout_height="@dimen/dividers_size"
+        android:layout_gravity="center"
+        android:layout_marginTop="60dp"
+        android:background="@color/gray"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hour_21" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

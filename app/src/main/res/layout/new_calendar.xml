@@ -86,18 +86,6 @@
                                 android:layout_width="40dp"
                                 android:layout_height="match_parent">
 
-                                <TextView
-                                    android:id="@+id/textViewHour6"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:elevation="1dp"
-                                    android:text="6:00"
-                                    android:textAlignment="textEnd"
-                                    app:layout_constraintBottom_toBottomOf="@id/hour_6"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="@id/hour_6" />
-
                                 <View
                                     android:id="@+id/hour_6"
                                     android:layout_width="400dp"
@@ -105,20 +93,9 @@
                                     android:layout_gravity="center"
                                     android:layout_marginTop="20dp"
                                     android:background="@color/gray"
-                                    app:layout_constraintStart_toEndOf="@id/textViewHour6"
+                                    app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
 
-                                <TextView
-                                    android:id="@+id/textViewHour7"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:elevation="1dp"
-                                    android:text="7:00"
-                                    android:textAlignment="textEnd"
-                                    app:layout_constraintBottom_toBottomOf="@id/hour_7"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="@id/hour_7" />
                                 <View
                                     android:id="@+id/hour_7"
                                     android:layout_width="400dp"
@@ -126,20 +103,9 @@
                                     android:layout_gravity="center"
                                     android:layout_marginTop="@dimen/visit_hour_height"
                                     android:background="@color/light_gray"
-                                    app:layout_constraintStart_toEndOf="@id/textViewHour7"
+                                    app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@id/hour_6" />
 
-                                <TextView
-                                    android:id="@+id/textViewHour8"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:elevation="1dp"
-                                    android:text="8:00"
-                                    android:textAlignment="textEnd"
-                                    app:layout_constraintBottom_toBottomOf="@id/hour_8"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="@id/hour_8" />
                                 <View
                                     android:id="@+id/hour_8"
                                     android:layout_width="400dp"
@@ -147,20 +113,9 @@
                                     android:layout_gravity="center"
                                     android:layout_marginTop="@dimen/visit_hour_height"
                                     android:background="@color/light_gray"
-                                    app:layout_constraintStart_toEndOf="@id/textViewHour8"
+                                    app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@id/hour_7" />
 
-                                <TextView
-                                    android:id="@+id/textViewHour9"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:elevation="1dp"
-                                    android:text="9:00"
-                                    android:textAlignment="textEnd"
-                                    app:layout_constraintBottom_toBottomOf="@id/hour_9"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="@id/hour_9" />
                                 <View
                                     android:id="@+id/hour_9"
                                     android:layout_width="400dp"
@@ -168,20 +123,9 @@
                                     android:layout_gravity="center"
                                     android:layout_marginTop="@dimen/visit_hour_height"
                                     android:background="@color/light_gray"
-                                    app:layout_constraintStart_toEndOf="@id/textViewHour9"
+                                    app:layout_constraintLeft_toLeftOf="parent"
                                     app:layout_constraintTop_toBottomOf="@id/hour_8" />
 
-                                <TextView
-                                    android:id="@+id/textViewHour10"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:elevation="1dp"
-                                    android:text="10:00"
-                                    android:textAlignment="textEnd"
-                                    app:layout_constraintBottom_toBottomOf="@id/hour_10"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="@id/hour_10" />
                                 <View
                                     android:id="@+id/hour_10"
                                     android:layout_width="400dp"
@@ -189,20 +133,9 @@
                                     android:layout_gravity="center"
                                     android:layout_marginTop="@dimen/visit_hour_height"
                                     android:background="@color/light_gray"
-                                    app:layout_constraintStart_toEndOf="@id/textViewHour10"
+                                    app:layout_constraintLeft_toLeftOf="parent"
                                     app:layout_constraintTop_toBottomOf="@id/hour_9" />
 
-                                <TextView
-                                    android:id="@+id/textViewHour11"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:elevation="1dp"
-                                    android:text="11:00"
-                                    android:textAlignment="textEnd"
-                                    app:layout_constraintBottom_toBottomOf="@id/hour_11"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="@id/hour_11" />
                                 <View
                                     android:id="@+id/hour_11"
                                     android:layout_width="400dp"
@@ -210,20 +143,9 @@
                                     android:layout_gravity="center"
                                     android:layout_marginTop="@dimen/visit_hour_height"
                                     android:background="@color/light_gray"
-                                    app:layout_constraintStart_toEndOf="@id/textViewHour11"
+                                    app:layout_constraintLeft_toLeftOf="parent"
                                     app:layout_constraintTop_toBottomOf="@id/hour_10" />
 
-                                <TextView
-                                    android:id="@+id/textViewHour12"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:elevation="1dp"
-                                    android:text="12:00"
-                                    android:textAlignment="textEnd"
-                                    app:layout_constraintBottom_toBottomOf="@id/hour_12"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="@id/hour_12" />
                                 <View
                                     android:id="@+id/hour_12"
                                     android:layout_width="400dp"
@@ -231,20 +153,9 @@
                                     android:layout_gravity="center"
                                     android:layout_marginTop="@dimen/visit_hour_height"
                                     android:background="@color/light_gray"
-                                    app:layout_constraintStart_toEndOf="@id/textViewHour12"
+                                    app:layout_constraintLeft_toLeftOf="parent"
                                     app:layout_constraintTop_toBottomOf="@id/hour_11" />
 
-                                <TextView
-                                    android:id="@+id/textViewHour13"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:elevation="1dp"
-                                    android:text="13:00"
-                                    android:textAlignment="textEnd"
-                                    app:layout_constraintBottom_toBottomOf="@id/hour_13"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="@id/hour_13" />
                                 <View
                                     android:id="@+id/hour_13"
                                     android:layout_width="400dp"
@@ -252,20 +163,9 @@
                                     android:layout_gravity="center"
                                     android:layout_marginTop="@dimen/visit_hour_height"
                                     android:background="@color/light_gray"
-                                    app:layout_constraintStart_toEndOf="@id/textViewHour13"
+                                    app:layout_constraintLeft_toLeftOf="parent"
                                     app:layout_constraintTop_toBottomOf="@id/hour_12" />
 
-                                <TextView
-                                    android:id="@+id/textViewHour14"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:elevation="1dp"
-                                    android:text="14:00"
-                                    android:textAlignment="textEnd"
-                                    app:layout_constraintBottom_toBottomOf="@id/hour_14"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="@id/hour_14" />
                                 <View
                                     android:id="@+id/hour_14"
                                     android:layout_width="400dp"
@@ -273,20 +173,9 @@
                                     android:layout_gravity="center"
                                     android:layout_marginTop="@dimen/visit_hour_height"
                                     android:background="@color/light_gray"
-                                    app:layout_constraintStart_toEndOf="@id/textViewHour14"
+                                    app:layout_constraintLeft_toLeftOf="parent"
                                     app:layout_constraintTop_toBottomOf="@id/hour_13" />
 
-                                <TextView
-                                    android:id="@+id/textViewHour15"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:elevation="1dp"
-                                    android:text="15:00"
-                                    android:textAlignment="textEnd"
-                                    app:layout_constraintBottom_toBottomOf="@id/hour_15"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="@id/hour_15" />
                                 <View
                                     android:id="@+id/hour_15"
                                     android:layout_width="400dp"
@@ -294,20 +183,9 @@
                                     android:layout_gravity="center"
                                     android:layout_marginTop="@dimen/visit_hour_height"
                                     android:background="@color/light_gray"
-                                    app:layout_constraintStart_toEndOf="@id/textViewHour15"
+                                    app:layout_constraintLeft_toLeftOf="parent"
                                     app:layout_constraintTop_toBottomOf="@id/hour_14" />
 
-                                <TextView
-                                    android:id="@+id/textViewHour16"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:elevation="1dp"
-                                    android:text="16:00"
-                                    android:textAlignment="textEnd"
-                                    app:layout_constraintBottom_toBottomOf="@id/hour_16"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="@id/hour_16" />
                                 <View
                                     android:id="@+id/hour_16"
                                     android:layout_width="400dp"
@@ -315,20 +193,9 @@
                                     android:layout_gravity="center"
                                     android:layout_marginTop="@dimen/visit_hour_height"
                                     android:background="@color/light_gray"
-                                    app:layout_constraintStart_toEndOf="@id/textViewHour16"
+                                    app:layout_constraintLeft_toLeftOf="parent"
                                     app:layout_constraintTop_toBottomOf="@id/hour_15" />
 
-                                <TextView
-                                    android:id="@+id/textViewHour17"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:elevation="1dp"
-                                    android:text="17:00"
-                                    android:textAlignment="textEnd"
-                                    app:layout_constraintBottom_toBottomOf="@id/hour_17"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="@id/hour_17" />
                                 <View
                                     android:id="@+id/hour_17"
                                     android:layout_width="400dp"
@@ -336,20 +203,9 @@
                                     android:layout_gravity="center"
                                     android:layout_marginTop="@dimen/visit_hour_height"
                                     android:background="@color/light_gray"
-                                    app:layout_constraintStart_toEndOf="@id/textViewHour17"
+                                    app:layout_constraintLeft_toLeftOf="parent"
                                     app:layout_constraintTop_toBottomOf="@id/hour_16" />
 
-                                <TextView
-                                    android:id="@+id/textViewHour18"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:elevation="1dp"
-                                    android:text="18:00"
-                                    android:textAlignment="textEnd"
-                                    app:layout_constraintBottom_toBottomOf="@id/hour_18"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="@id/hour_18" />
                                 <View
                                     android:id="@+id/hour_18"
                                     android:layout_width="400dp"
@@ -357,20 +213,9 @@
                                     android:layout_gravity="center"
                                     android:layout_marginTop="@dimen/visit_hour_height"
                                     android:background="@color/light_gray"
-                                    app:layout_constraintStart_toEndOf="@id/textViewHour18"
+                                    app:layout_constraintLeft_toLeftOf="parent"
                                     app:layout_constraintTop_toBottomOf="@id/hour_17" />
 
-                                <TextView
-                                    android:id="@+id/textViewHour19"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:elevation="1dp"
-                                    android:text="19:00"
-                                    android:textAlignment="textEnd"
-                                    app:layout_constraintBottom_toBottomOf="@id/hour_19"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="@id/hour_19" />
                                 <View
                                     android:id="@+id/hour_19"
                                     android:layout_width="400dp"
@@ -378,20 +223,9 @@
                                     android:layout_gravity="center"
                                     android:layout_marginTop="@dimen/visit_hour_height"
                                     android:background="@color/light_gray"
-                                    app:layout_constraintStart_toEndOf="@id/textViewHour19"
+                                    app:layout_constraintLeft_toLeftOf="parent"
                                     app:layout_constraintTop_toBottomOf="@id/hour_18" />
 
-                                <TextView
-                                    android:id="@+id/textViewHour20"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:elevation="1dp"
-                                    android:text="20:00"
-                                    android:textAlignment="textEnd"
-                                    app:layout_constraintBottom_toBottomOf="@id/hour_20"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="@id/hour_20" />
                                 <View
                                     android:id="@+id/hour_20"
                                     android:layout_width="400dp"
@@ -399,20 +233,9 @@
                                     android:layout_gravity="center"
                                     android:layout_marginTop="@dimen/visit_hour_height"
                                     android:background="@color/light_gray"
-                                    app:layout_constraintStart_toEndOf="@id/textViewHour20"
+                                    app:layout_constraintLeft_toLeftOf="parent"
                                     app:layout_constraintTop_toBottomOf="@id/hour_19" />
 
-                                <TextView
-                                    android:id="@+id/textViewHour21"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:elevation="1dp"
-                                    android:text="21:00"
-                                    android:textAlignment="textEnd"
-                                    app:layout_constraintBottom_toBottomOf="@id/hour_21"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="@id/hour_21" />
                                 <View
                                     android:id="@+id/hour_21"
                                     android:layout_width="400dp"
@@ -420,20 +243,9 @@
                                     android:layout_gravity="center"
                                     android:layout_marginTop="@dimen/visit_hour_height"
                                     android:background="@color/light_gray"
-                                    app:layout_constraintStart_toEndOf="@id/textViewHour21"
+                                    app:layout_constraintLeft_toLeftOf="parent"
                                     app:layout_constraintTop_toBottomOf="@id/hour_20" />
 
-                                <TextView
-                                    android:id="@+id/textViewHour22"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:elevation="1dp"
-                                    android:text="22:00"
-                                    android:textAlignment="textEnd"
-                                    app:layout_constraintBottom_toBottomOf="@id/hour_22"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="@id/hour_22" />
                                 <View
                                     android:id="@+id/hour_22"
                                     android:layout_width="400dp"
@@ -441,7 +253,7 @@
                                     android:layout_gravity="center"
                                     android:layout_marginTop="@dimen/visit_hour_height"
                                     android:background="@color/gray"
-                                    app:layout_constraintStart_toEndOf="@id/textViewHour22"
+                                    app:layout_constraintLeft_toLeftOf="parent"
                                     app:layout_constraintTop_toBottomOf="@id/hour_21" />
 
                             </androidx.constraintlayout.widget.ConstraintLayout>

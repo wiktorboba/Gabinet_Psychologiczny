@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/days_spacing"
     android:layout_height="@dimen/visit_hour_height"
+    android:alpha="1"
     app:cardBackgroundColor="#FFE28C"
     app:cardCornerRadius="12dp"
     app:cardElevation="2dp">

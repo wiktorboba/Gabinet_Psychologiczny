@@ -4,10 +4,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,38 +12,31 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.gabinet_psychologiczny.Database.Relations.ServiceWithVisits;
+import com.example.gabinet_psychologiczny.Fragments.PatientSearchFragment;
 import com.example.gabinet_psychologiczny.Model.Service;
 import com.example.gabinet_psychologiczny.Model.Visit;
 import com.example.gabinet_psychologiczny.R;
 import com.example.gabinet_psychologiczny.ViewModel.ServiceViewModel;
 import com.example.gabinet_psychologiczny.ViewModel.VisitViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.textfield.TextInputLayout;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
-public class AddVisitDialog extends AppCompatDialogFragment {
+public class AddVisitDialog extends AppCompatDialogFragment implements TimesPickerDialog.TimesPickerDialogListener {
 
     AutoCompleteTextView serviceTextView;
     AutoCompleteTextView patientTextView;
@@ -124,7 +114,9 @@ public class AddVisitDialog extends AppCompatDialogFragment {
         buttonAddService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 openAddServiceDialog();
+                //openTimesPickerDialog();
             }
         });
 
@@ -235,4 +227,22 @@ public class AddVisitDialog extends AppCompatDialogFragment {
         addServiceDialog.show(getChildFragmentManager(), "Dodaj usługę");
     }
 
+    private void openTimesPickerDialog(){
+        TimesPickerDialog timesPickerDialog = new TimesPickerDialog();
+        Bundle args = new Bundle(); // min max times
+        args.putInt("minHour", 8);
+        args.putInt("maxHour", 13);
+        args.putInt("minMinutes", 25);
+        args.putInt("maxMinutes", 50);
+        timesPickerDialog.setArguments(args);
+
+        timesPickerDialog.setTargetFragment(AddVisitDialog.this, 1);
+        timesPickerDialog.show(getFragmentManager(), "Czas trwania uslugi");
+    }
+
+    @Override
+    public void onDialogSuccess(int startHour, int startMinutes, int endHour, int endMinutes) {
+        visitStartTime = LocalTime.of(startHour, startMinutes);
+        visitEndTime = LocalTime.of(endHour, endMinutes);
+    }
 }
