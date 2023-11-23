@@ -34,6 +34,19 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
+                    android:id="@+id/addVisitStateButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleX="1.5"
+                    android:scaleY="1.5"
+                    android:src="@drawable/baseline_add"
+                    android:tint="@color/teal_700"
+                    app:layout_constraintBottom_toBottomOf="@+id/selectedWeek"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/nextWeekButton"
+                    app:layout_constraintTop_toTopOf="@+id/selectedWeek" />
+
+                <ImageView
                     android:id="@+id/nextWeekButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -57,6 +70,7 @@
                     app:tint="#009688" />
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_marginStart="8dp"
@@ -119,6 +133,7 @@
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="@id/hour_7" />
+
                                 <View
                                     android:id="@+id/hour_7"
                                     android:layout_width="400dp"
@@ -140,6 +155,7 @@
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="@id/hour_8" />
+
                                 <View
                                     android:id="@+id/hour_8"
                                     android:layout_width="400dp"
@@ -161,6 +177,7 @@
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="@id/hour_9" />
+
                                 <View
                                     android:id="@+id/hour_9"
                                     android:layout_width="400dp"
@@ -182,6 +199,7 @@
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="@id/hour_10" />
+
                                 <View
                                     android:id="@+id/hour_10"
                                     android:layout_width="400dp"
@@ -203,6 +221,7 @@
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="@id/hour_11" />
+
                                 <View
                                     android:id="@+id/hour_11"
                                     android:layout_width="400dp"
@@ -224,6 +243,7 @@
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="@id/hour_12" />
+
                                 <View
                                     android:id="@+id/hour_12"
                                     android:layout_width="400dp"
@@ -245,6 +265,7 @@
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="@id/hour_13" />
+
                                 <View
                                     android:id="@+id/hour_13"
                                     android:layout_width="400dp"
@@ -266,6 +287,7 @@
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="@id/hour_14" />
+
                                 <View
                                     android:id="@+id/hour_14"
                                     android:layout_width="400dp"
@@ -287,6 +309,7 @@
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="@id/hour_15" />
+
                                 <View
                                     android:id="@+id/hour_15"
                                     android:layout_width="400dp"
@@ -308,6 +331,7 @@
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="@id/hour_16" />
+
                                 <View
                                     android:id="@+id/hour_16"
                                     android:layout_width="400dp"
@@ -329,6 +353,7 @@
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="@id/hour_17" />
+
                                 <View
                                     android:id="@+id/hour_17"
                                     android:layout_width="400dp"
@@ -350,6 +375,7 @@
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="@id/hour_18" />
+
                                 <View
                                     android:id="@+id/hour_18"
                                     android:layout_width="400dp"
@@ -371,6 +397,7 @@
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="@id/hour_19" />
+
                                 <View
                                     android:id="@+id/hour_19"
                                     android:layout_width="400dp"
@@ -392,6 +419,7 @@
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="@id/hour_20" />
+
                                 <View
                                     android:id="@+id/hour_20"
                                     android:layout_width="400dp"
@@ -413,6 +441,7 @@
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="@id/hour_21" />
+
                                 <View
                                     android:id="@+id/hour_21"
                                     android:layout_width="400dp"
@@ -434,6 +463,7 @@
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="@id/hour_22" />
+
                                 <View
                                     android:id="@+id/hour_22"
                                     android:layout_width="400dp"
@@ -592,6 +622,7 @@
                     </ScrollView>
 
                 </androidx.cardview.widget.CardView>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,4 @@
-package com.example.gabinet_psychologiczny.Classes;
+package com.example.gabinet_psychologiczny.Other;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;

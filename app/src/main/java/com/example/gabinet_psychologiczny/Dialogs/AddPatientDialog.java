@@ -1,4 +1,4 @@
-package com.example.gabinet_psychologiczny.Classes;
+package com.example.gabinet_psychologiczny.Dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

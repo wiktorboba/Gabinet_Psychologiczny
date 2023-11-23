@@ -20,11 +20,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.gabinet_psychologiczny.Classes.CalendarUtils;
+import com.example.gabinet_psychologiczny.Dialogs.AddVisitDialog;
+import com.example.gabinet_psychologiczny.Other.CalendarUtils;
+import com.example.gabinet_psychologiczny.Dialogs.TimesPickerDialog;
 import com.example.gabinet_psychologiczny.Database.Relations.VisitWithPatientAndService;
 import com.example.gabinet_psychologiczny.R;
 import com.example.gabinet_psychologiczny.ViewModel.VisitViewModel;
 import com.example.gabinet_psychologiczny.databinding.FragmentCalendarBinding;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -38,7 +41,7 @@ import java.util.List;
  * Use the {@link CalendarFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CalendarFragment extends Fragment {
+public class CalendarFragment extends Fragment implements TimesPickerDialog.TimesPickerDialogListener, AddVisitDialog.AddVisitDialogListener{
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -52,6 +55,7 @@ public class CalendarFragment extends Fragment {
     private FragmentCalendarBinding binding;
     private VisitViewModel visitViewModel;
     private LocalDate currentDate;
+    ArrayList<LocalDate> days;
     private TextView selectedWeek;
     private TextView mondayTextView;
     private TextView tuesdayTextView;
@@ -60,6 +64,7 @@ public class CalendarFragment extends Fragment {
     private TextView fridayTextView;
     private ImageView previousWeekButton;
     private ImageView nextWeekButton;
+    private ImageView addVisitStateButton;
     private int one_hour_height;
     private int top_offset;
     private int dividers_size;
@@ -74,6 +79,7 @@ public class CalendarFragment extends Fragment {
     private LiveData<List<VisitWithPatientAndService>> observedWeek;
     private final int breakTime = 5;
     private final int minFreeTime = 30;
+    private boolean addVisitState = false;
 
 
     public CalendarFragment() {
@@ -142,6 +148,13 @@ public class CalendarFragment extends Fragment {
             }
         });
 
+        addVisitStateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setAddVisitState(!addVisitState);
+            }
+        });
+
         if(currentDate == null)
             currentDate = LocalDate.now();
     }
@@ -150,6 +163,7 @@ public class CalendarFragment extends Fragment {
         selectedWeek = binding.selectedWeek;
         previousWeekButton = binding.previousWeekButton;
         nextWeekButton = binding.nextWeekButton;
+        addVisitStateButton = binding.addVisitStateButton;
         mondayTextView = binding.mondayTextView;
         tuesdayTextView = binding.tuesdayTextView;
         wednesdayTextView = binding.wednesdayTextView;
@@ -178,7 +192,7 @@ public class CalendarFragment extends Fragment {
     }
 
     private void setWeekView(){
-        ArrayList<LocalDate> days = CalendarUtils.daysInWeekArray(currentDate);
+        days = CalendarUtils.daysInWeekArray(currentDate);
         String week = CalendarUtils.formattedDate(days.get(0)) + " - " + CalendarUtils.formattedDate(days.get(days.size()-1));
         selectedWeek.setText(week);
         setDayNames(days);
@@ -236,11 +250,16 @@ public class CalendarFragment extends Fragment {
                 if(freeTimeDuration >= minFreeTime){
                     CardView freeTimeCardView = createCardViewForFreeTime(dayLayout, freeTimeStart, freeTimeEnd);
                     displayedFreeTimes.add(freeTimeCardView);
+                    int startHour = freeTimeStart.getHour();
+                    int endHour = freeTimeEnd.getHour();
+                    int startMinute = freeTimeStart.getMinute();
+                    int endMinute = freeTimeEnd.getMinute();
+                    int dayIndex = i;
                     freeTimeCardView.setOnClickListener(new View.OnClickListener() {
+
                         @Override
                         public void onClick(View view) {
-                            // open addVisitDialog with selected date
-                            // let user choose patient, time(TimesPickerDialog) and service
+                            openTimePickerDialog(startHour, endHour, startMinute, endMinute, dayIndex, minFreeTime);
                         }
                     });
                 }
@@ -254,16 +273,22 @@ public class CalendarFragment extends Fragment {
             if(freeTimeDuration >= minFreeTime){
                 CardView freeTimeCardView = createCardViewForFreeTime(dayLayout, freeTimeStart, freeTimeEnd);
                 displayedFreeTimes.add(freeTimeCardView);
+                int startHour = freeTimeStart.getHour();
+                int endHour = freeTimeEnd.getHour();
+                int startMinute = freeTimeStart.getMinute();
+                int endMinute = freeTimeEnd.getMinute();
+                int dayIndex = i;
                 freeTimeCardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        // TODO
+                        openTimePickerDialog(startHour, endHour, startMinute, endMinute, dayIndex, minFreeTime);
                     }
                 });
             }
 
             i++;
         }
+        setAddVisitState(addVisitState);
     }
 
     private CardView createCardViewForVisit(ConstraintLayout parentLayout, VisitWithPatientAndService visit){
@@ -383,10 +408,86 @@ public class CalendarFragment extends Fragment {
         fragmentTransaction.commit();
     }
 
+    private void openAddVisitDialog(int startHour, int startMinutes, int endHour, int endMinutes, int dayIndex){
+        LocalDate day = days.get(dayIndex);
+        Bundle bundle = new Bundle();
+       // bundle.putInt("patientId", 2);
+       // bundle.putString("patientFirstName", "Anna");
+       // bundle.putString("patientLastName", "Nowak");
+        bundle.putInt("year", day.getYear());
+        bundle.putInt("month", day.getMonthValue());
+        bundle.putInt("day", day.getDayOfMonth());
+
+        bundle.putInt("startHour", startHour);
+        bundle.putInt("startMinute", startMinutes);
+        bundle.putInt("endHour", endHour);
+        bundle.putInt("endMinute", endMinutes);
+
+        AddVisitDialog addVisitDialog = new AddVisitDialog();
+        addVisitDialog.setArguments(bundle);
+
+        addVisitDialog.setTargetFragment(CalendarFragment.this, 1);
+        addVisitDialog.show(getFragmentManager(), "Dodaj wizyte");
+    }
+
+    private void openTimePickerDialog(int minStartHour, int maxEndHour, int minStartMinutes, int maxEndMinutes, int day, int minTime){
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("minHour", minStartHour);
+        bundle.putInt("maxHour", maxEndHour);
+        bundle.putInt("minMinutes", minStartMinutes);
+        bundle.putInt("maxMinutes", maxEndMinutes);
+        bundle.putInt("dayIndex", day);
+        bundle.putInt("minFreeTime", minTime);
+
+        TimesPickerDialog timesPickerDialog = new TimesPickerDialog();
+        timesPickerDialog.setArguments(bundle);
+
+        timesPickerDialog.setTargetFragment(CalendarFragment.this, 1);
+        timesPickerDialog.show(getFragmentManager(), "Czas trwania uslugi");
+        //getActivity().findViewById(R.id.bottomNavigationView).setVisibility(View.GONE);
+        //replaceFragment(fragment);
+    }
+
+    private void setAddVisitState(boolean state){
+        int freeTimeVisibility;
+        float visitsVisibility;
+        if(state){
+            freeTimeVisibility = View.VISIBLE;
+            visitsVisibility = 0.3f;
+        }
+        else {
+            freeTimeVisibility = View.INVISIBLE;
+            visitsVisibility = 1f;
+        }
+
+        for(CardView freeTime : displayedFreeTimes){
+            freeTime.setVisibility(freeTimeVisibility);
+        }
+        for(CardView visit : displayedVisits){
+            visit.setAlpha(visitsVisibility);
+            visit.setEnabled(!state);
+        }
+        addVisitState = state;
+    }
+
+    @Override // TimesPickerDialogListener
+    public void onDialogSuccess(int startHour, int startMinutes, int endHour, int endMinutes, int dayIndex) {
+        openAddVisitDialog(startHour, startMinutes, endHour, endMinutes, dayIndex);
+    }
+
+    @Override // AddVisitDialogListener
+    public void onDialogSuccess() {
+        setWeekView();
+        setAddVisitState(false);
+    }
+
     @Override
     public void onResume() {
         super.onResume();
-        getActivity().findViewById(R.id.bottomNavigationView).setVisibility(View.VISIBLE);
+        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
+        if(bottomNavigationView != null)
+            bottomNavigationView.setVisibility(View.VISIBLE);
         setWeekView();
     }
 
@@ -399,4 +500,6 @@ public class CalendarFragment extends Fragment {
         removeFromView(displayedFreeTimes);
         displayedFreeTimes = new ArrayList<>();
     }
+
+
 }

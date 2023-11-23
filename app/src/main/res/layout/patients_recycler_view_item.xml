@@ -14,6 +14,7 @@
         app:cardCornerRadius="10dp"
         app:cardElevation="8dp"
         android:foreground="?android:attr/selectableItemBackground"
+        app:cardBackgroundColor="@color/patient_recyclerview_item_selector"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

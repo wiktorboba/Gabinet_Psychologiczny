@@ -17,7 +17,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.gabinet_psychologiczny.Classes.CalendarUtils;
+import com.example.gabinet_psychologiczny.Other.CalendarUtils;
 import com.example.gabinet_psychologiczny.Database.Relations.VisitWithPatientAndService;
 import com.example.gabinet_psychologiczny.Model.Patient;
 import com.example.gabinet_psychologiczny.Model.Service;

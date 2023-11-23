@@ -1,7 +1,5 @@
 package com.example.gabinet_psychologiczny.Fragments;
 
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,8 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.gabinet_psychologiczny.Classes.AddVisitDialog;
-import com.example.gabinet_psychologiczny.Classes.VisitsHistoryRecyclerViewAdapter;
+import com.example.gabinet_psychologiczny.Dialogs.AddVisitDialog;
+import com.example.gabinet_psychologiczny.Other.VisitsHistoryRecyclerViewAdapter;
 import com.example.gabinet_psychologiczny.Database.Relations.PatientWithVisits;
 import com.example.gabinet_psychologiczny.Database.Relations.VisitWithPatientAndService;
 import com.example.gabinet_psychologiczny.Model.Patient;
@@ -36,7 +34,7 @@ import java.util.List;
  * Use the {@link PatientDetailsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PatientDetailsFragment extends Fragment {
+public class PatientDetailsFragment extends Fragment implements AddVisitDialog.AddVisitDialogListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -153,9 +151,16 @@ public class PatientDetailsFragment extends Fragment {
 
 
     private void openDialog(){
-        AddVisitDialog addVisitDialog = new AddVisitDialog(patient.getId(), patient.getFirstName(), patient.getLastName());
-        //addVisitDialog.setTargetFragment(PatientSearchFragment.this, 1);
-        addVisitDialog.show(getChildFragmentManager(), "Dodaj pacjenta");
+        Bundle bundle = new Bundle();
+        bundle.putInt("patientId", patient.getId());
+        bundle.putString("patientFirstName", patient.getFirstName());
+        bundle.putString("patientLastName", patient.getLastName());
+
+        AddVisitDialog addVisitDialog = new AddVisitDialog();
+        addVisitDialog.setArguments(bundle);
+
+        addVisitDialog.setTargetFragment(PatientDetailsFragment.this, 1);
+        addVisitDialog.show(getFragmentManager(), "Dodaj wizyte");
     }
 
     private void replaceFragment(Fragment fragment) {
@@ -166,4 +171,8 @@ public class PatientDetailsFragment extends Fragment {
         fragmentTransaction.commit();
     }
 
+    @Override
+    public void onDialogSuccess() {
+
+    }
 }

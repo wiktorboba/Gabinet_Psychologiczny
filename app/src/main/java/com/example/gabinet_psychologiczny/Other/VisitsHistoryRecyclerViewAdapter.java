@@ -1,4 +1,4 @@
-package com.example.gabinet_psychologiczny.Classes;
+package com.example.gabinet_psychologiczny.Other;
 
 import android.view.LayoutInflater;
 import android.view.View;

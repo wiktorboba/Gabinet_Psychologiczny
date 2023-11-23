@@ -20,17 +20,14 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.gabinet_psychologiczny.Activities.PatientProfileActivity;
-import com.example.gabinet_psychologiczny.Classes.AddPatientDialog;
-import com.example.gabinet_psychologiczny.Database.Relations.PatientWithVisits;
-import com.example.gabinet_psychologiczny.Model.Visit;
+import com.example.gabinet_psychologiczny.Dialogs.AddPatientDialog;
 import com.example.gabinet_psychologiczny.ViewModel.PatientViewModel;
 import com.example.gabinet_psychologiczny.Model.Patient;
-import com.example.gabinet_psychologiczny.Classes.PatientsRecyclerViewAdapter;
+import com.example.gabinet_psychologiczny.Other.PatientsRecyclerViewAdapter;
 import com.example.gabinet_psychologiczny.R;
 import com.example.gabinet_psychologiczny.databinding.FragmentPatientSearchBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -185,4 +182,10 @@ public class PatientSearchFragment extends Fragment implements AddPatientDialog.
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        PatientsRecyclerViewAdapter adapter = (PatientsRecyclerViewAdapter)recyclerView.getAdapter();
+        adapter.setSelectedItemIndex(-1);
+    }
 }
