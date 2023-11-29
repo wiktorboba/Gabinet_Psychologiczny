@@ -39,18 +39,15 @@ public class Visit {
     private int patientId;
     private String description;
 
-
-    //TODO change to Date or LocalDate
     private LocalDate day;
     private LocalTime startTime;
     private LocalTime endTime;
 
 
-    //TODO change to enum
-    private boolean paymentStatus;
-    private boolean tookPlaceStatus;
+    private int paymentStatus;
+    private int visitStatus;
 
-    public Visit(int serviceId, int patientId, String description, LocalDate day , LocalTime startTime, LocalTime endTime, boolean paymentStatus, boolean tookPlaceStatus) {
+    public Visit(int serviceId, int patientId, String description, LocalDate day , LocalTime startTime, LocalTime endTime, int paymentStatus, int visitStatus) {
         this.serviceId = serviceId;
         this.patientId = patientId;
         this.description = description;
@@ -58,7 +55,7 @@ public class Visit {
         this.startTime = startTime;
         this.endTime = endTime;
         this.paymentStatus = paymentStatus;
-        this.tookPlaceStatus = tookPlaceStatus;
+        this.visitStatus = visitStatus;
     }
 
 
@@ -78,6 +75,10 @@ public class Visit {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public void setPaymentStatus(int paymentStatus) { this.paymentStatus = paymentStatus; }
+
+    public void setVisitStatus(int visitStatus) { this.visitStatus = visitStatus; }
 
 
     // Getters
@@ -105,11 +106,9 @@ public class Visit {
         return endTime;
     }
 
-    public boolean isPaymentStatus() {
+    public int getPaymentStatus() {
         return paymentStatus;
     }
 
-    public boolean isTookPlaceStatus() {
-        return tookPlaceStatus;
-    }
+    public int getVisitStatus() { return visitStatus; }
 }

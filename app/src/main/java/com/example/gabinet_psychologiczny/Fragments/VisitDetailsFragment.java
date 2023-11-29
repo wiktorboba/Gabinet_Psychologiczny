@@ -13,25 +13,37 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.gabinet_psychologiczny.Dialogs.AddVisitDialog;
+import com.example.gabinet_psychologiczny.Dialogs.EditVisitDialog;
+import com.example.gabinet_psychologiczny.Dialogs.SelectPatientDialog;
 import com.example.gabinet_psychologiczny.Other.CalendarUtils;
 import com.example.gabinet_psychologiczny.Database.Relations.VisitWithPatientAndService;
 import com.example.gabinet_psychologiczny.Model.Patient;
 import com.example.gabinet_psychologiczny.Model.Service;
 import com.example.gabinet_psychologiczny.Model.Visit;
+import com.example.gabinet_psychologiczny.R;
 import com.example.gabinet_psychologiczny.ViewModel.VisitViewModel;
 import com.example.gabinet_psychologiczny.databinding.FragmentVisitDetailsBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link VisitDetailsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class VisitDetailsFragment extends Fragment {
+public class VisitDetailsFragment extends Fragment implements EditVisitDialog.EditVisitDialogListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -48,6 +60,16 @@ public class VisitDetailsFragment extends Fragment {
     Service service;
     Patient patient;
 
+    String[] visitStatusItems;
+    String[] paymentStatusItems;
+
+    boolean optionsClicked = false;
+    FloatingActionButton optionsButton;
+    FloatingActionButton addAnnotationButton;
+    FloatingActionButton editVisitStatus;
+
+    Animation showButtonAnimation;
+    Animation hideButtonAnimation;
 
     public VisitDetailsFragment() {
         // Required empty public constructor
@@ -89,29 +111,10 @@ public class VisitDetailsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
         FloatingActionButton buttonMoreOptions = binding.moreOptions;
-
-
         recyclerView = binding.annotationsRecyclerview;
-        //VisitsHistoryRecyclerViewAdapter adapter = new AnnotationsRecyclerViewAdapter();
-        //recyclerView.setAdapter(adapter);
-        //recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-//        adapter.setOnItemClickListener(new AnnotationsRecyclerViewAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(VisitAndService visit) {
-//                Bundle bundle = new Bundle();
-//                bundle.putInt("visit_id", visit.visit.getId());
-//                Fragment fragment = new VisitDetailsFragment();
-//                fragment.setArguments(bundle);
-//
-//                replaceFragment(fragment);
-//            }
-//        });
-
-
         TextView description = binding.description;
+
 
         description.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -126,6 +129,30 @@ public class VisitDetailsFragment extends Fragment {
             }
         });
 
+        optionsButton = binding.moreOptions;
+        addAnnotationButton = binding.addAnnotationButton;
+        editVisitStatus = binding.editStatusButton;
+        showButtonAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.expand_buttons_from_bottom);
+        hideButtonAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.hide_butons_to_bottom);
+
+        optionsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                optionsClicked = !optionsClicked;
+                setVisibility(optionsClicked);
+                setAnimation(optionsClicked);
+                addAnnotationButton.setClickable(optionsClicked);
+                editVisitStatus.setClickable(optionsClicked);
+            }
+        });
+
+        editVisitStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openEditVisitDialog();
+            }
+        });
+
 
         visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
         visitViewModel.getVisitAndServiceById(id).observe(getViewLifecycleOwner(), new Observer<VisitWithPatientAndService>() {
@@ -135,6 +162,7 @@ public class VisitDetailsFragment extends Fragment {
                 service = v.service;
                 patient = v.patient;
                 setUpVisitInformation();
+                setStatus();
             }
         });
 
@@ -149,5 +177,58 @@ public class VisitDetailsFragment extends Fragment {
 
     }
 
+    private void setStatus(){
+        visitStatusItems = getResources().getStringArray(R.array.visit_status_items);
+        paymentStatusItems = getResources().getStringArray(R.array.payment_status_items);
 
+        binding.visitStatusText.setText(visitStatusItems[visit.getVisitStatus()]);
+        binding.paymentStatusText.setText(paymentStatusItems[visit.getPaymentStatus()]);
+        setStatusIcons();
+    }
+
+    private void setStatusIcons(){
+        //if(visit.getVisitStatus())
+    }
+
+    private void setVisibility(boolean clicked){
+        if(!clicked){
+            addAnnotationButton.setVisibility(View.INVISIBLE);
+            editVisitStatus.setVisibility(View.INVISIBLE);
+        }
+        else {
+            addAnnotationButton.setVisibility(View.VISIBLE);
+            editVisitStatus.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void setAnimation(boolean clicked){
+        if(!clicked){
+            addAnnotationButton.startAnimation(hideButtonAnimation);
+            editVisitStatus.startAnimation(hideButtonAnimation);
+        }
+        else {
+            addAnnotationButton.startAnimation(showButtonAnimation);
+            editVisitStatus.startAnimation(showButtonAnimation);
+        }
+    }
+
+
+    private void openEditVisitDialog(){
+        EditVisitDialog editVisitDialog = new EditVisitDialog();
+
+        Bundle args = new Bundle(); // min max times
+        args.putInt("visitStatus", visit.getVisitStatus());
+        args.putInt("paymentStatus", visit.getPaymentStatus());
+        editVisitDialog.setArguments(args);
+
+        editVisitDialog.setTargetFragment(VisitDetailsFragment.this, 1);
+        editVisitDialog.show(getFragmentManager(), "Wybierz pacjenta");
+    }
+
+    @Override
+    public void onDialogSuccess(int newVisitStatus, int newPaymentStatus) {
+        visit.setVisitStatus(newVisitStatus);
+        visit.setPaymentStatus(newPaymentStatus);
+        visitViewModel.update(visit);
+    }
 }

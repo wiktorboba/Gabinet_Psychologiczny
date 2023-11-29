@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="visit_status_items">
+        <item>Zaplanowana</item>
+        <item>Pacjent nie zjawił się</item>
+        <item>Odwołano przez psychologa</item>
+        <item>Odwołano przez pacjenta</item>
+        <item>Odbyto</item>
+
+    </string-array>
+</resources>

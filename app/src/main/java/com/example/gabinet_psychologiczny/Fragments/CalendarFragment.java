@@ -78,7 +78,7 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
 
     private LiveData<List<VisitWithPatientAndService>> observedWeek;
     private final int breakTime = 5;
-    private final int minFreeTime = 30;
+    private final int minFreeTime = 45;
     private boolean addVisitState = false;
 
 

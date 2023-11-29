@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="payment_status_items">
+        <item>Nie zapłacono</item>
+        <item>Zapłacono gotówką</item>
+        <item>Zapłacono kartą</item>
+        <item>Zapłacono przelewem</item>
+    </string-array>
+</resources>

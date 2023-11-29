@@ -7,6 +7,7 @@
     tools:context=".Fragments.VisitDetailsFragment">
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="770dp">
 
@@ -162,6 +163,7 @@
                                 app:layout_constraintBottom_toBottomOf="@+id/imageView3"
                                 app:layout_constraintStart_toEndOf="@+id/imageView3"
                                 app:layout_constraintTop_toTopOf="@+id/imageView3" />
+
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -180,31 +182,79 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="20dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/constraintLayout">
+                        app:layout_constraintStart_toEndOf="@+id/constraintLayout"
+                        app:layout_constraintTop_toBottomOf="@+id/service">
 
-                        <Switch
-                            android:id="@+id/switch1"
-                            android:layout_width="wrap_content"
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/constraintLayout7"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="10dp"
-                            android:text="Odbyta"
-                            android:textSize="20sp"
-                            app:layout_constraintBottom_toTopOf="@+id/switch2"
-                            app:layout_constraintEnd_toEndOf="@+id/switch2" />
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
 
-                        <Switch
-                            android:id="@+id/switch2"
-                            android:layout_width="wrap_content"
+                            <ImageView
+                                android:id="@+id/visitStatusIcon"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:src="@drawable/baseline_pending_actions_24"
+                                app:layout_constraintBottom_toBottomOf="@+id/visitStatusText"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/visitStatusText"
+                                app:tint="#EACE19" />
+
+                            <TextView
+                                android:id="@+id/visitStatusText"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                android:text="Odwołano przez psychologa"
+                                android:textSize="19sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/visitStatusIcon"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/constraintLayout8"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Opłacona"
-                            android:textSize="20sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent" />
+                            android:layout_marginTop="8dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/constraintLayout7">
+
+                            <ImageView
+                                android:id="@+id/paymentStatusIcon"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:src="@drawable/baseline_money_off_24"
+                                app:layout_constraintBottom_toBottomOf="@+id/paymentStatusText"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/paymentStatusText"
+                                app:tint="#B12C2C" />
+
+                            <TextView
+                                android:id="@+id/paymentStatusText"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                android:text="Zapłacono przelewem"
+                                android:textSize="19sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/paymentStatusIcon"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -277,20 +327,55 @@
 
             </androidx.cardview.widget.CardView>
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/moreOptions"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="16dp"
-                android:clickable="true"
-                android:src="@drawable/baseline_more_vert_24"
-                app:fabCustomSize="60dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/annotations" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/moreOptions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="64dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/baseline_more_vert_24"
+            app:fabCustomSize="60dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@color/white" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addAnnotationButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/baseline_note_add_24"
+            android:visibility="invisible"
+            app:fabCustomSize="60dp"
+            app:layout_constraintBottom_toTopOf="@id/editStatusButton"
+            app:layout_constraintStart_toStartOf="@id/editStatusButton"
+            app:tint="@color/white" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/editStatusButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/baseline_note_alt_24"
+            android:visibility="invisible"
+            app:fabCustomSize="60dp"
+            app:layout_constraintBottom_toTopOf="@id/moreOptions"
+            app:layout_constraintStart_toStartOf="@+id/moreOptions"
+            app:tint="@color/white" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

@@ -157,7 +157,7 @@ public class AddVisitDialog extends DialogFragment implements TimesPickerDialog.
                 }
                 else{
                     Visit visit = new Visit(serviceList.get(selectedServiceInArrayAdapter).getId(), patientId, descriptionTextView.getText().toString(),
-                            visitDay, visitStartTime, visitEndTime, false, false);
+                            visitDay, visitStartTime, visitEndTime, 0, 0);
                     visitViewModel.insert(visit);
                     Toast.makeText(getActivity(), "Dodano nową wizytę", Toast.LENGTH_SHORT).show();
                     listener.onDialogSuccess();
@@ -253,9 +253,6 @@ public class AddVisitDialog extends DialogFragment implements TimesPickerDialog.
         //
         // TODO
         //
-        //      1. Otwórz fragment CalendarFragment
-        //      2. W kalendarzu po wyborze czasu nowej wizyty, zwróć wybrane czasy z powrotem do AddVisitDialog zamiast tworzyć go od nowa.
-        //      3. Uzupełnij odpowiednie TextView otrzymanymi wartosciami
         //
         //
         //
