@@ -1,9 +1,11 @@
 package com.example.gabinet_psychologiczny.Fragments;
 
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -18,6 +20,7 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,10 +66,16 @@ public class VisitDetailsFragment extends Fragment implements EditVisitDialog.Ed
     String[] visitStatusItems;
     String[] paymentStatusItems;
 
+    ImageView visitStatusIcon;
+    ImageView paymentStatusIcon;
+
     boolean optionsClicked = false;
     FloatingActionButton optionsButton;
     FloatingActionButton addAnnotationButton;
     FloatingActionButton editVisitStatus;
+
+    ConstraintLayout addAnnotationsLayout;
+    ConstraintLayout editStatusLayout;
 
     Animation showButtonAnimation;
     Animation hideButtonAnimation;
@@ -132,8 +141,13 @@ public class VisitDetailsFragment extends Fragment implements EditVisitDialog.Ed
         optionsButton = binding.moreOptions;
         addAnnotationButton = binding.addAnnotationButton;
         editVisitStatus = binding.editStatusButton;
+        addAnnotationsLayout = binding.addAnnotationFloatingButtonLayout;
+        editStatusLayout = binding.statusFloatingButtonLayout;
         showButtonAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.expand_buttons_from_bottom);
         hideButtonAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.hide_butons_to_bottom);
+
+        visitStatusIcon = binding.visitStatusIcon;
+        paymentStatusIcon = binding.paymentStatusIcon;
 
         optionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,28 +201,55 @@ public class VisitDetailsFragment extends Fragment implements EditVisitDialog.Ed
     }
 
     private void setStatusIcons(){
-        //if(visit.getVisitStatus())
+        int status = visit.getVisitStatus();
+        switch (status){
+            case 0:
+                visitStatusIcon.setImageResource(R.drawable.baseline_pending_actions_24);
+                visitStatusIcon.setColorFilter(getResources().getColor(R.color.yellow, null));
+                break;
+            case 1:
+                visitStatusIcon.setImageResource(R.drawable.baseline_pending_actions_24);
+                visitStatusIcon.setColorFilter(getResources().getColor(R.color.red, null));
+                break;
+            case 2:
+            case 3:
+                visitStatusIcon.setImageResource(R.drawable.baseline_pending_actions_24);
+                visitStatusIcon.setColorFilter(getResources().getColor(R.color.gray, null));
+                break;
+            case 4:
+                visitStatusIcon.setImageResource(R.drawable.baseline_assignment_turned_in_24);
+                visitStatusIcon.setColorFilter(getResources().getColor(R.color.green, null));
+                break;
+        }
     }
 
     private void setVisibility(boolean clicked){
         if(!clicked){
-            addAnnotationButton.setVisibility(View.INVISIBLE);
-            editVisitStatus.setVisibility(View.INVISIBLE);
+            //addAnnotationButton.setVisibility(View.INVISIBLE);
+            //editVisitStatus.setVisibility(View.INVISIBLE);
+            addAnnotationsLayout.setVisibility(View.INVISIBLE);
+            editStatusLayout.setVisibility(View.INVISIBLE);
         }
         else {
-            addAnnotationButton.setVisibility(View.VISIBLE);
-            editVisitStatus.setVisibility(View.VISIBLE);
+            //addAnnotationButton.setVisibility(View.VISIBLE);
+            //editVisitStatus.setVisibility(View.VISIBLE);
+            addAnnotationsLayout.setVisibility(View.VISIBLE);
+            editStatusLayout.setVisibility(View.VISIBLE);
         }
     }
 
     private void setAnimation(boolean clicked){
         if(!clicked){
-            addAnnotationButton.startAnimation(hideButtonAnimation);
-            editVisitStatus.startAnimation(hideButtonAnimation);
+            //addAnnotationButton.startAnimation(hideButtonAnimation);
+            //editVisitStatus.startAnimation(hideButtonAnimation);
+            addAnnotationsLayout.startAnimation(hideButtonAnimation);
+           editStatusLayout.startAnimation(hideButtonAnimation);
         }
         else {
-            addAnnotationButton.startAnimation(showButtonAnimation);
-            editVisitStatus.startAnimation(showButtonAnimation);
+           //addAnnotationButton.startAnimation(showButtonAnimation);
+            //editVisitStatus.startAnimation(showButtonAnimation);
+            addAnnotationsLayout.startAnimation(showButtonAnimation);
+            editStatusLayout.startAnimation(showButtonAnimation);
         }
     }
 

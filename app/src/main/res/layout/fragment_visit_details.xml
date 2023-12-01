@@ -13,7 +13,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp">
 
 
             <TextView
@@ -79,7 +80,7 @@
                             android:id="@+id/time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
+                            android:layout_marginTop="8dp"
                             app:layout_constraintStart_toStartOf="@+id/date"
                             app:layout_constraintTop_toBottomOf="@+id/date">
 
@@ -110,7 +111,7 @@
                             android:id="@+id/date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
+                            android:layout_marginTop="8dp"
                             app:layout_constraintStart_toStartOf="@+id/patient"
                             app:layout_constraintTop_toBottomOf="@+id/patient">
 
@@ -207,7 +208,7 @@
                                 app:layout_constraintBottom_toBottomOf="@+id/visitStatusText"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="@+id/visitStatusText"
-                                app:tint="#EACE19" />
+                                app:tint="@color/yellow" />
 
                             <TextView
                                 android:id="@+id/visitStatusText"
@@ -226,7 +227,7 @@
                             android:id="@+id/constraintLayout8"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="12dp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/constraintLayout7">
 
@@ -238,7 +239,7 @@
                                 app:layout_constraintBottom_toBottomOf="@+id/paymentStatusText"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="@+id/paymentStatusText"
-                                app:tint="#B12C2C" />
+                                app:tint="@color/red" />
 
                             <TextView
                                 android:id="@+id/paymentStatusText"
@@ -335,6 +336,93 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/addAnnotationFloatingButtonLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/statusFloatingButtonLayout"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:id="@+id/addAnnotationTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/floating_button_textview"
+                android:elevation="4dp"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="6dp"
+                android:text="Nowa adnotacja"
+                android:textColor="@color/dark_gray"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/addAnnotationButton"
+                app:layout_constraintEnd_toStartOf="@+id/addAnnotationButton"
+                app:layout_constraintTop_toTopOf="@+id/addAnnotationButton" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/addAnnotationButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:src="@drawable/baseline_note_add_24"
+                android:visibility="visible"
+                app:fabCustomSize="50dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/white" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/statusFloatingButtonLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/moreOptions"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:id="@+id/editStatusTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/floating_button_textview"
+                android:elevation="4dp"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="6dp"
+                android:text="Status wizyty"
+                android:textColor="@color/dark_gray"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/editStatusButton"
+                app:layout_constraintEnd_toStartOf="@+id/editStatusButton"
+                app:layout_constraintTop_toTopOf="@+id/editStatusButton" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/editStatusButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:src="@drawable/baseline_note_alt_24"
+                android:visibility="visible"
+                app:fabCustomSize="50dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/white" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/moreOptions"
             android:layout_width="wrap_content"
@@ -349,33 +437,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:tint="@color/white" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/addAnnotationButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:src="@drawable/baseline_note_add_24"
-            android:visibility="invisible"
-            app:fabCustomSize="60dp"
-            app:layout_constraintBottom_toTopOf="@id/editStatusButton"
-            app:layout_constraintStart_toStartOf="@id/editStatusButton"
-            app:tint="@color/white" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/editStatusButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:src="@drawable/baseline_note_alt_24"
-            android:visibility="invisible"
-            app:fabCustomSize="60dp"
-            app:layout_constraintBottom_toTopOf="@id/moreOptions"
-            app:layout_constraintStart_toStartOf="@+id/moreOptions"
-            app:tint="@color/white" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
