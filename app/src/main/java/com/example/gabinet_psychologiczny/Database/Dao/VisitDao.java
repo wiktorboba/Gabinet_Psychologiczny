@@ -11,7 +11,8 @@ import androidx.room.Update;
 
 import com.example.gabinet_psychologiczny.Database.Relations.PatientWithVisits;
 import com.example.gabinet_psychologiczny.Database.Relations.VisitAndPatient;
-import com.example.gabinet_psychologiczny.Database.Relations.VisitWithPatientAndService;
+import com.example.gabinet_psychologiczny.Database.Relations.VisitWithAnnotations;
+import com.example.gabinet_psychologiczny.Database.Relations.VisitWithAnnotationsAndPatientAndService;
 import com.example.gabinet_psychologiczny.Model.Visit;
 
 import java.time.LocalDate;
@@ -34,7 +35,7 @@ public interface VisitDao {
 
     @Transaction
     @Query("SELECT * FROM visit_table ORDER BY visit_id")
-    LiveData<List<VisitWithPatientAndService>> getAllVisitsAndServices();
+    LiveData<List<VisitWithAnnotationsAndPatientAndService>> getAllVisitsAndServices();
 
     @Transaction
     @Query("SELECT * FROM patient_table WHERE patient_id = :id")
@@ -42,13 +43,21 @@ public interface VisitDao {
 
     @Transaction
     @Query("SELECT * FROM visit_table WHERE visit_id = :id")
-    LiveData<VisitWithPatientAndService> getVisitAndServiceById(int id);
+    LiveData<VisitWithAnnotationsAndPatientAndService> getVisitAndServiceById(int id);
     @Transaction
     @Query("SELECT * FROM visit_table WHERE visit_id = :id")
     LiveData<VisitAndPatient> getVisitAndPatientById(int id);
 
     @Transaction
     @Query("SELECT * FROM visit_table WHERE day >= :fromDay AND day <= :toDay")
-    LiveData<List<VisitWithPatientAndService>>getVisitAndServiceFromDayToDay(LocalDate fromDay, LocalDate toDay);
+    LiveData<List<VisitWithAnnotationsAndPatientAndService>>getVisitAndServiceFromDayToDay(LocalDate fromDay, LocalDate toDay);
+
+    @Transaction
+    @Query("SELECT * FROM visit_table")
+    LiveData<List<VisitWithAnnotations>> getAllVisitsWithAnnotations();
+
+    @Transaction
+    @Query("SELECT * FROM visit_table WHERE visit_id = :id")
+    LiveData<VisitWithAnnotations> getVisitWithAnnotationsById(int id);
 
 }

@@ -20,10 +20,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.gabinet_psychologiczny.Database.Relations.VisitWithAnnotationsAndPatientAndService;
 import com.example.gabinet_psychologiczny.Dialogs.AddVisitDialog;
 import com.example.gabinet_psychologiczny.Other.CalendarUtils;
 import com.example.gabinet_psychologiczny.Dialogs.TimesPickerDialog;
-import com.example.gabinet_psychologiczny.Database.Relations.VisitWithPatientAndService;
 import com.example.gabinet_psychologiczny.R;
 import com.example.gabinet_psychologiczny.ViewModel.VisitViewModel;
 import com.example.gabinet_psychologiczny.databinding.FragmentCalendarBinding;
@@ -76,7 +76,7 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
     private ArrayList<CardView> displayedVisits = new ArrayList<>();
     private ArrayList<CardView> displayedFreeTimes = new ArrayList<>();
 
-    private LiveData<List<VisitWithPatientAndService>> observedWeek;
+    private LiveData<List<VisitWithAnnotationsAndPatientAndService>> observedWeek;
     private final int breakTime = 5;
     private final int minFreeTime = 45;
     private boolean addVisitState = false;
@@ -198,10 +198,10 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
         setDayNames(days);
 
         observedWeek = visitViewModel.getVisitAndServiceFromDayToDay(days.get(0), days.get(days.size()-1));
-        observedWeek.observe(getViewLifecycleOwner(), new Observer<List<VisitWithPatientAndService>>() {
+        observedWeek.observe(getViewLifecycleOwner(), new Observer<List<VisitWithAnnotationsAndPatientAndService>>() {
             @Override
-            public void onChanged(@Nullable List<VisitWithPatientAndService> visitWithPatientAndServices) {
-                ArrayList<ArrayList<VisitWithPatientAndService>> visitsPerDay = getVisitsPerDay(days, visitWithPatientAndServices);
+            public void onChanged(@Nullable List<VisitWithAnnotationsAndPatientAndService> visitWithAnnotationsAndPatientAndServices) {
+                ArrayList<ArrayList<VisitWithAnnotationsAndPatientAndService>> visitsPerDay = getVisitsPerDay(days, visitWithAnnotationsAndPatientAndServices);
                 setUpVisitsInCalendar(visitsPerDay);
                 observedWeek.removeObserver(this);
             }
@@ -209,7 +209,7 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
 
     }
 
-    private void setUpVisitsInCalendar(ArrayList<ArrayList<VisitWithPatientAndService>> visitsPerDay) {
+    private void setUpVisitsInCalendar(ArrayList<ArrayList<VisitWithAnnotationsAndPatientAndService>> visitsPerDay) {
         int i=0;
         if(!displayedVisits.isEmpty() || !displayedFreeTimes.isEmpty()){
             removeFromView(displayedVisits);
@@ -221,13 +221,13 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
 
 
         for(ConstraintLayout dayLayout: daysLayouts){
-            ArrayList<VisitWithPatientAndService> visits = visitsPerDay.get(i);
+            ArrayList<VisitWithAnnotationsAndPatientAndService> visits = visitsPerDay.get(i);
 
             LocalTime previousVisitEndTime = LocalTime.of(6, 0).minusMinutes(5);
             LocalTime freeTimeStart;
             LocalTime freeTimeEnd;
             int freeTimeDuration = 0;
-            for(VisitWithPatientAndService visit: visits){
+            for(VisitWithAnnotationsAndPatientAndService visit: visits){
                 CardView visitCardView = createCardViewForVisit(dayLayout, visit);
                 displayedVisits.add(visitCardView);
                 visitCardView.setOnClickListener(new View.OnClickListener() {
@@ -291,7 +291,7 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
         setAddVisitState(addVisitState);
     }
 
-    private CardView createCardViewForVisit(ConstraintLayout parentLayout, VisitWithPatientAndService visit){
+    private CardView createCardViewForVisit(ConstraintLayout parentLayout, VisitWithAnnotationsAndPatientAndService visit){
         //calculate cardview height and offset
         double visitDuration = Duration.between(visit.visit.getStartTime(), visit.visit.getEndTime()).toMinutes() / 60f;
         double verticalOffset = Duration.between(LocalTime.of(6, 0), visit.visit.getStartTime()).toMinutes() / 60f;
@@ -370,19 +370,19 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
         }
     }
 
-    private ArrayList<ArrayList<VisitWithPatientAndService>> getVisitsPerDay(ArrayList<LocalDate> days, List<VisitWithPatientAndService> allVisitsInWeek){
-        ArrayList<ArrayList<VisitWithPatientAndService>> visitsPerDay = new ArrayList<>();
+    private ArrayList<ArrayList<VisitWithAnnotationsAndPatientAndService>> getVisitsPerDay(ArrayList<LocalDate> days, List<VisitWithAnnotationsAndPatientAndService> allVisitsInWeek){
+        ArrayList<ArrayList<VisitWithAnnotationsAndPatientAndService>> visitsPerDay = new ArrayList<>();
         for(LocalDate day: days){
-            ArrayList<VisitWithPatientAndService> visitsThisDay = new ArrayList<>();
-            for(VisitWithPatientAndService visit: allVisitsInWeek){
+            ArrayList<VisitWithAnnotationsAndPatientAndService> visitsThisDay = new ArrayList<>();
+            for(VisitWithAnnotationsAndPatientAndService visit: allVisitsInWeek){
                 if(visit.visit.getDay().equals(day)){
                     visitsThisDay.add(visit);
                     //allVisitsInWeek.remove(visit); //TODO
                 }
             }
-            visitsThisDay.sort(new Comparator<VisitWithPatientAndService>() {
+            visitsThisDay.sort(new Comparator<VisitWithAnnotationsAndPatientAndService>() {
                 @Override
-                public int compare(VisitWithPatientAndService v1, VisitWithPatientAndService v2) {
+                public int compare(VisitWithAnnotationsAndPatientAndService v1, VisitWithAnnotationsAndPatientAndService v2) {
                     return v1.visit.getStartTime().compareTo(v2.visit.getStartTime());
                 }
             });

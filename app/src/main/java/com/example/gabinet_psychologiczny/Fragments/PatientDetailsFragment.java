@@ -17,10 +17,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.gabinet_psychologiczny.Database.Relations.VisitWithAnnotationsAndPatientAndService;
 import com.example.gabinet_psychologiczny.Dialogs.AddVisitDialog;
 import com.example.gabinet_psychologiczny.Other.VisitsHistoryRecyclerViewAdapter;
 import com.example.gabinet_psychologiczny.Database.Relations.PatientWithVisits;
-import com.example.gabinet_psychologiczny.Database.Relations.VisitWithPatientAndService;
 import com.example.gabinet_psychologiczny.Model.Patient;
 import com.example.gabinet_psychologiczny.R;
 import com.example.gabinet_psychologiczny.ViewModel.VisitViewModel;
@@ -47,7 +47,7 @@ public class PatientDetailsFragment extends Fragment implements AddVisitDialog.A
     private VisitViewModel visitViewModel;
 
     Patient patient;
-    List<VisitWithPatientAndService> visitList;
+    List<VisitWithAnnotationsAndPatientAndService> visitList;
 
     RecyclerView recyclerView;
 
@@ -117,7 +117,7 @@ public class PatientDetailsFragment extends Fragment implements AddVisitDialog.A
 
         adapter.setOnItemClickListener(new VisitsHistoryRecyclerViewAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(VisitWithPatientAndService visit) {
+            public void onItemClick(VisitWithAnnotationsAndPatientAndService visit) {
                 Bundle bundle = new Bundle();
                 bundle.putInt("visit_id", visit.visit.getId());
                 Fragment fragment = new VisitDetailsFragment();

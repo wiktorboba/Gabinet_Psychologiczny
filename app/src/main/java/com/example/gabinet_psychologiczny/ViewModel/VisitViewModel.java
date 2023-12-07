@@ -8,7 +8,7 @@ import androidx.lifecycle.LiveData;
 
 import com.example.gabinet_psychologiczny.Database.Relations.PatientWithVisits;
 import com.example.gabinet_psychologiczny.Database.Relations.VisitAndPatient;
-import com.example.gabinet_psychologiczny.Database.Relations.VisitWithPatientAndService;
+import com.example.gabinet_psychologiczny.Database.Relations.VisitWithAnnotationsAndPatientAndService;
 import com.example.gabinet_psychologiczny.Database.Repository.VisitRepository;
 import com.example.gabinet_psychologiczny.Model.Visit;
 
@@ -20,7 +20,7 @@ public class VisitViewModel extends AndroidViewModel {
     private VisitRepository repository;
     private LiveData<List<Visit>> allVisits;
 
-    private LiveData<List<VisitWithPatientAndService>> allVisitsAndServices;
+    private LiveData<List<VisitWithAnnotationsAndPatientAndService>> allVisitsAndServices;
 
     public VisitViewModel(@NonNull Application application) {
         super(application);
@@ -45,12 +45,12 @@ public class VisitViewModel extends AndroidViewModel {
         return allVisits;
     }
 
-    public LiveData<List<VisitWithPatientAndService>> getAllVisitsAndServices() { return allVisitsAndServices; }
+    public LiveData<List<VisitWithAnnotationsAndPatientAndService>> getAllVisitsAndServices() { return allVisitsAndServices; }
 
     public LiveData<PatientWithVisits> getPatientWithVisitsById(int id) { return repository.getPatientWithVisitsById(id); }
 
-    public LiveData<VisitWithPatientAndService> getVisitAndServiceById(int id) { return repository.getVisitAndServiceById(id); }
+    public LiveData<VisitWithAnnotationsAndPatientAndService> getVisitAndServiceById(int id) { return repository.getVisitAndServiceById(id); }
     public LiveData<VisitAndPatient> getVisitAndPatientById(int id) { return repository.getVisitAndPatientById(id); }
-    public LiveData<List<VisitWithPatientAndService>> getVisitAndServiceFromDayToDay(LocalDate fromDay, LocalDate toDay) { return repository.getVisitAndServiceFromDayToDay(fromDay, toDay); }
+    public LiveData<List<VisitWithAnnotationsAndPatientAndService>> getVisitAndServiceFromDayToDay(LocalDate fromDay, LocalDate toDay) { return repository.getVisitAndServiceFromDayToDay(fromDay, toDay); }
 
 }

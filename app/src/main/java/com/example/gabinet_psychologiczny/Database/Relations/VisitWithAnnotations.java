@@ -3,19 +3,19 @@ package com.example.gabinet_psychologiczny.Database.Relations;
 import androidx.room.Embedded;
 import androidx.room.Relation;
 
+import com.example.gabinet_psychologiczny.Model.Annotation;
 import com.example.gabinet_psychologiczny.Model.Patient;
 import com.example.gabinet_psychologiczny.Model.Visit;
 
 import java.util.List;
 
-public class PatientWithVisits {
+public class VisitWithAnnotations {
     @Embedded
-    public Patient patient;
+    public Visit visit;
     @Relation(
-            entity = Visit.class,
-            parentColumn = "patient_id",
-            entityColumn = "patient_id"
+            entity = Annotation.class,
+            parentColumn = "visit_id",
+            entityColumn = "visit_id"
     )
-    public List<VisitWithAnnotationsAndPatientAndService> visitList;
-
+    public List<Annotation> annotationList;
 }

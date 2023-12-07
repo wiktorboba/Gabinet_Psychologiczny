@@ -322,7 +322,8 @@
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/annotationsRecyclerview"
                             android:layout_width="match_parent"
-                            android:layout_height="100dp" />
+                            android:layout_height="250dp"
+                            tools:listitem="@layout/annotations_recycler_view_item"/>
                     </RelativeLayout>
                 </LinearLayout>
 

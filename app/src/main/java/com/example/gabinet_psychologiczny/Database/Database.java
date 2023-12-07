@@ -10,14 +10,16 @@ import android.os.AsyncTask;
 
 import com.example.gabinet_psychologiczny.Database.Converters.DateConverter;
 import com.example.gabinet_psychologiczny.Database.Converters.TimeConverter;
+import com.example.gabinet_psychologiczny.Database.Dao.AnnotationDao;
 import com.example.gabinet_psychologiczny.Database.Dao.PatientDao;
 import com.example.gabinet_psychologiczny.Database.Dao.ServiceDao;
 import com.example.gabinet_psychologiczny.Database.Dao.VisitDao;
+import com.example.gabinet_psychologiczny.Model.Annotation;
 import com.example.gabinet_psychologiczny.Model.Patient;
 import com.example.gabinet_psychologiczny.Model.Service;
 import com.example.gabinet_psychologiczny.Model.Visit;
 
-@androidx.room.Database(entities = {Patient.class, Visit.class, Service.class}, version = 6)
+@androidx.room.Database(entities = {Patient.class, Visit.class, Service.class, Annotation.class}, version = 7)
 @androidx.room.TypeConverters({DateConverter.class, TimeConverter.class})
 public abstract class Database extends RoomDatabase {
 
@@ -26,6 +28,7 @@ public abstract class Database extends RoomDatabase {
     public abstract PatientDao patientDao();
     public abstract VisitDao visitDao();
     public abstract ServiceDao serviceDao();
+    public abstract AnnotationDao annotationDao();
 
     public static synchronized Database getInstance(Context context) {
 
@@ -50,11 +53,13 @@ public abstract class Database extends RoomDatabase {
         private PatientDao patientDao;
         private VisitDao visitDao;
         private ServiceDao serviceDao;
+        private AnnotationDao annotationDao;
 
         private PopulateDbAsyncTask(Database db) {
             patientDao = db.patientDao();
             visitDao = db.visitDao();
             serviceDao = db.serviceDao();
+            annotationDao = db.annotationDao();
         }
 
         @Override
