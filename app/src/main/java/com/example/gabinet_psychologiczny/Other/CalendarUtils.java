@@ -3,6 +3,7 @@ package com.example.gabinet_psychologiczny.Other;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -13,6 +14,13 @@ public class CalendarUtils {
     public static String formattedDate(LocalDate date)
     {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+                .withLocale(new Locale("pl"));
+        return date.format(formatter);
+    }
+
+    public static String formattedDateShort(LocalDate date)
+    {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yy")
                 .withLocale(new Locale("pl"));
         return date.format(formatter);
     }
@@ -45,6 +53,20 @@ public class CalendarUtils {
         LocalDate endDate = startDate.plusWeeks(1);
 
         while (startDate.isBefore(endDate))
+        {
+            days.add(startDate);
+            startDate = startDate.plusDays(1);
+        }
+        return days;
+    }
+
+    public static ArrayList<LocalDate> daysInMonthArray(YearMonth yearMonth)
+    {
+        ArrayList<LocalDate> days = new ArrayList<>();
+        LocalDate startDate = yearMonth.atDay(1);
+        LocalDate endDate = yearMonth.atEndOfMonth();
+
+        while (startDate.isBefore(endDate.plusDays(1)))
         {
             days.add(startDate);
             startDate = startDate.plusDays(1);

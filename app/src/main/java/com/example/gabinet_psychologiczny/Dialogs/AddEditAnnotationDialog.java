@@ -4,13 +4,16 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.OpenableColumns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -29,10 +32,12 @@ import androidx.fragment.app.DialogFragment;
 import com.example.gabinet_psychologiczny.R;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.io.File;
+
 public class AddEditAnnotationDialog extends DialogFragment {
     private AddEditAnnotationDialog.AddEditAnnotationDialogListener listener;
-    private String annotationName;
-    private String annotationUri;
+    private String annotationName = "";
+    private String annotationUri = "";
     private int annotationPosition = -1;
     private TextInputEditText editName;
     private TextView pathTextView;
@@ -68,6 +73,7 @@ public class AddEditAnnotationDialog extends DialogFragment {
                     public void onActivityResult(ActivityResult result) {
                         if (result.getResultCode() == Activity.RESULT_OK) {
                             // There are no request codes
+
                             Uri uri = result.getData().getData();
                             String mimeType = getContext().getContentResolver().getType(uri);
                             int intType = getTypeFromMime(mimeType);
@@ -148,7 +154,12 @@ public class AddEditAnnotationDialog extends DialogFragment {
     }
 
     private void setFilePath() {
-        pathTextView.setText(annotationUri);
+        String path = annotationUri;
+        if(!annotationUri.isEmpty()){
+            path = getFileName(Uri.parse(annotationUri));
+        }
+
+        pathTextView.setText(path);
     }
     private void setAnnotationName() {
         editName.setText(annotationName);
@@ -174,6 +185,18 @@ public class AddEditAnnotationDialog extends DialogFragment {
         return type;
     }
 
+    private String getFileName(Uri uri) {
+        ContentResolver resolver = getContext().getContentResolver();
+        resolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        Cursor returnCursor =
+                resolver.query(uri, null, null, null, null);
+        assert returnCursor != null;
+        int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+        returnCursor.moveToFirst();
+        String name = returnCursor.getString(nameIndex);
+        returnCursor.close();
+        return name;
+    }
 
     @Override
     public void onAttach(@NonNull Context context) {

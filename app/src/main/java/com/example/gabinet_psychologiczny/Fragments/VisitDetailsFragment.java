@@ -283,8 +283,8 @@ public class VisitDetailsFragment extends Fragment implements EditVisitDialog.Ed
     private void openFileFromUri(Uri uri){
         ContentResolver contentResolver = getContext().getContentResolver();
         Intent intent = new Intent();
+        getContext().getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.setAction(Intent.ACTION_VIEW);
-        contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.setDataAndType(uri, contentResolver.getType(uri));
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);

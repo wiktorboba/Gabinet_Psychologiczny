@@ -7,4 +7,5 @@
     <dimen name="new_top_offset">22dp</dimen>
     <dimen name="dividers_size">2dp</dimen>
     <dimen name="dividers2_size">2.5dp</dimen>
+    <dimen name="visit_indicator_size">8dp</dimen>
 </resources>

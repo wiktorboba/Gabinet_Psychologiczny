@@ -1,5 +1,9 @@
 package com.example.gabinet_psychologiczny.Fragments;
 
+import static com.kizitonwose.calendar.core.ExtensionsKt.daysOfWeek;
+import static com.kizitonwose.calendar.core.ExtensionsKt.firstDayOfWeekFromLocale;
+
+import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,11 +17,14 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.gabinet_psychologiczny.Database.Relations.VisitWithAnnotationsAndPatientAndService;
@@ -28,13 +35,28 @@ import com.example.gabinet_psychologiczny.R;
 import com.example.gabinet_psychologiczny.ViewModel.VisitViewModel;
 import com.example.gabinet_psychologiczny.databinding.FragmentCalendarBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.kizitonwose.calendar.core.CalendarDay;
+import com.kizitonwose.calendar.core.CalendarMonth;
+import com.kizitonwose.calendar.core.DayPosition;
+import com.kizitonwose.calendar.view.CalendarView;
+import com.kizitonwose.calendar.view.MonthDayBinder;
+import com.kizitonwose.calendar.view.MonthHeaderFooterBinder;
+import com.kizitonwose.calendar.view.ViewContainer;
 
+import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
+
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -55,8 +77,12 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
     private FragmentCalendarBinding binding;
     private VisitViewModel visitViewModel;
     private LocalDate currentDate;
-    ArrayList<LocalDate> days;
-    private TextView selectedWeek;
+    private YearMonth currentMonth;
+    ArrayList<LocalDate> daysInThisWeek;
+    ArrayList<LocalDate> daysInThisMonth;
+    ArrayList<Boolean> hasVisitsPerDay;
+    Boolean indicatorsReady = false;
+    private TextView selectedDate;
     private TextView mondayTextView;
     private TextView tuesdayTextView;
     private TextView wednesdayTextView;
@@ -68,6 +94,7 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
     private int one_hour_height;
     private int top_offset;
     private int dividers_size;
+    private int visit_indicator_size;
 
     private ArrayList<ConstraintLayout> daysLayouts;
 
@@ -77,10 +104,14 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
     private ArrayList<CardView> displayedFreeTimes = new ArrayList<>();
 
     private LiveData<List<VisitWithAnnotationsAndPatientAndService>> observedWeek;
+    private LiveData<List<VisitWithAnnotationsAndPatientAndService>> observedMonth;
     private final int breakTime = 5;
     private final int minFreeTime = 45;
     private boolean addVisitState = false;
 
+    private boolean isMonthlyLayout = false; // false - weekly, true - monthly
+    private CalendarView calendarView;
+    private ViewGroup titlesContainer;
 
     public CalendarFragment() {
         // Required empty public constructor
@@ -129,22 +160,50 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
 
         visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
 
+        if(currentDate == null){
+            currentDate = LocalDate.now();
+            currentMonth = YearMonth.from(currentDate);
+        }
+        //setMonthView();
+
         one_hour_height = getResources().getDimensionPixelSize(R.dimen.visit_hour_height);
         top_offset = getResources().getDimensionPixelSize(R.dimen.new_top_offset);
         dividers_size = getResources().getDimensionPixelSize(R.dimen.dividers_size);
+        visit_indicator_size = getResources().getDimensionPixelSize(R.dimen.visit_indicator_size);
 
+        selectedDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(!isMonthlyLayout){
+                    changeToMonthlyView();
+                }
+            }
+        });
 
         previousWeekButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                previousWeek();
+
+                if(isMonthlyLayout){
+                    previousMonth();
+                }
+                else {
+                    previousWeek();
+                }
             }
         });
 
         nextWeekButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                nextWeek();
+
+                if(isMonthlyLayout){
+                    nextMonth();
+                }
+                else {
+                    nextWeek();
+                }
             }
         });
 
@@ -155,12 +214,28 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
             }
         });
 
-        if(currentDate == null)
-            currentDate = LocalDate.now();
+        setUpMonthlyCalendar();
+    }
+
+    private void changeToMonthlyView(){
+        isMonthlyLayout = true;
+        setMonthView();
+        //calendarView.scrollToMonth(currentMonth);
+        addVisitStateButton.setVisibility(View.INVISIBLE);
+        binding.weeklyCalendarView.setVisibility(View.INVISIBLE);
+        binding.bottomContainer.setVisibility(View.VISIBLE);
+    }
+
+    private void changeToWeeklyView(){
+        isMonthlyLayout = false;
+        setWeekView();
+        addVisitStateButton.setVisibility(View.VISIBLE);
+        binding.weeklyCalendarView.setVisibility(View.VISIBLE);
+        binding.bottomContainer.setVisibility(View.INVISIBLE);
     }
 
     private void setUpWidgets(){
-        selectedWeek = binding.selectedWeek;
+        selectedDate = binding.selectedWeek;
         previousWeekButton = binding.previousWeekButton;
         nextWeekButton = binding.nextWeekButton;
         addVisitStateButton = binding.addVisitStateButton;
@@ -169,6 +244,9 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
         wednesdayTextView = binding.wednesdayTextView;
         thursdayTextView = binding.thursdayTextView;
         fridayTextView = binding.fridayTextView;
+
+        calendarView = binding.monthCalendarView;
+        titlesContainer = binding.titlesContainer;
 
         dayNamesList = new ArrayList<>();
         dayNamesList.add(mondayTextView);
@@ -191,22 +269,165 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
         daysLayouts.add(fridayLayout);
     }
 
-    private void setWeekView(){
-        days = CalendarUtils.daysInWeekArray(currentDate);
-        String week = CalendarUtils.formattedDate(days.get(0)) + " - " + CalendarUtils.formattedDate(days.get(days.size()-1));
-        selectedWeek.setText(week);
-        setDayNames(days);
+    private void setUpMonthlyCalendar(){
+        calendarView.setMonthHeaderBinder(new MonthHeaderFooterBinder<MonthViewContainer>() {
+            @NonNull
+            @Override
+            public MonthViewContainer create(@NonNull View view) {
+                return new MonthViewContainer(view);
+            }
 
-        observedWeek = visitViewModel.getVisitAndServiceFromDayToDay(days.get(0), days.get(days.size()-1));
+            @Override
+            public void bind(@NonNull MonthViewContainer container, CalendarMonth calendarMonth) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("LLLL u")
+                        .withLocale(new Locale("pl"));
+
+                String title = calendarMonth.getYearMonth().format(formatter);
+                //container.calendarMonthText.setText(title);
+                //monthYearText.setText(title);
+            }
+        });
+
+        /*        calendarView.setMonthFooterBinder(new MonthHeaderFooterBinder<MonthViewContainer>() {
+            @NonNull
+            @Override
+            public MonthViewContainer create(@NonNull View view) {
+                return new MonthViewContainer(view);
+            }
+
+            @Override
+            public void bind(@NonNull MonthViewContainer container, CalendarMonth calendarMonth) {
+
+            }
+        });
+       */
+
+        calendarView.setDayBinder(new MonthDayBinder<DayViewContainer>() {
+            @NonNull
+            @Override
+            public DayViewContainer create(@NonNull View view) {
+                return new DayViewContainer(view);
+            }
+
+
+            @Override
+            public void bind(@NonNull DayViewContainer container, CalendarDay calendarDay) {
+                container.calendarDayText.setText(Integer.toString(calendarDay.getDate().getDayOfMonth()));
+                container.calendarDay = calendarDay;
+                container.calendarDayText.setTypeface(Typeface.DEFAULT);
+                if(calendarDay.getPosition() == DayPosition.MonthDate){
+                    LocalDate today = LocalDate.now();
+                    if(calendarDay.getDate().equals(today)){
+                        container.calendarDayText.setTextColor(getResources().getColor(R.color.teal_700));
+                        container.calendarDayText.setTypeface(container.calendarDayText.getTypeface(), Typeface.BOLD);
+                    }
+                    else{
+                        container.calendarDayText.setTextColor(getResources().getColor(R.color.dark_gray));
+                    }
+
+                    container.visitIndicatorDot.setVisibility(View.INVISIBLE);
+                    if(hasVisitsPerDay != null && indicatorsReady && YearMonth.from(calendarDay.getDate()).equals(currentMonth)){
+                        int dayIndex = calendarDay.getDate().getDayOfMonth()-1;
+                        if(hasVisitsPerDay.get(dayIndex)){
+                            //ImageView visitIndicator = new ImageView(container.visitIndicatorsLayout.getContext());
+                            //visitIndicator.setId(View.generateViewId());
+
+                            //LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(visit_indicator_size, visit_indicator_size);
+                            //visitIndicator.setLayoutParams(layoutParams);
+                            //container.visitIndicatorsLayout.addView(visitIndicator);
+                            container.visitIndicatorDot.setVisibility(View.VISIBLE);
+                        }
+
+                    }
+
+                }
+
+                else
+                    container.calendarDayText.setTextColor(getResources().getColor(R.color.light_gray));
+            }
+        });
+
+        YearMonth currentMonth = YearMonth.now();
+        YearMonth startMonth = currentMonth.minusMonths(100);  // Adjust as needed
+        YearMonth endMonth = currentMonth.plusMonths(100);  // Adjust as needed
+        DayOfWeek firstDayOfWeek = firstDayOfWeekFromLocale(); // Available from the library
+        List<DayOfWeek> daysOfWeek = daysOfWeek(firstDayOfWeek = DayOfWeek.MONDAY);
+
+        int count = titlesContainer.getChildCount();
+        for(int i=0; i<count; i++){
+            TextView textView = (TextView) titlesContainer.getChildAt(i);
+            DayOfWeek dayOfWeek = daysOfWeek.get(i);
+            String title = dayOfWeek.getDisplayName(TextStyle.SHORT, new Locale("pl"));
+            textView.setText(title);
+        }
+
+        calendarView.addOnItemTouchListener(new RecyclerView.SimpleOnItemTouchListener(){
+            @Override
+            public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+                return rv.getScrollState() == RecyclerView.SCROLL_STATE_DRAGGING;
+            }
+        });
+
+        /*
+        calendarView.setMonthScrollListener(new Function1<CalendarMonth, Unit>() {
+            @Override
+            public Unit invoke(CalendarMonth calendarMonth) {
+                updateTitle();
+                setMonthView();
+                indicatorsReady = true;
+                return null;
+            }
+        });
+
+        */
+
+        calendarView.setup(startMonth, endMonth, daysOfWeek.get(0));
+        calendarView.scrollToMonth(currentMonth);
+
+    }
+
+    private void setWeekView(){
+        daysInThisWeek = CalendarUtils.daysInWeekArray(currentDate);
+        currentMonth = YearMonth.from(currentDate);
+
+        String week = CalendarUtils.formattedDateShort(daysInThisWeek.get(0)) + " - " + CalendarUtils.formattedDateShort(daysInThisWeek.get(daysInThisWeek.size()-1));
+        selectedDate.setText(week);
+        setDayNames(daysInThisWeek);
+
+        observedWeek = visitViewModel.getVisitAndServiceFromDayToDay(daysInThisWeek.get(0), daysInThisWeek.get(daysInThisWeek.size()-1));
         observedWeek.observe(getViewLifecycleOwner(), new Observer<List<VisitWithAnnotationsAndPatientAndService>>() {
             @Override
             public void onChanged(@Nullable List<VisitWithAnnotationsAndPatientAndService> visitWithAnnotationsAndPatientAndServices) {
-                ArrayList<ArrayList<VisitWithAnnotationsAndPatientAndService>> visitsPerDay = getVisitsPerDay(days, visitWithAnnotationsAndPatientAndServices);
+                ArrayList<ArrayList<VisitWithAnnotationsAndPatientAndService>> visitsPerDay = getVisitsPerDay(daysInThisWeek, visitWithAnnotationsAndPatientAndServices);
                 setUpVisitsInCalendar(visitsPerDay);
                 observedWeek.removeObserver(this);
             }
         });
 
+    }
+
+    private void setMonthView(){
+        indicatorsReady = false;
+        daysInThisMonth = CalendarUtils.daysInMonthArray(currentMonth);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("LLLL u")
+                .withLocale(new Locale("pl"));
+
+        String month = currentMonth.format(formatter);
+        selectedDate.setText(month);
+
+
+        observedMonth = visitViewModel.getVisitAndServiceFromDayToDay(currentMonth.atDay(1), currentMonth.atEndOfMonth());
+        observedMonth.observe(getViewLifecycleOwner(), new Observer<List<VisitWithAnnotationsAndPatientAndService>>() {
+            @Override
+            public void onChanged(@Nullable List<VisitWithAnnotationsAndPatientAndService> visitWithAnnotationsAndPatientAndServices) {
+                hasVisitsPerDay = checkVisitsPerDay(daysInThisMonth, visitWithAnnotationsAndPatientAndServices);
+                observedMonth.removeObserver(this);
+                indicatorsReady = true;
+                calendarView.notifyMonthChanged(currentMonth);
+                calendarView.smoothScrollToMonth(currentMonth);
+            }
+        });
     }
 
     private void setUpVisitsInCalendar(ArrayList<ArrayList<VisitWithAnnotationsAndPatientAndService>> visitsPerDay) {
@@ -362,10 +583,24 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
         setWeekView();
     }
 
+    private void previousMonth(){
+        currentMonth = currentMonth.minusMonths(1);
+        setMonthView();
+    }
+
+    private void nextMonth(){
+        currentMonth = currentMonth.plusMonths(1);
+        setMonthView();
+    }
+
     private void setDayNames(ArrayList<LocalDate> days){
         int i=0;
         for(TextView name: dayNamesList){
             name.setText(CalendarUtils.dayMonthFromDate(days.get(i)));
+            if(days.get(i).equals(LocalDate.now())){
+                name.setTextColor(getResources().getColor(R.color.teal_700));
+                name.setTypeface(name.getTypeface(), Typeface.BOLD);
+            }
             i++;
         }
     }
@@ -391,6 +626,21 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
         return visitsPerDay;
     }
 
+    private ArrayList<Boolean> checkVisitsPerDay(ArrayList<LocalDate> days, List<VisitWithAnnotationsAndPatientAndService> allVisitsInMonth){
+        ArrayList<Boolean> hasAnyVisits = new ArrayList<>();
+        for(LocalDate day: days){
+            Boolean hasVisitsThisDay = false;
+            for(VisitWithAnnotationsAndPatientAndService visit: allVisitsInMonth){
+                if(visit.visit.getDay().equals(day)){
+                    hasVisitsThisDay = true;
+                    break;
+                }
+            }
+            hasAnyVisits.add(hasVisitsThisDay);
+        }
+        return hasAnyVisits;
+    }
+
     private void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -409,7 +659,7 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
     }
 
     private void openAddVisitDialog(int startHour, int startMinutes, int endHour, int endMinutes, int dayIndex){
-        LocalDate day = days.get(dayIndex);
+        LocalDate day = daysInThisWeek.get(dayIndex);
         Bundle bundle = new Bundle();
        // bundle.putInt("patientId", 2);
        // bundle.putString("patientFirstName", "Anna");
@@ -501,5 +751,37 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
         displayedFreeTimes = new ArrayList<>();
     }
 
+
+    class DayViewContainer extends ViewContainer {
+        public final TextView calendarDayText;
+        public CalendarDay calendarDay;
+        public final LinearLayout visitIndicatorsLayout;
+        public final ImageView visitIndicatorDot;
+
+        public DayViewContainer(View view) {
+            super(view);
+            calendarDayText = view.findViewById(R.id.calendarDayText);
+            visitIndicatorsLayout = view.findViewById(R.id.dayVisitsIndicatorsLayout);
+            visitIndicatorDot = view.findViewById(R.id.visitInd);
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    currentDate = calendarDay.getDate();
+                    changeToWeeklyView();
+                }
+            });
+        }
+    }
+
+    class MonthViewContainer extends ViewContainer {
+        public final TextView calendarMonthText;
+
+
+        public MonthViewContainer(View view) {
+            super(view);
+            calendarMonthText = view.findViewById(R.id.calendarMonthText);
+        }
+    }
 
 }

@@ -42,6 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="24dp"
+                android:backgroundTint="@color/teal_700"
                 android:text="WYBIERZ PLIK"
                 app:cornerRadius="12dp" />
 
