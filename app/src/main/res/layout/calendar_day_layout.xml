@@ -6,7 +6,9 @@
     android:layout_marginHorizontal="4dp"
     android:layout_marginVertical="6dp"
     app:cardCornerRadius="12dp"
-    app:cardElevation="6dp">
+    app:cardElevation="0dp"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/calendar_recyclerview_item_selector">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -14,8 +16,8 @@
 
         <TextView
             android:id="@+id/calendarDayText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:gravity="center"
             android:text="22"
             android:textColor="@color/dark_gray"
@@ -29,18 +31,20 @@
             android:id="@+id/dayVisitsIndicatorsLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="@+id/calendarDayText"
-            app:layout_constraintStart_toStartOf="@+id/calendarDayText"
-            app:layout_constraintTop_toBottomOf="@+id/calendarDayText">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/visitInd"
                 android:layout_width="8dp"
                 android:layout_height="8dp"
+                android:visibility="invisible"
                 app:srcCompat="@drawable/baseline_circle_24"
-                app:tint="@color/yellow"
-                android:visibility="invisible"/>
+                app:tint="@color/yellow" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -20,6 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -32,6 +33,7 @@ import com.example.gabinet_psychologiczny.Model.Visit;
 import com.example.gabinet_psychologiczny.R;
 import com.example.gabinet_psychologiczny.ViewModel.ServiceViewModel;
 import com.example.gabinet_psychologiczny.ViewModel.VisitViewModel;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDate;
@@ -114,6 +116,31 @@ public class AddVisitDialog extends DialogFragment implements TimesPickerDialog.
             endHour = args.getInt("endHour", -1);
             endMinute = args.getInt("endMinute", -1);
         }
+
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager.setFragmentResultListener("selectedDate", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                year = result.getInt("year", -1);
+                month = result.getInt("month", -1);
+                day = result.getInt("day", -1);
+                if(year != -1 && month != -1 && day != -1)
+                    visitDay = LocalDate.of(year, month, day);
+
+                startHour = result.getInt("startHour", -1);
+                startMinute = result.getInt("startMinute", -1);
+                endHour = result.getInt("endHour", -1);
+                endMinute = result.getInt("endMinute", -1);
+
+                if(startHour != -1 && startMinute != -1 && endHour != -1 && endMinute != -1){
+                    visitStartTime = LocalTime.of(startHour, startMinute);
+                    visitEndTime = LocalTime.of(endHour, endMinute);
+                    dateTextView.setText(CalendarUtils.formattedDate(visitDay) + " " + CalendarUtils.formattedTime(visitStartTime) + " - " + CalendarUtils.formattedTime(visitEndTime));
+                }
+
+            }
+        });
+
     }
 
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -187,7 +214,6 @@ public class AddVisitDialog extends DialogFragment implements TimesPickerDialog.
 
         if(getTargetFragment().getClass().equals(PatientDetailsFragment.class)){
             dateTextView.setOnClickListener(new View.OnClickListener() {
-
                 @Override
                 public void onClick(View view) {
 
@@ -245,19 +271,13 @@ public class AddVisitDialog extends DialogFragment implements TimesPickerDialog.
     }
 
     private void openCalendar(){
-        //Fragment calendar = new CalendarFragment();
-        //replaceFragment(calendar);
+        getDialog().hide();
         CalendarFragment calendarFragment = new CalendarFragment();
-        //
-        //
-        //
-        // TODO
-        //
-        //
-        //
-        //
-        //
-        //
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_layout2, calendarFragment);
+        fragmentTransaction.addToBackStack("AddVisitDialog");
+        fragmentTransaction.commit();
     }
 
     private void openSelectPatientDialog(){
@@ -289,6 +309,7 @@ public class AddVisitDialog extends DialogFragment implements TimesPickerDialog.
     }
 
 
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -311,6 +332,7 @@ public class AddVisitDialog extends DialogFragment implements TimesPickerDialog.
         patientId = id;
         patientTextView.setText(name + " " + lName);
     }
+
 
 
     public interface AddVisitDialogListener{

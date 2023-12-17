@@ -25,6 +25,7 @@ import com.example.gabinet_psychologiczny.Model.Patient;
 import com.example.gabinet_psychologiczny.R;
 import com.example.gabinet_psychologiczny.ViewModel.VisitViewModel;
 import com.example.gabinet_psychologiczny.databinding.FragmentPatientDetailsBinding;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.List;
@@ -52,6 +53,8 @@ public class PatientDetailsFragment extends Fragment implements AddVisitDialog.A
     RecyclerView recyclerView;
 
     TextView edit;
+
+    AddVisitDialog addVisitDialog;
 
     public PatientDetailsFragment() {
         // Required empty public constructor
@@ -156,11 +159,12 @@ public class PatientDetailsFragment extends Fragment implements AddVisitDialog.A
         bundle.putString("patientFirstName", patient.getFirstName());
         bundle.putString("patientLastName", patient.getLastName());
 
-        AddVisitDialog addVisitDialog = new AddVisitDialog();
+        addVisitDialog = new AddVisitDialog();
         addVisitDialog.setArguments(bundle);
 
         addVisitDialog.setTargetFragment(PatientDetailsFragment.this, 1);
         addVisitDialog.show(getFragmentManager(), "Dodaj wizyte");
+
     }
 
     private void replaceFragment(Fragment fragment) {
@@ -172,7 +176,16 @@ public class PatientDetailsFragment extends Fragment implements AddVisitDialog.A
     }
 
     @Override
-    public void onDialogSuccess() {
+    public void onResume() {
+        super.onResume();
+        if(addVisitDialog != null && addVisitDialog.getDialog() != null &&!addVisitDialog.getDialog().isShowing()){
+            addVisitDialog.getDialog().show();
+        }
 
+    }
+
+    @Override
+    public void onDialogSuccess() {
+        addVisitDialog = null;
     }
 }

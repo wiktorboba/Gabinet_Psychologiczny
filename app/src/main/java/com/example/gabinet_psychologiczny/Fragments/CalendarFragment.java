@@ -3,6 +3,7 @@ package com.example.gabinet_psychologiczny.Fragments;
 import static com.kizitonwose.calendar.core.ExtensionsKt.daysOfWeek;
 import static com.kizitonwose.calendar.core.ExtensionsKt.firstDayOfWeekFromLocale;
 
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
@@ -23,9 +24,14 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.gabinet_psychologiczny.Database.Relations.VisitWithAnnotationsAndPatientAndService;
 import com.example.gabinet_psychologiczny.Dialogs.AddVisitDialog;
@@ -112,6 +118,15 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
     private boolean isMonthlyLayout = false; // false - weekly, true - monthly
     private CalendarView calendarView;
     private ViewGroup titlesContainer;
+    private Boolean calledFromAddVisitDialog = false;
+    private View selectedDayForList;
+    private TextView textViewOfSelectedDay;
+    private Boolean isDaySelected = false;
+    private Button generateListButton;
+
+    private Animation showButtonAnimation;
+
+    private Animation hideButtonAnimation;
 
     public CalendarFragment() {
         // Required empty public constructor
@@ -215,6 +230,7 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
         });
 
         setUpMonthlyCalendar();
+
     }
 
     private void changeToMonthlyView(){
@@ -229,7 +245,8 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
     private void changeToWeeklyView(){
         isMonthlyLayout = false;
         setWeekView();
-        addVisitStateButton.setVisibility(View.VISIBLE);
+        if(!calledFromAddVisitDialog)
+            addVisitStateButton.setVisibility(View.VISIBLE);
         binding.weeklyCalendarView.setVisibility(View.VISIBLE);
         binding.bottomContainer.setVisibility(View.INVISIBLE);
     }
@@ -247,6 +264,9 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
 
         calendarView = binding.monthCalendarView;
         titlesContainer = binding.titlesContainer;
+        generateListButton = binding.generateListButton;
+        showButtonAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.expand_buttons_from_bottom);
+        hideButtonAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.hide_butons_to_bottom);
 
         dayNamesList = new ArrayList<>();
         dayNamesList.add(mondayTextView);
@@ -368,6 +388,7 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
             }
         });
 
+
         /*
         calendarView.setMonthScrollListener(new Function1<CalendarMonth, Unit>() {
             @Override
@@ -380,7 +401,6 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
         });
 
         */
-
         calendarView.setup(startMonth, endMonth, daysOfWeek.get(0));
         calendarView.scrollToMonth(currentMonth);
 
@@ -723,7 +743,26 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
 
     @Override // TimesPickerDialogListener
     public void onDialogSuccess(int startHour, int startMinutes, int endHour, int endMinutes, int dayIndex) {
-        openAddVisitDialog(startHour, startMinutes, endHour, endMinutes, dayIndex);
+        if(!calledFromAddVisitDialog)
+            openAddVisitDialog(startHour, startMinutes, endHour, endMinutes, dayIndex);
+        else{
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            if (fragmentManager.getBackStackEntryCount() > 0) {
+                Bundle bundle = new Bundle();
+                LocalDate day = daysInThisWeek.get(dayIndex);
+
+                bundle.putInt("year", day.getYear());
+                bundle.putInt("month", day.getMonthValue());
+                bundle.putInt("day", day.getDayOfMonth());
+                bundle.putInt("startHour", startHour);
+                bundle.putInt("startMinute", startMinutes);
+                bundle.putInt("endHour", endHour);
+                bundle.putInt("endMinute", endMinutes);
+
+                fragmentManager.setFragmentResult("selectedDate", bundle);
+                fragmentManager.popBackStack();
+            }
+        }
     }
 
     @Override // AddVisitDialogListener
@@ -738,6 +777,18 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
         BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
         if(bottomNavigationView != null)
             bottomNavigationView.setVisibility(View.VISIBLE);
+
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        int count = fragmentManager.getBackStackEntryCount();
+        if(count >=1){
+            String name = fragmentManager.getBackStackEntryAt(count-1).getName();
+            if(name == "AddVisitDialog"){
+                calledFromAddVisitDialog = true;
+                setAddVisitState(true);
+                addVisitStateButton.setVisibility(View.INVISIBLE);
+            }
+        }
+
         setWeekView();
     }
 
@@ -752,6 +803,8 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
     }
 
 
+
+
     class DayViewContainer extends ViewContainer {
         public final TextView calendarDayText;
         public CalendarDay calendarDay;
@@ -764,11 +817,47 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
             visitIndicatorsLayout = view.findViewById(R.id.dayVisitsIndicatorsLayout);
             visitIndicatorDot = view.findViewById(R.id.visitInd);
 
+
+            view.setClickable(true);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     currentDate = calendarDay.getDate();
                     changeToWeeklyView();
+                }
+            });
+
+            view.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    if(isDaySelected){
+                        textViewOfSelectedDay.setTextColor(getResources().getColor(R.color.dark_gray));
+                        selectedDayForList.setSelected(false);
+                        if(view == selectedDayForList){
+                            isDaySelected = false;
+
+                            generateListButton.setVisibility(View.INVISIBLE);
+                            generateListButton.startAnimation(hideButtonAnimation);
+                        }
+                        else {
+                            calendarDayText.setTextColor(getResources().getColor(R.color.white));
+                            view.setSelected(true);
+                            selectedDayForList = view;
+                            textViewOfSelectedDay = calendarDayText;
+                        }
+                    }
+                    else{
+                        calendarDayText.setTextColor(getResources().getColor(R.color.white));
+                        view.setSelected(true);
+                        selectedDayForList = view;
+                        textViewOfSelectedDay = calendarDayText;
+                        isDaySelected = true;
+
+                        generateListButton.setVisibility(View.VISIBLE);
+                        generateListButton.startAnimation(showButtonAnimation);
+
+                    }
+                    return true;
                 }
             });
         }
