@@ -51,4 +51,5 @@ dependencies {
     implementation 'com.kizitonwose.calendar:view:2.0.0'
     implementation 'com.kizitonwose.calendar:compose:2.0.0'
 
+    implementation 'com.itextpdf:itext7-core:8.0.2'
 }

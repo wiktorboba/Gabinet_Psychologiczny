@@ -1,10 +1,17 @@
 package com.example.gabinet_psychologiczny.Fragments;
 
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static com.kizitonwose.calendar.core.ExtensionsKt.daysOfWeek;
 import static com.kizitonwose.calendar.core.ExtensionsKt.firstDayOfWeekFromLocale;
 
+import android.Manifest;
+import android.content.ContentResolver;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,6 +19,9 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -37,6 +47,7 @@ import com.example.gabinet_psychologiczny.Database.Relations.VisitWithAnnotation
 import com.example.gabinet_psychologiczny.Dialogs.AddVisitDialog;
 import com.example.gabinet_psychologiczny.Other.CalendarUtils;
 import com.example.gabinet_psychologiczny.Dialogs.TimesPickerDialog;
+import com.example.gabinet_psychologiczny.Other.PdfGenerator;
 import com.example.gabinet_psychologiczny.R;
 import com.example.gabinet_psychologiczny.ViewModel.VisitViewModel;
 import com.example.gabinet_psychologiczny.databinding.FragmentCalendarBinding;
@@ -49,6 +60,7 @@ import com.kizitonwose.calendar.view.MonthDayBinder;
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder;
 import com.kizitonwose.calendar.view.ViewContainer;
 
+import java.io.File;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -111,6 +123,8 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
 
     private LiveData<List<VisitWithAnnotationsAndPatientAndService>> observedWeek;
     private LiveData<List<VisitWithAnnotationsAndPatientAndService>> observedMonth;
+
+    private LiveData<List<VisitWithAnnotationsAndPatientAndService>> observedDayForList;
     private final int breakTime = 5;
     private final int minFreeTime = 45;
     private boolean addVisitState = false;
@@ -122,6 +136,7 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
     private View selectedDayForList;
     private TextView textViewOfSelectedDay;
     private Boolean isDaySelected = false;
+    private LocalDate selectedDateForList;
     private Button generateListButton;
 
     private Animation showButtonAnimation;
@@ -193,6 +208,13 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
                 if(!isMonthlyLayout){
                     changeToMonthlyView();
                 }
+            }
+        });
+
+        generateListButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                generateListToPdf(selectedDateForList);
             }
         });
 
@@ -406,6 +428,39 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
 
     }
 
+    private void generateListToPdf(LocalDate date){
+        observedDayForList = visitViewModel.getVisitAndServiceFromDayToDay(date, date);
+        observedDayForList.observe(getViewLifecycleOwner(), new Observer<List<VisitWithAnnotationsAndPatientAndService>>() {
+            @Override
+            public void onChanged(@Nullable List<VisitWithAnnotationsAndPatientAndService> visitWithAnnotationsAndPatientAndServices) {
+                List<VisitWithAnnotationsAndPatientAndService> list = visitWithAnnotationsAndPatientAndServices;
+                File file = new File(PdfGenerator.generateVisitList(list, CalendarUtils.dayMonthFromDate(selectedDateForList)));
+                if(file != null){
+                    Toast.makeText(getContext(), "Wygenerowano plik pomyślnie.", Toast.LENGTH_SHORT).show();
+                    openPdf(file);
+
+                    textViewOfSelectedDay.setTextColor(getResources().getColor(R.color.dark_gray));
+                    selectedDayForList.setSelected(false);
+                    isDaySelected = false;
+                    selectedDateForList = null;
+                    generateListButton.setVisibility(View.INVISIBLE);
+                    generateListButton.startAnimation(hideButtonAnimation);
+                }
+                else
+                    Toast.makeText(getContext(), "Bląd.", Toast.LENGTH_SHORT).show();
+                observedDayForList.removeObserver(this);
+            }
+        });
+    }
+
+    private void openPdf(File file){
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Uri uri = FileProvider.getUriForFile(getContext(), getContext().getApplicationContext().getPackageName() + ".provider", file);
+        intent.setDataAndType(uri, "application/pdf");
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivity(intent);
+    }
+
     private void setWeekView(){
         daysInThisWeek = CalendarUtils.daysInWeekArray(currentDate);
         currentMonth = YearMonth.from(currentDate);
@@ -617,6 +672,9 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
         int i=0;
         for(TextView name: dayNamesList){
             name.setText(CalendarUtils.dayMonthFromDate(days.get(i)));
+            name.setTextColor(getResources().getColor(R.color.dark_gray));
+            name.setTypeface(Typeface.DEFAULT);
+
             if(days.get(i).equals(LocalDate.now())){
                 name.setTextColor(getResources().getColor(R.color.teal_700));
                 name.setTypeface(name.getTypeface(), Typeface.BOLD);
@@ -723,10 +781,12 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
         int freeTimeVisibility;
         float visitsVisibility;
         if(state){
+            addVisitStateButton.setImageResource(R.drawable.baseline_calendar_month_24);
             freeTimeVisibility = View.VISIBLE;
             visitsVisibility = 0.3f;
         }
         else {
+            addVisitStateButton.setImageResource(R.drawable.baseline_add);
             freeTimeVisibility = View.INVISIBLE;
             visitsVisibility = 1f;
         }
@@ -740,6 +800,19 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
         }
         addVisitState = state;
     }
+
+    private boolean checkPermission() {
+        // checking of permissions.
+        int permission1 = ContextCompat.checkSelfPermission(getContext(), WRITE_EXTERNAL_STORAGE);
+        int permission2 = ContextCompat.checkSelfPermission(getContext(), READ_EXTERNAL_STORAGE);
+        return permission1 == PackageManager.PERMISSION_GRANTED && permission2 == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestPermission() {
+        // requesting permissions if not provided.
+        ActivityCompat.requestPermissions(getActivity(), new String[]{WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE}, 200);
+    }
+
 
     @Override // TimesPickerDialogListener
     public void onDialogSuccess(int startHour, int startMinutes, int endHour, int endMinutes, int dayIndex) {
@@ -835,11 +908,13 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
                         selectedDayForList.setSelected(false);
                         if(view == selectedDayForList){
                             isDaySelected = false;
-
+                            selectedDateForList = null;
                             generateListButton.setVisibility(View.INVISIBLE);
                             generateListButton.startAnimation(hideButtonAnimation);
                         }
                         else {
+                            selectedDateForList = calendarDay.getDate();
+
                             calendarDayText.setTextColor(getResources().getColor(R.color.white));
                             view.setSelected(true);
                             selectedDayForList = view;
@@ -851,6 +926,8 @@ public class CalendarFragment extends Fragment implements TimesPickerDialog.Time
                         view.setSelected(true);
                         selectedDayForList = view;
                         textViewOfSelectedDay = calendarDayText;
+
+                        selectedDateForList = calendarDay.getDate();
                         isDaySelected = true;
 
                         generateListButton.setVisibility(View.VISIBLE);

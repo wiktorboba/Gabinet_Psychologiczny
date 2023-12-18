@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -42,12 +43,15 @@ import com.example.gabinet_psychologiczny.Other.CalendarUtils;
 import com.example.gabinet_psychologiczny.Model.Patient;
 import com.example.gabinet_psychologiczny.Model.Service;
 import com.example.gabinet_psychologiczny.Model.Visit;
+import com.example.gabinet_psychologiczny.Other.PdfGenerator;
 import com.example.gabinet_psychologiczny.R;
 import com.example.gabinet_psychologiczny.ViewModel.AnnotationViewModel;
 import com.example.gabinet_psychologiczny.ViewModel.VisitViewModel;
 import com.example.gabinet_psychologiczny.databinding.FragmentVisitDetailsBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.File;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -205,7 +209,7 @@ public class VisitDetailsFragment extends Fragment implements EditVisitDialog.Ed
                             if(intType == -1)
                                 Toast.makeText(getActivity(), "Niepoprawny typ pliku!", Toast.LENGTH_SHORT).show();
                             else {
-                                Annotation annotation = new Annotation(visit.getId(), mimeType, intType, uri.toString());
+                                Annotation annotation = new Annotation(visit.getId(), mimeType, intType, uri.toString(), LocalDateTime.now());
                                 annotationViewModel.insert(annotation);
                             }
                         }
@@ -258,6 +262,14 @@ public class VisitDetailsFragment extends Fragment implements EditVisitDialog.Ed
 
         annotationViewModel = new ViewModelProvider(this).get(AnnotationViewModel.class);
 
+    }
+
+    private void openPdf(File file){
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Uri uri = FileProvider.getUriForFile(getContext(), getContext().getApplicationContext().getPackageName() + ".provider", file);
+        intent.setDataAndType(uri, "application/pdf");
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivity(intent);
     }
 
     private int getTypeFromMime(String mimeType){
@@ -396,16 +408,38 @@ public class VisitDetailsFragment extends Fragment implements EditVisitDialog.Ed
 
     @Override //editVisitListener
     public void onDialogSuccess(int newVisitStatus, int newPaymentStatus) {
+        if(newPaymentStatus != visit.getPaymentStatus() && newPaymentStatus > 0){
+            String paymentMethod;
+            if(newPaymentStatus == 1)
+                paymentMethod = "gotowka";
+            else if (newPaymentStatus == 2)
+                paymentMethod = "karta";
+            else
+                paymentMethod = "przelew";
+
+            String path = PdfGenerator.generateBill(visit, service, patient, paymentMethod);
+            File file = new File(path);
+            if(file != null){
+                Toast.makeText(getContext(), "Wygenerowano rachunek pomyślnie.", Toast.LENGTH_SHORT).show();
+                openPdf(file);
+            }
+            else
+                Toast.makeText(getContext(), "Bląd.", Toast.LENGTH_SHORT).show();
+
+            visit.setPaymentStatus(newPaymentStatus);
+        }
+
         visit.setVisitStatus(newVisitStatus);
-        visit.setPaymentStatus(newPaymentStatus);
         visitViewModel.update(visit);
+
+
     }
 
     @Override //addEditAnnotationListener
     public void onDialogSuccess(String name, String uri) {
         String mimeType = getContext().getContentResolver().getType(Uri.parse(uri));
         int intType = getTypeFromMime(mimeType);
-        Annotation annotation = new Annotation(visit.getId(), name, intType, uri.toString());
+        Annotation annotation = new Annotation(visit.getId(), name, intType, uri.toString(), LocalDateTime.now());
         annotationViewModel.insert(annotation);
     }
 

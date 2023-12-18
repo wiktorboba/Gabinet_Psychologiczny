@@ -28,6 +28,7 @@ import com.example.gabinet_psychologiczny.databinding.FragmentPatientDetailsBind
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -137,6 +138,13 @@ public class PatientDetailsFragment extends Fragment implements AddVisitDialog.A
             public void onChanged(@Nullable PatientWithVisits p) {
                 patient = p.patient;
                 visitList = p.visitList;
+                visitList.sort(new Comparator<VisitWithAnnotationsAndPatientAndService>() {
+                    @Override
+                    public int compare(VisitWithAnnotationsAndPatientAndService v1, VisitWithAnnotationsAndPatientAndService v2) {
+                        return -(v1.visit.getDay().compareTo(v2.visit.getDay()));
+                    }
+                });
+
                 adapter.setVisitsList(p.visitList);
                 setUpPersonalInformation();
             }

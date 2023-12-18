@@ -28,7 +28,6 @@ public class MainNavigationActivity extends AppCompatActivity {
 
         binding.bottomNavigationView.setSelectedItemId(R.id.patients); //default fragment
 
-
         replaceFragment(new PatientSearchFragment());
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()){

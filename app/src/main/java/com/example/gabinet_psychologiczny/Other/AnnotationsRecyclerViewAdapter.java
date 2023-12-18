@@ -10,7 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.gabinet_psychologiczny.Database.Relations.VisitWithAnnotationsAndPatientAndService;
 import com.example.gabinet_psychologiczny.Model.Annotation;
 import com.example.gabinet_psychologiczny.R;
 
@@ -36,6 +35,7 @@ public class AnnotationsRecyclerViewAdapter extends RecyclerView.Adapter<Annotat
         int type = currentAnnotation.getType();
 
         holder.name.setText(name);
+        holder.date.setText(CalendarUtils.formattedDateTime(currentAnnotation.getTime()));
         setTypeIcon(type, holder.icon, holder.resources);
     }
     private void setTypeIcon(int annotationType, ImageView annotationIcon, Resources resources){
@@ -66,6 +66,7 @@ public class AnnotationsRecyclerViewAdapter extends RecyclerView.Adapter<Annotat
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView name;
+        TextView date;
         ImageView icon;
         ImageView editIcon;
         Resources resources;
@@ -76,6 +77,7 @@ public class AnnotationsRecyclerViewAdapter extends RecyclerView.Adapter<Annotat
             resources = itemView.getResources();
 
             name = itemView.findViewById(R.id.annotationName);
+            date = itemView.findViewById(R.id.annotatimeAddedTime);
             icon = itemView.findViewById(R.id.annotationTypeIcon);
             editIcon = itemView.findViewById(R.id.editAnnotationIcon);
 

@@ -2,6 +2,7 @@ package com.example.gabinet_psychologiczny.Other;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
@@ -18,9 +19,23 @@ public class CalendarUtils {
         return date.format(formatter);
     }
 
+    public static String formattedDateForBill(LocalDate date)
+    {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+                .withLocale(new Locale("pl"));
+        return date.format(formatter);
+    }
+
     public static String formattedDateShort(LocalDate date)
     {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yy")
+                .withLocale(new Locale("pl"));
+        return date.format(formatter);
+    }
+
+    public static String formattedDateTime(LocalDateTime date)
+    {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, y | HH:mm")
                 .withLocale(new Locale("pl"));
         return date.format(formatter);
     }

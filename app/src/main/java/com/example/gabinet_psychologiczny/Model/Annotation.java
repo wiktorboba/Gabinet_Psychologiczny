@@ -5,6 +5,8 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
+import java.time.LocalDateTime;
+
 @Entity(tableName = "annotation_table", foreignKeys = {
 
         @ForeignKey(
@@ -22,16 +24,17 @@ public class Annotation {
 
     @ColumnInfo(name = "visit_id", index = true)
     private int visitId;
-
     private String name;
     private int type;
     private String uri;
+    private LocalDateTime time;
 
-    public Annotation(int visitId, String name, int type, String uri) {
+    public Annotation(int visitId, String name, int type, String uri, LocalDateTime time) {
         this.visitId = visitId;
         this.name = name;
         this.type = type;
         this.uri = uri;
+        this.time = time;
     }
 
     // Setters
@@ -40,6 +43,7 @@ public class Annotation {
     public void setName(String name) { this.name = name; }
     public void setType(int type) { this.type = type; }
     public void setUri(String uri) { this.uri = uri; }
+    public void setTime(LocalDateTime time) { this.time = time; }
 
 
     // Getters
@@ -48,5 +52,6 @@ public class Annotation {
     public String getName() { return name; }
     public int getType() { return type; }
     public String getUri() { return uri; }
+    public LocalDateTime getTime() { return time; }
 
 }

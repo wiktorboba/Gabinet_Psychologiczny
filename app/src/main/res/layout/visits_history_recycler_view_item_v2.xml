@@ -52,24 +52,25 @@
 
             <TextView
                 android:id="@+id/serviceName"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="5dp"
                 android:text="Terapia"
                 android:textSize="30sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="@+id/visitTime"
-                app:layout_constraintStart_toStartOf="@+id/visitTime"
+                app:layout_constraintEnd_toStartOf="@+id/visitIcon"
+                app:layout_constraintStart_toEndOf="@+id/view"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/visitTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="25dp"
+                android:layout_marginStart="20dp"
                 android:text="14:00 - 15:30"
                 android:textSize="14sp"
-                app:layout_constraintStart_toEndOf="@+id/view"
+                app:layout_constraintStart_toStartOf="@+id/serviceName"
                 app:layout_constraintTop_toBottomOf="@+id/serviceName" />
 
             <View
@@ -87,11 +88,12 @@
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:layout_marginEnd="2dp"
-                app:tint="#959595"
                 app:layout_constraintBottom_toBottomOf="@+id/visitTime"
                 app:layout_constraintEnd_toStartOf="@+id/visitTime"
-                app:layout_constraintTop_toBottomOf="@+id/serviceName"
-                app:srcCompat="@drawable/baseline_access_time_24" />
+                app:layout_constraintTop_toBottomOf="@id/visitTime"
+                app:layout_constraintTop_toTopOf="@id/visitTime"
+                app:srcCompat="@drawable/baseline_access_time_24"
+                app:tint="#959595" />
 
             <ImageView
                 android:id="@+id/paymentIcon"

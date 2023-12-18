@@ -236,6 +236,7 @@
             android:text="Edytuj"
             android:textColor="#474747"
             android:textSize="18sp"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/visitDetailsData"
             app:layout_constraintEnd_toEndOf="@+id/visitDetailsData" />
 
